@@ -13,6 +13,8 @@
         <module>tgshop-service-zuul</module>
         <module>tgshop-core</module>
         <module>tgshop-mybatis-generator</module>
+        <module>tgshop-auth-api</module>
+        <module>tgshop-auth-service</module>
     </modules>
 
     <parent>
