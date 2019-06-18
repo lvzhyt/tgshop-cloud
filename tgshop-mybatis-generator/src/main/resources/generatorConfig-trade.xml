@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE generatorConfiguration PUBLIC "-//mybatis.org//DTD MyBatis Generator Configuration 1.0//EN" "http://mybatis.org/dtd/mybatis-generator-config_1_0.dtd">
+
+<generatorConfiguration>
+    <properties resource="jdbc.properties"/>
+    <context id="context1">
+        <plugin type="org.mybatis.generator.plugins.SerializablePlugin"/>
+
+        <plugin type="com.mybatis.plugin.LombokPlugin"/>
+
+        <commentGenerator type="com.mybatis.comment.MyCommentGenerator">
+
+        </commentGenerator>
+
+
+        <jdbcConnection driverClass="com.mysql.jdbc.Driver" connectionURL="${url}" userId="${username}" password="${password}">
+        </jdbcConnection>
+
+        <javaModelGenerator targetProject="tgshop-core/src/main/java"
+                            targetPackage="com.tg.shop.core.domain.trade.entity"/>
+        <sqlMapGenerator targetProject="tgshop-trade-service/src/main/resources"
+                         targetPackage="com.tg.shop.trade.mapper"/>
+        <javaClientGenerator targetProject="tgshop-trade-service/src/main/java"
+                             targetPackage="com.tg.shop.trade.mapper"
+                             type="XMLMAPPER"/>
+
+        <!-- product 商品 -->
+       <table tableName="trade_cart" domainObjectName="Cart" enableCountByExample="false" enableUpdateByExample="false" enableDeleteByExample="false" enableSelectByExample="false" selectByExampleQueryId="false"/>
+       <table tableName="trade_order" domainObjectName="Order" enableCountByExample="false" enableUpdateByExample="false" enableDeleteByExample="false" enableSelectByExample="false" selectByExampleQueryId="false"/>
+       <table tableName="trade_order_items" domainObjectName="OrderItems" enableCountByExample="false" enableUpdateByExample="false" enableDeleteByExample="false" enableSelectByExample="false" selectByExampleQueryId="false"/>
+       <table tableName="trade_order_address" domainObjectName="OrderAddress" enableCountByExample="false" enableUpdateByExample="false" enableDeleteByExample="false" enableSelectByExample="false" selectByExampleQueryId="false"/>
+       <table tableName="trade_order_log" domainObjectName="OrderLog" enableCountByExample="false" enableUpdateByExample="false" enableDeleteByExample="false" enableSelectByExample="false" selectByExampleQueryId="false"/>
+       <table tableName="trade_user_receive_address" domainObjectName="UserReceiveAddress" enableCountByExample="false" enableUpdateByExample="false" enableDeleteByExample="false" enableSelectByExample="false" selectByExampleQueryId="false"/>
+
+    </context>
+</generatorConfiguration>

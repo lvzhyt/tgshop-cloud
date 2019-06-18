@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE generatorConfiguration PUBLIC "-//mybatis.org//DTD MyBatis Generator Configuration 1.0//EN" "http://mybatis.org/dtd/mybatis-generator-config_1_0.dtd">
+
+<generatorConfiguration>
+    <properties resource="jdbc.properties"/>
+    <context id="context1">
+        <plugin type="org.mybatis.generator.plugins.SerializablePlugin"/>
+
+        <plugin type="com.mybatis.plugin.LombokPlugin"/>
+
+        <commentGenerator type="com.mybatis.comment.MyCommentGenerator">
+
+        </commentGenerator>
+
+
+        <jdbcConnection driverClass="com.mysql.jdbc.Driver" connectionURL="${url}" userId="${username}" password="${password}">
+        </jdbcConnection>
+
+        <javaModelGenerator targetProject="tgshop-commons-api/src/main/java"
+                            targetPackage="com.tg.shop.commons.entity"/>
+        <sqlMapGenerator targetProject="tgshop-commons-service/src/main/resources"
+                         targetPackage="com.tg.shop.commons.mapper"/>
+        <javaClientGenerator targetProject="tgshop-commons-service/src/main/java"
+                             targetPackage="com.tg.shop.commons.mapper"
+                             type="XMLMAPPER"/>
+
+        <!-- 店铺 -->
+        <table tableName="shop_store" domainObjectName="Store" enableCountByExample="false" enableUpdateByExample="false" enableDeleteByExample="false" enableSelectByExample="false" selectByExampleQueryId="false"/>
+<!--        <table tableName="shop_seller" domainObjectName="Seller" enableCountByExample="false" enableUpdateByExample="false" enableDeleteByExample="false" enableSelectByExample="false" selectByExampleQueryId="false"/>-->
+
+    </context>
+</generatorConfiguration>

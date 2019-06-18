@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE generatorConfiguration PUBLIC "-//mybatis.org//DTD MyBatis Generator Configuration 1.0//EN" "http://mybatis.org/dtd/mybatis-generator-config_1_0.dtd">
+
+<generatorConfiguration>
+    <properties resource="jdbc.properties"/>
+    <context id="context1">
+        <plugin type="org.mybatis.generator.plugins.SerializablePlugin"/>
+
+        <plugin type="com.mybatis.plugin.LombokPlugin"/>
+
+        <commentGenerator type="com.mybatis.comment.MyCommentGenerator">
+
+        </commentGenerator>
+
+
+        <jdbcConnection driverClass="com.mysql.jdbc.Driver" connectionURL="${url}" userId="${username}" password="${password}">
+        </jdbcConnection>
+
+        <javaModelGenerator targetProject="tgshop-core/src/main/java"
+                            targetPackage="com.tg.shop.core.domain.product.entity"/>
+        <sqlMapGenerator targetProject="tgshop-product-service/src/main/resources"
+                         targetPackage="com.tg.shop.product.mapper"/>
+        <javaClientGenerator targetProject="tgshop-product-service/src/main/java"
+                             targetPackage="com.tg.shop.product.mapper"
+                             type="XMLMAPPER"/>
+
+        <!-- product 商品 -->
+<!--        <table tableName="item_goods" domainObjectName="Goods" enableCountByExample="false" enableUpdateByExample="false" enableDeleteByExample="false" enableSelectByExample="false" selectByExampleQueryId="false"/>-->
+<!--        <table tableName="item_goods_sku" domainObjectName="GoodsSku" enableCountByExample="false" enableUpdateByExample="false" enableDeleteByExample="false" enableSelectByExample="false" selectByExampleQueryId="false"/>-->
+<!--        <table tableName="item_goods_upload_picture" domainObjectName="GoodsUploadPicture" enableCountByExample="false" enableUpdateByExample="false" enableDeleteByExample="false" enableSelectByExample="false" selectByExampleQueryId="false"/>-->
+<!--        <table tableName="item_goods_sku_picture" domainObjectName="GoodsSkuPicture" enableCountByExample="false" enableUpdateByExample="false" enableDeleteByExample="false" enableSelectByExample="false" selectByExampleQueryId="false"/>-->
+<!--        <table tableName="item_goods_attribute" domainObjectName="GoodsAttribute" enableCountByExample="false" enableUpdateByExample="false" enableDeleteByExample="false" enableSelectByExample="false" selectByExampleQueryId="false"/>-->
+<!--        <table tableName="item_goods_attribute_value" domainObjectName="GoodsAttributeValue" enableCountByExample="false" enableUpdateByExample="false" enableDeleteByExample="false" enableSelectByExample="false" selectByExampleQueryId="false"/>-->
+<!--        <table tableName="item_goods_sku_attribute" domainObjectName="GoodsSkuAttribute" enableCountByExample="false" enableUpdateByExample="false" enableDeleteByExample="false" enableSelectByExample="false" selectByExampleQueryId="false"/>-->
+<!--        <table tableName="item_goods_sku_attribute_value" domainObjectName="GoodsSkuAttributeValue" enableCountByExample="false" enableUpdateByExample="false" enableDeleteByExample="false" enableSelectByExample="false" selectByExampleQueryId="false"/>-->
+        <table tableName="item_goods_sku_inventory" domainObjectName="GoodsSkuInventory" enableCountByExample="false" enableUpdateByExample="false" enableDeleteByExample="false" enableSelectByExample="false" selectByExampleQueryId="false"/>
+        <table tableName="item_goods_sku_inventory_log" domainObjectName="GoodsSkuInventoryLog" enableCountByExample="false" enableUpdateByExample="false" enableDeleteByExample="false" enableSelectByExample="false" selectByExampleQueryId="false"/>
+        <table tableName="item_goods_sku_price" domainObjectName="GoodsSkuPrice" enableCountByExample="false" enableUpdateByExample="false" enableDeleteByExample="false" enableSelectByExample="false" selectByExampleQueryId="false"/>
+        <table tableName="item_goods_sku_price_log" domainObjectName="GoodsSkuPriceLog" enableCountByExample="false" enableUpdateByExample="false" enableDeleteByExample="false" enableSelectByExample="false" selectByExampleQueryId="false"/>
+<!--        <table tableName="item_freight_charge_template" domainObjectName="FreightChargeTemplate" enableCountByExample="false" enableUpdateByExample="false" enableDeleteByExample="false" enableSelectByExample="false" selectByExampleQueryId="false"/>-->
+
+<!--        &lt;!&ndash; 商家 &ndash;&gt;-->
+<!--        &lt;!&ndash;商家-属性&ndash;&gt;-->
+<!--        <table tableName="shop_attribute" domainObjectName="ShopAttribute" enableCountByExample="false" enableUpdateByExample="false" enableDeleteByExample="false" enableSelectByExample="false" selectByExampleQueryId="false"/>-->
+<!--        &lt;!&ndash;商家-属性值&ndash;&gt;-->
+<!--        <table tableName="shop_attr_value" domainObjectName="ShopAttributeValue" enableCountByExample="false" enableUpdateByExample="false" enableDeleteByExample="false" enableSelectByExample="false" selectByExampleQueryId="false"/>-->
+<!--        &lt;!&ndash;商家-类目关系&ndash;&gt;-->
+<!--        <table tableName="shop_category" domainObjectName="ShopCategory" enableCountByExample="false" enableUpdateByExample="false" enableDeleteByExample="false" enableSelectByExample="false" selectByExampleQueryId="false"/>-->
+<!--        &lt;!&ndash;商家-类目-属性&ndash;&gt;-->
+<!--        <table tableName="shop_category_attribute" domainObjectName="ShopCategoryAttribute" enableCountByExample="false" enableUpdateByExample="false" enableDeleteByExample="false" enableSelectByExample="false" selectByExampleQueryId="false"/>-->
+<!--        &lt;!&ndash; 商家-品牌 &ndash;&gt;-->
+<!--        <table tableName="shop_brand" domainObjectName="ShopBrand" enableCountByExample="false" enableUpdateByExample="false" enableDeleteByExample="false" enableSelectByExample="false" selectByExampleQueryId="false"/>-->
+<!--        &lt;!&ndash;商家-类目-属性值&ndash;&gt;-->
+<!--        <table tableName="shop_category_attribute_value" domainObjectName="ShopCategoryAttributeValue" enableCountByExample="false" enableUpdateByExample="false" enableDeleteByExample="false" enableSelectByExample="false" selectByExampleQueryId="false"/>-->
+
+
+    </context>
+</generatorConfiguration>

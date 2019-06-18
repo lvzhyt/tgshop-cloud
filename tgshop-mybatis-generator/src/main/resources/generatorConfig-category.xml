@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE generatorConfiguration PUBLIC "-//mybatis.org//DTD MyBatis Generator Configuration 1.0//EN" "http://mybatis.org/dtd/mybatis-generator-config_1_0.dtd">
+
+<generatorConfiguration>
+    <properties resource="jdbc.properties"/>
+    <context id="context1">
+        <plugin type="org.mybatis.generator.plugins.SerializablePlugin"/>
+
+        <plugin type="com.mybatis.plugin.LombokPlugin"/>
+
+        <commentGenerator type="com.mybatis.comment.MyCommentGenerator">
+
+        </commentGenerator>
+
+
+        <jdbcConnection driverClass="com.mysql.jdbc.Driver" connectionURL="${url}" userId="${username}" password="${password}">
+        </jdbcConnection>
+
+        <javaModelGenerator targetProject="tgshop-core/src/main/java"
+                            targetPackage="com.tg.shop.core.domain.categories.entity"/>
+        <sqlMapGenerator targetProject="tgshop-categories-service/src/main/resources"
+                         targetPackage="com.tg.shop.categories.mapper"/>
+        <javaClientGenerator targetProject="tgshop-categories-service/src/main/java"
+                             targetPackage="com.tg.shop.categories.mapper"
+                             type="XMLMAPPER"/>
+
+
+        <!-- 系统 -->
+        <!-- 品牌 -->
+        <table tableName="item_brand" domainObjectName="Brand" enableCountByExample="false" enableUpdateByExample="false" enableDeleteByExample="false" enableSelectByExample="false" selectByExampleQueryId="false"/>
+        <!-- 类目 -->
+        <table tableName="item_category" domainObjectName="Category" enableCountByExample="false" enableUpdateByExample="false" enableDeleteByExample="false" enableSelectByExample="false" selectByExampleQueryId="false"/>
+        <!-- 属性 -->
+        <table tableName="item_attribute" domainObjectName="Attribute" enableCountByExample="false" enableUpdateByExample="false" enableDeleteByExample="false" enableSelectByExample="false" selectByExampleQueryId="false"/>
+        <!-- 属性值 -->
+        <table tableName="item_attribute_value" domainObjectName="AttributeValue" enableCountByExample="false" enableUpdateByExample="false" enableDeleteByExample="false" enableSelectByExample="false" selectByExampleQueryId="false"/>
+        <!-- 类目品牌 -->
+        <table tableName="item_category_brand" domainObjectName="CategoryBrand" enableCountByExample="false" enableUpdateByExample="false" enableDeleteByExample="false" enableSelectByExample="false" selectByExampleQueryId="false"/>
+        <!-- 类目属性 -->
+        <table tableName="item_category_attribute" domainObjectName="CategoryAttribute" enableCountByExample="false" enableUpdateByExample="false" enableDeleteByExample="false" enableSelectByExample="false" selectByExampleQueryId="false"/>
+        <!-- 类目属性值 -->
+        <table tableName="item_category_attr_value" domainObjectName="CategoryAttrValue" enableCountByExample="false" enableUpdateByExample="false" enableDeleteByExample="false" enableSelectByExample="false" selectByExampleQueryId="false"/>
+
+
+
+
+
+
+
+    </context>
+</generatorConfiguration>

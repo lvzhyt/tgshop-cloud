@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE generatorConfiguration PUBLIC "-//mybatis.org//DTD MyBatis Generator Configuration 1.0//EN" "http://mybatis.org/dtd/mybatis-generator-config_1_0.dtd">
+
+<generatorConfiguration>
+    <properties resource="jdbc.properties"/>
+    <context id="context1">
+        <plugin type="org.mybatis.generator.plugins.SerializablePlugin"/>
+
+        <plugin type="com.mybatis.plugin.LombokPlugin"/>
+
+        <commentGenerator type="com.mybatis.comment.MyCommentGenerator">
+
+        </commentGenerator>
+
+
+        <jdbcConnection driverClass="com.mysql.jdbc.Driver" connectionURL="${url}" userId="${username}" password="${password}">
+        </jdbcConnection>
+
+        <javaModelGenerator targetProject="tgshop-core/src/main/java"
+                            targetPackage="com.tg.shop.core.domain.mq.entity"/>
+        <sqlMapGenerator targetProject="tgshop-mq-service/src/main/resources"
+                         targetPackage="com.tg.shop.core.mq.mapper"/>
+        <javaClientGenerator targetProject="tgshop-mq-service/src/main/java"
+                             targetPackage="com.tg.shop.core.mq.mapper"
+                             type="XMLMAPPER"/>
+
+        <!-- 消息队列 -->
+        <table tableName="item_message_queue" domainObjectName="MessageQueue" enableCountByExample="false" enableUpdateByExample="false" enableDeleteByExample="false" enableSelectByExample="false" selectByExampleQueryId="false"/>
+        <table tableName="item_message_queue_log" domainObjectName="MessageQueueLog" enableCountByExample="false" enableUpdateByExample="false" enableDeleteByExample="false" enableSelectByExample="false" selectByExampleQueryId="false"/>
+
+    </context>
+</generatorConfiguration>
