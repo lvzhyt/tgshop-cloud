@@ -1,6 +1,6 @@
 package com.tg.shop.product.controller;
 
-import com.opec.shop.core.entity.base.Goods;
+import com.tg.shop.core.domain.product.entity.Goods;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -22,7 +22,6 @@ public class ProductController {
         Goods goods = new Goods();
         goods.setGoodsId(goodsId);
         goods.setGoodsName("goodsName");
-        goods.setGoodsSerial(goodsId);
         return goods;
     }
 }
