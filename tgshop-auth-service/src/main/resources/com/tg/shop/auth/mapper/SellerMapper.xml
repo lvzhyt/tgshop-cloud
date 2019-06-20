@@ -302,32 +302,4 @@
       version = #{version,jdbcType=INTEGER}
     where seller_id = #{sellerId,jdbcType=VARCHAR}
   </update>
-
-  <!-- 自定义 -->
-  <sql id="whereStatement">
-    <where>
-      and is_del=0
-      <if test="storeId != null">
-        and store_id = #{storeId,jdbcType=VARCHAR}
-      </if>
-      <if test="loginName != null">
-        and login_name = #{loginName,jdbcType=CHAR}
-      </if>
-      <if test="phone != null">
-        and phone = #{phone,jdbcType=VARCHAR}
-      </if>
-      <if test="mail != null">
-        and mail = #{mail,jdbcType=VARCHAR}
-      </if>
-      <if test="idCard != null">
-        and id_card = #{idCard,jdbcType=VARCHAR}
-      </if>
-    </where>
-  </sql>
-  <select id="findListByRecord" resultMap="BaseResultMap" parameterType="com.tg.shop.core.domain.auth.entity.Seller">
-    select <include refid="Base_Column_List"/>
-    from shop_seller
-    <include refid="whereStatement"/>
-  </select>
-
 </mapper>
