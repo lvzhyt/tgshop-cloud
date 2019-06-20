@@ -1,7 +1,7 @@
-package com.tg.shop.controller;
+package com.tg.shop.manager.seller.controller;
 
 import com.tg.shop.core.domain.product.entity.Goods;
-import com.tg.shop.fegin.service.FeignExampleService;
+import com.tg.shop.manager.seller.fegin.service.FeignExampleService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.bind.annotation.GetMapping;

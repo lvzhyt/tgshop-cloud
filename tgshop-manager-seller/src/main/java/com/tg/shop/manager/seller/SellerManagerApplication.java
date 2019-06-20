@@ -1,4 +1,4 @@
-package com.tg.shop;
+package com.tg.shop.manager.seller;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -9,8 +9,8 @@ import org.springframework.cloud.client.discovery.EnableDiscoveryClient;
  */
 @SpringBootApplication
 @EnableDiscoveryClient
-public class SellerApplication {
+public class SellerManagerApplication {
     public static void main(String[] args) {
-        SpringApplication.run(SellerApplication.class);
+        SpringApplication.run(SellerManagerApplication.class);
     }
 }

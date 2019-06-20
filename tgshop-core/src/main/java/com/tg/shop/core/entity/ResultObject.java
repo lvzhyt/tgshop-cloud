@@ -59,4 +59,25 @@ public class ResultObject implements Serializable {
         this.message = errorCode.getMessage();
         this.result = "0000".equals(this.code)?1:0;
     }
+
+    public static ResultObject getInstance() {
+        return new ResultObject();
+    }
+
+    public static ResultObject getInstance(Object data) {
+        return new ResultObject(data);
+    }
+
+    public static ResultObject getInstance(String message) {
+        return new ResultObject(message);
+    }
+
+    public static ResultObject getInstance(String code, String message) {
+        return new ResultObject(code,message);
+    }
+
+    public static ResultObject getInstance(ErrorCode errorCode) {
+        return new ResultObject(errorCode);
+    }
+
 }

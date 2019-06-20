@@ -22,6 +22,10 @@ zuul:
     api-product:
       path: /api-product/**
       serviceId: tgshop-product-service
+    # /api-seller  tgshop-manager-seller
+    api-seller:
+      path: /api-seller/**
+      serviceId: tgshop-manager-seller
     #匹配/github/直接重定向到https://github.com/
     github:
       path: /github/**

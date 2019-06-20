@@ -1,7 +1,7 @@
-package com.tg.shop.hystrix;
+package com.tg.shop.manager.seller.hystrix;
 
 import com.tg.shop.core.domain.product.entity.Goods;
-import com.tg.shop.fegin.service.FeignExampleService;
+import com.tg.shop.manager.seller.fegin.service.FeignExampleService;
 import org.springframework.stereotype.Component;
 import org.springframework.web.bind.annotation.PathVariable;
 

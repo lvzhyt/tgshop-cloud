@@ -1,7 +1,7 @@
-package com.tg.shop.fegin.service;
+package com.tg.shop.manager.seller.fegin.service;
 
 import com.tg.shop.core.domain.product.entity.Goods;
-import com.tg.shop.hystrix.FeignServiceHystrix;
+import com.tg.shop.manager.seller.hystrix.FeignServiceHystrix;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
