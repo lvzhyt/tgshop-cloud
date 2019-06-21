@@ -1,0 +1,1 @@
+org.springframework.boot.autoconfigure.EnableAutoConfiguration=com.tg.shop.core.config.ShopCoreAutoConfiguration

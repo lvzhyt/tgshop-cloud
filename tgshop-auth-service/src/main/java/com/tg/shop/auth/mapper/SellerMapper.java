@@ -3,6 +3,8 @@ package com.tg.shop.auth.mapper;
 import com.tg.shop.core.domain.auth.entity.Seller;
 import org.apache.ibatis.annotations.Mapper;
 
+import java.util.List;
+
 @Mapper
 public interface SellerMapper {
     /**
@@ -40,4 +42,7 @@ public interface SellerMapper {
      * @mbg.generated Thu Jun 20 14:59:35 CST 2019
      */
     int updateByPrimaryKey(Seller record);
+
+
+    List<Seller> findListByRecord(Seller record);
 }
