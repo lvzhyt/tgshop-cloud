@@ -11,7 +11,7 @@ import org.springframework.cloud.netflix.eureka.EnableEurekaClient;
  */
 @SpringBootApplication
 @EnableEurekaClient
-@MapperScan("com.tg.shop.auth")
+@MapperScan("com.tg.shop.auth.mapper")
 public class AuthServiceApplication {
     public static void main(String[] args) {
         SpringApplication.run(AuthServiceApplication.class);

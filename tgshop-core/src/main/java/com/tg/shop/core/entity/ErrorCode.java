@@ -13,16 +13,23 @@ public enum ErrorCode {
      * success
      */
     SUCCESS("0000", "success"),
-    SERVER_ERROR("9999", "system error"),
+
 
     REQUEST_ERROR("400", "请求错误"),
     UNAUTHORIZED("401", "未授权"),
     NOT_ACCESSIBLE("403", "不可访问"),
     METHOD_NOT_ALLOWED("405", "方法不被允许"),
     UNSUPPORTED_MEDIA_TYPE("415", "不支持当前媒体类型"),
+    REQUEST_PARAM_ERROR("1000", "请求参数错误"),
+
+    TOKEN_IS_EMPTY("1001","您的登录令牌为空，请登录"),
+    TOKEN_LOSE_EFFICACY("1002","您的登录令牌已失效，请重新登录"),
+    LOGIN_USER_NOT_EXISTS("1003","用户不存在"),
+    LOGIN_PASSWORD_ERROR("1004","登录密码错误"),
+
+    SERVER_ERROR("9999", "system error");
 
 
-    TOKEN_LOSE_EFFICACY("1001","您的登录令牌已失效，请重新登录");
 
     private String code;
 

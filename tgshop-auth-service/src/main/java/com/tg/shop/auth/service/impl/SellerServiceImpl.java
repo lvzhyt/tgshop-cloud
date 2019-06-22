@@ -9,6 +9,8 @@ import com.tg.shop.core.domain.ResultState;
 import com.tg.shop.core.domain.auth.cache.SellerUser;
 import com.tg.shop.core.domain.auth.entity.Seller;
 import com.tg.shop.core.domain.auth.entity.Store;
+import com.tg.shop.core.entity.ErrorCode;
+import com.tg.shop.core.entity.ResultObject;
 import com.tg.shop.core.generator.IdGenerator;
 import com.tg.shop.core.utils.RedisUtil;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,6 +21,7 @@ import org.springframework.util.Assert;
 import org.springframework.util.DigestUtils;
 import org.springframework.util.StringUtils;
 
+import javax.annotation.Resource;
 import java.util.UUID;
 import java.util.concurrent.TimeUnit;
 
@@ -30,13 +33,13 @@ import java.util.concurrent.TimeUnit;
 public class SellerServiceImpl implements SellerService {
 
 
-    @Autowired
+    @Resource
     private SellerMapper sellerMapper;
 
     @Autowired
     private SellerDao sellerDao;
 
-    @Autowired
+    @Resource
     private StoreMapper storeMapper;
 
     @Autowired
@@ -45,19 +48,19 @@ public class SellerServiceImpl implements SellerService {
     @Autowired
     private StringRedisTemplate stringRedisTemplate;
 
-    @Autowired
+    @Resource
     private IdGenerator idGenerator;
 
 
     @Override
-    public ResultState login(LoginParam loginForm) {
+    public ResultObject login(LoginParam loginForm) {
         Assert.notNull(loginForm.getUserName(),"seller loginName is null");
         Assert.notNull(loginForm.getPassword(),"seller password is null");
         String loginName = loginForm.getUserName();
         String key = RedisUtil.getSellerKey(loginName);
         String token = stringRedisTemplate.opsForValue().get(key);
         if(token!=null){
-            return new ResultState(token);
+            return new ResultObject(token);
         }
 
         Seller seller = sellerDao.findSellerByLoginName(loginName);
@@ -82,13 +85,13 @@ public class SellerServiceImpl implements SellerService {
                 // 放入redis缓存
                 redisTemplate.opsForValue().set(token, sellerUser,30, TimeUnit.DAYS);
             }else {
-                return new ResultState(ResultState.MESSAGE_TYPE_ERROR,"密码不正确");
+                return new ResultObject(ErrorCode.LOGIN_PASSWORD_ERROR);
             }
         }else {
-            return new ResultState(ResultState.MESSAGE_TYPE_ERROR,"用户不存在");
+            return new ResultObject(ErrorCode.LOGIN_USER_NOT_EXISTS);
         }
 
-        return new ResultState(token);
+        return new ResultObject(token);
     }
 
     @Override

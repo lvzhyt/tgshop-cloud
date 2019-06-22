@@ -1,8 +1,10 @@
 package com.tg.shop.core.entity;
 
 import lombok.Data;
+import org.springframework.validation.FieldError;
 
 import java.io.Serializable;
+import java.util.List;
 
 /**
  * 请求返回数据
@@ -42,11 +44,6 @@ public class ResultObject implements Serializable {
         this.data = data;
     }
 
-    public ResultObject(String message) {
-        this.result = 0;
-        this.code = "9999";
-        this.message = message;
-    }
 
     public ResultObject(String code, String message) {
         this.result = "0000".equals(code)?1:0;
@@ -57,13 +54,19 @@ public class ResultObject implements Serializable {
     public ResultObject(ErrorCode errorCode) {
         this.code = errorCode.getCode();
         this.message = errorCode.getMessage();
-        this.result = "0000".equals(this.code)?1:0;
+        this.result =errorCode==ErrorCode.SUCCESS?1:0;
+    }
+
+    public ResultObject(ErrorCode errorCode,List<FieldError> fieldErrors) {
+        this.code = errorCode.getCode();
+        this.message = errorCode.getMessage();
+        this.result =errorCode==ErrorCode.SUCCESS?1:0;
+        this.data = fieldErrors;
     }
 
     public static ResultObject getInstance() {
         return new ResultObject();
     }
-
     public static ResultObject getInstance(Object data) {
         return new ResultObject(data);
     }
@@ -80,4 +83,7 @@ public class ResultObject implements Serializable {
         return new ResultObject(errorCode);
     }
 
+    public static ResultObject getInstance(ErrorCode errorCode, List<FieldError> fieldErrors) {
+        return new ResultObject(errorCode,fieldErrors);
+    }
 }

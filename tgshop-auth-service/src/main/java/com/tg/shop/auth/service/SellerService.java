@@ -1,8 +1,8 @@
 package com.tg.shop.auth.service;
 
 import com.tg.shop.auth.request.LoginParam;
-import com.tg.shop.core.domain.ResultState;
 import com.tg.shop.core.domain.auth.entity.Seller;
+import com.tg.shop.core.entity.ResultObject;
 
 /**
  * @Author: tg
@@ -14,7 +14,7 @@ public interface SellerService {
      * @param loginForm
      * @return ResultState
      */
-    ResultState login(LoginParam loginForm);
+    ResultObject login(LoginParam loginForm);
 
 
     /**
