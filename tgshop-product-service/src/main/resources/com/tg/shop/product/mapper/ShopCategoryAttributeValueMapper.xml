@@ -1,0 +1,188 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.tg.shop.product.mapper.ShopCategoryAttributeValueMapper">
+  <resultMap id="BaseResultMap" type="com.tg.shop.core.domain.product.entity.ShopCategoryAttributeValue">
+    <id column="shop_category_value_id" jdbcType="VARCHAR" property="shopCategoryValueId" />
+    <result column="attribute_id" jdbcType="VARCHAR" property="attributeId" />
+    <result column="category_id" jdbcType="VARCHAR" property="categoryId" />
+    <result column="store_id" jdbcType="VARCHAR" property="storeId" />
+    <result column="seller_id" jdbcType="VARCHAR" property="sellerId" />
+    <result column="value_id" jdbcType="VARCHAR" property="valueId" />
+    <result column="sort_number" jdbcType="INTEGER" property="sortNumber" />
+    <result column="is_del" jdbcType="INTEGER" property="isDel" />
+    <result column="creator" jdbcType="VARCHAR" property="creator" />
+    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+    <result column="modifier" jdbcType="VARCHAR" property="modifier" />
+    <result column="modify_time" jdbcType="TIMESTAMP" property="modifyTime" />
+    <result column="version" jdbcType="INTEGER" property="version" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    shop_category_value_id, attribute_id, category_id, store_id, seller_id, value_id, 
+    sort_number, is_del, creator, create_time, modifier, modify_time, version
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.String" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from shop_category_attribute_value
+    where shop_category_value_id = #{shopCategoryValueId,jdbcType=VARCHAR}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String">
+    delete from shop_category_attribute_value
+    where shop_category_value_id = #{shopCategoryValueId,jdbcType=VARCHAR}
+  </delete>
+  <insert id="insert" parameterType="com.tg.shop.core.domain.product.entity.ShopCategoryAttributeValue">
+    insert into shop_category_attribute_value (shop_category_value_id, attribute_id, 
+      category_id, store_id, seller_id, 
+      value_id, sort_number, is_del, 
+      creator, create_time, modifier, 
+      modify_time, version)
+    values (#{shopCategoryValueId,jdbcType=VARCHAR}, #{attributeId,jdbcType=VARCHAR}, 
+      #{categoryId,jdbcType=VARCHAR}, #{storeId,jdbcType=VARCHAR}, #{sellerId,jdbcType=VARCHAR}, 
+      #{valueId,jdbcType=VARCHAR}, #{sortNumber,jdbcType=INTEGER}, #{isDel,jdbcType=INTEGER}, 
+      #{creator,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP}, #{modifier,jdbcType=VARCHAR}, 
+      #{modifyTime,jdbcType=TIMESTAMP}, #{version,jdbcType=INTEGER})
+  </insert>
+  <insert id="insertSelective" parameterType="com.tg.shop.core.domain.product.entity.ShopCategoryAttributeValue">
+    insert into shop_category_attribute_value
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="shopCategoryValueId != null">
+        shop_category_value_id,
+      </if>
+      <if test="attributeId != null">
+        attribute_id,
+      </if>
+      <if test="categoryId != null">
+        category_id,
+      </if>
+      <if test="storeId != null">
+        store_id,
+      </if>
+      <if test="sellerId != null">
+        seller_id,
+      </if>
+      <if test="valueId != null">
+        value_id,
+      </if>
+      <if test="sortNumber != null">
+        sort_number,
+      </if>
+      <if test="isDel != null">
+        is_del,
+      </if>
+      <if test="creator != null">
+        creator,
+      </if>
+      <if test="createTime != null">
+        create_time,
+      </if>
+      <if test="modifier != null">
+        modifier,
+      </if>
+      <if test="modifyTime != null">
+        modify_time,
+      </if>
+      <if test="version != null">
+        version,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="shopCategoryValueId != null">
+        #{shopCategoryValueId,jdbcType=VARCHAR},
+      </if>
+      <if test="attributeId != null">
+        #{attributeId,jdbcType=VARCHAR},
+      </if>
+      <if test="categoryId != null">
+        #{categoryId,jdbcType=VARCHAR},
+      </if>
+      <if test="storeId != null">
+        #{storeId,jdbcType=VARCHAR},
+      </if>
+      <if test="sellerId != null">
+        #{sellerId,jdbcType=VARCHAR},
+      </if>
+      <if test="valueId != null">
+        #{valueId,jdbcType=VARCHAR},
+      </if>
+      <if test="sortNumber != null">
+        #{sortNumber,jdbcType=INTEGER},
+      </if>
+      <if test="isDel != null">
+        #{isDel,jdbcType=INTEGER},
+      </if>
+      <if test="creator != null">
+        #{creator,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null">
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="modifier != null">
+        #{modifier,jdbcType=VARCHAR},
+      </if>
+      <if test="modifyTime != null">
+        #{modifyTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="version != null">
+        #{version,jdbcType=INTEGER},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.tg.shop.core.domain.product.entity.ShopCategoryAttributeValue">
+    update shop_category_attribute_value
+    <set>
+      <if test="attributeId != null">
+        attribute_id = #{attributeId,jdbcType=VARCHAR},
+      </if>
+      <if test="categoryId != null">
+        category_id = #{categoryId,jdbcType=VARCHAR},
+      </if>
+      <if test="storeId != null">
+        store_id = #{storeId,jdbcType=VARCHAR},
+      </if>
+      <if test="sellerId != null">
+        seller_id = #{sellerId,jdbcType=VARCHAR},
+      </if>
+      <if test="valueId != null">
+        value_id = #{valueId,jdbcType=VARCHAR},
+      </if>
+      <if test="sortNumber != null">
+        sort_number = #{sortNumber,jdbcType=INTEGER},
+      </if>
+      <if test="isDel != null">
+        is_del = #{isDel,jdbcType=INTEGER},
+      </if>
+      <if test="creator != null">
+        creator = #{creator,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null">
+        create_time = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="modifier != null">
+        modifier = #{modifier,jdbcType=VARCHAR},
+      </if>
+      <if test="modifyTime != null">
+        modify_time = #{modifyTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="version != null">
+        version = #{version,jdbcType=INTEGER},
+      </if>
+    </set>
+    where shop_category_value_id = #{shopCategoryValueId,jdbcType=VARCHAR}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.tg.shop.core.domain.product.entity.ShopCategoryAttributeValue">
+    update shop_category_attribute_value
+    set attribute_id = #{attributeId,jdbcType=VARCHAR},
+      category_id = #{categoryId,jdbcType=VARCHAR},
+      store_id = #{storeId,jdbcType=VARCHAR},
+      seller_id = #{sellerId,jdbcType=VARCHAR},
+      value_id = #{valueId,jdbcType=VARCHAR},
+      sort_number = #{sortNumber,jdbcType=INTEGER},
+      is_del = #{isDel,jdbcType=INTEGER},
+      creator = #{creator,jdbcType=VARCHAR},
+      create_time = #{createTime,jdbcType=TIMESTAMP},
+      modifier = #{modifier,jdbcType=VARCHAR},
+      modify_time = #{modifyTime,jdbcType=TIMESTAMP},
+      version = #{version,jdbcType=INTEGER}
+    where shop_category_value_id = #{shopCategoryValueId,jdbcType=VARCHAR}
+  </update>
+</mapper>

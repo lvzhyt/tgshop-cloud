@@ -1,0 +1,43 @@
+package com.tg.shop.categories.mapper;
+
+import com.tg.shop.core.domain.categories.entity.Attribute;
+import org.apache.ibatis.annotations.Mapper;
+
+@Mapper
+public interface AttributeMapper {
+    /**
+     *
+     * @mbg.generated Sun Jun 23 01:27:47 CST 2019
+     */
+    int deleteByPrimaryKey(String attrId);
+
+    /**
+     *
+     * @mbg.generated Sun Jun 23 01:27:47 CST 2019
+     */
+    int insert(Attribute record);
+
+    /**
+     *
+     * @mbg.generated Sun Jun 23 01:27:47 CST 2019
+     */
+    int insertSelective(Attribute record);
+
+    /**
+     *
+     * @mbg.generated Sun Jun 23 01:27:47 CST 2019
+     */
+    Attribute selectByPrimaryKey(String attrId);
+
+    /**
+     *
+     * @mbg.generated Sun Jun 23 01:27:47 CST 2019
+     */
+    int updateByPrimaryKeySelective(Attribute record);
+
+    /**
+     *
+     * @mbg.generated Sun Jun 23 01:27:47 CST 2019
+     */
+    int updateByPrimaryKey(Attribute record);
+}

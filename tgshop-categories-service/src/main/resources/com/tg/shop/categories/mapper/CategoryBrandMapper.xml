@@ -1,0 +1,164 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.tg.shop.categories.mapper.CategoryBrandMapper">
+  <resultMap id="BaseResultMap" type="com.tg.shop.core.domain.categories.entity.CategoryBrand">
+    <id column="category_brand_id" jdbcType="VARCHAR" property="categoryBrandId" />
+    <result column="brand_id" jdbcType="VARCHAR" property="brandId" />
+    <result column="category_lev2_id" jdbcType="VARCHAR" property="categoryLev2Id" />
+    <result column="category_lev3_id" jdbcType="VARCHAR" property="categoryLev3Id" />
+    <result column="sort_num" jdbcType="INTEGER" property="sortNum" />
+    <result column="is_del" jdbcType="INTEGER" property="isDel" />
+    <result column="creator" jdbcType="VARCHAR" property="creator" />
+    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+    <result column="modifier" jdbcType="VARCHAR" property="modifier" />
+    <result column="modify_time" jdbcType="TIMESTAMP" property="modifyTime" />
+    <result column="version" jdbcType="INTEGER" property="version" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    category_brand_id, brand_id, category_lev2_id, category_lev3_id, sort_num, is_del, 
+    creator, create_time, modifier, modify_time, version
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.String" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from item_category_brand
+    where category_brand_id = #{categoryBrandId,jdbcType=VARCHAR}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String">
+    delete from item_category_brand
+    where category_brand_id = #{categoryBrandId,jdbcType=VARCHAR}
+  </delete>
+  <insert id="insert" parameterType="com.tg.shop.core.domain.categories.entity.CategoryBrand">
+    insert into item_category_brand (category_brand_id, brand_id, category_lev2_id, 
+      category_lev3_id, sort_num, is_del, 
+      creator, create_time, modifier, 
+      modify_time, version)
+    values (#{categoryBrandId,jdbcType=VARCHAR}, #{brandId,jdbcType=VARCHAR}, #{categoryLev2Id,jdbcType=VARCHAR}, 
+      #{categoryLev3Id,jdbcType=VARCHAR}, #{sortNum,jdbcType=INTEGER}, #{isDel,jdbcType=INTEGER}, 
+      #{creator,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP}, #{modifier,jdbcType=VARCHAR}, 
+      #{modifyTime,jdbcType=TIMESTAMP}, #{version,jdbcType=INTEGER})
+  </insert>
+  <insert id="insertSelective" parameterType="com.tg.shop.core.domain.categories.entity.CategoryBrand">
+    insert into item_category_brand
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="categoryBrandId != null">
+        category_brand_id,
+      </if>
+      <if test="brandId != null">
+        brand_id,
+      </if>
+      <if test="categoryLev2Id != null">
+        category_lev2_id,
+      </if>
+      <if test="categoryLev3Id != null">
+        category_lev3_id,
+      </if>
+      <if test="sortNum != null">
+        sort_num,
+      </if>
+      <if test="isDel != null">
+        is_del,
+      </if>
+      <if test="creator != null">
+        creator,
+      </if>
+      <if test="createTime != null">
+        create_time,
+      </if>
+      <if test="modifier != null">
+        modifier,
+      </if>
+      <if test="modifyTime != null">
+        modify_time,
+      </if>
+      <if test="version != null">
+        version,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="categoryBrandId != null">
+        #{categoryBrandId,jdbcType=VARCHAR},
+      </if>
+      <if test="brandId != null">
+        #{brandId,jdbcType=VARCHAR},
+      </if>
+      <if test="categoryLev2Id != null">
+        #{categoryLev2Id,jdbcType=VARCHAR},
+      </if>
+      <if test="categoryLev3Id != null">
+        #{categoryLev3Id,jdbcType=VARCHAR},
+      </if>
+      <if test="sortNum != null">
+        #{sortNum,jdbcType=INTEGER},
+      </if>
+      <if test="isDel != null">
+        #{isDel,jdbcType=INTEGER},
+      </if>
+      <if test="creator != null">
+        #{creator,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null">
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="modifier != null">
+        #{modifier,jdbcType=VARCHAR},
+      </if>
+      <if test="modifyTime != null">
+        #{modifyTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="version != null">
+        #{version,jdbcType=INTEGER},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.tg.shop.core.domain.categories.entity.CategoryBrand">
+    update item_category_brand
+    <set>
+      <if test="brandId != null">
+        brand_id = #{brandId,jdbcType=VARCHAR},
+      </if>
+      <if test="categoryLev2Id != null">
+        category_lev2_id = #{categoryLev2Id,jdbcType=VARCHAR},
+      </if>
+      <if test="categoryLev3Id != null">
+        category_lev3_id = #{categoryLev3Id,jdbcType=VARCHAR},
+      </if>
+      <if test="sortNum != null">
+        sort_num = #{sortNum,jdbcType=INTEGER},
+      </if>
+      <if test="isDel != null">
+        is_del = #{isDel,jdbcType=INTEGER},
+      </if>
+      <if test="creator != null">
+        creator = #{creator,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null">
+        create_time = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="modifier != null">
+        modifier = #{modifier,jdbcType=VARCHAR},
+      </if>
+      <if test="modifyTime != null">
+        modify_time = #{modifyTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="version != null">
+        version = #{version,jdbcType=INTEGER},
+      </if>
+    </set>
+    where category_brand_id = #{categoryBrandId,jdbcType=VARCHAR}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.tg.shop.core.domain.categories.entity.CategoryBrand">
+    update item_category_brand
+    set brand_id = #{brandId,jdbcType=VARCHAR},
+      category_lev2_id = #{categoryLev2Id,jdbcType=VARCHAR},
+      category_lev3_id = #{categoryLev3Id,jdbcType=VARCHAR},
+      sort_num = #{sortNum,jdbcType=INTEGER},
+      is_del = #{isDel,jdbcType=INTEGER},
+      creator = #{creator,jdbcType=VARCHAR},
+      create_time = #{createTime,jdbcType=TIMESTAMP},
+      modifier = #{modifier,jdbcType=VARCHAR},
+      modify_time = #{modifyTime,jdbcType=TIMESTAMP},
+      version = #{version,jdbcType=INTEGER}
+    where category_brand_id = #{categoryBrandId,jdbcType=VARCHAR}
+  </update>
+</mapper>

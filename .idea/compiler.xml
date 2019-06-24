@@ -8,7 +8,10 @@
         <outputRelativeToContentRoot value="true" />
         <module name="tgshop-eureka-service" />
         <module name="tgshop-mybatis-generator" />
+        <module name="tgshop-categories-service" />
         <module name="tgshop-auth-service" />
+        <module name="tgshop-mq-service" />
+        <module name="tgshop-trade-service" />
         <module name="tgshop-service-zuul" />
         <module name="tgshop-manager-seller" />
         <module name="tgshop-core" />
@@ -22,12 +25,15 @@
     <option name="ADDITIONAL_OPTIONS_OVERRIDE">
       <module name="tgshop-auth-api" options="-parameters" />
       <module name="tgshop-auth-service" options="-parameters" />
+      <module name="tgshop-categories-service" options="-parameters" />
       <module name="tgshop-core" options="-parameters" />
       <module name="tgshop-eureka-service" options="-parameters" />
       <module name="tgshop-manager-seller" options="-parameters" />
+      <module name="tgshop-mq-service" options="-parameters" />
       <module name="tgshop-mybatis-generator" options="-parameters" />
       <module name="tgshop-product-service" options="-parameters" />
       <module name="tgshop-service-zuul" options="-parameters" />
+      <module name="tgshop-trade-service" options="-parameters" />
       <module name="tgshop-zuul-seller" options="-parameters" />
     </option>
   </component>
