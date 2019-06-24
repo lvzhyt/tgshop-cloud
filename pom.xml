@@ -18,6 +18,9 @@
         <module>tgshop-product-service</module>
         <module>tgshop-manager-seller</module>
         <module>tgshop-zuul-seller</module>
+        <module>tgshop-categories-service</module>
+        <module>tgshop-mq-service</module>
+        <module>tgshop-trade-service</module>
     </modules>
 
     <parent>

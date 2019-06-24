@@ -19,9 +19,9 @@
         <javaModelGenerator targetProject="tgshop-core/src/main/java"
                             targetPackage="com.tg.shop.core.domain.mq.entity"/>
         <sqlMapGenerator targetProject="tgshop-mq-service/src/main/resources"
-                         targetPackage="com.tg.shop.core.mq.mapper"/>
+                         targetPackage="com.tg.shop.mq.mapper"/>
         <javaClientGenerator targetProject="tgshop-mq-service/src/main/java"
-                             targetPackage="com.tg.shop.core.mq.mapper"
+                             targetPackage="com.tg.shop.mq.mapper"
                              type="XMLMAPPER"/>
 
         <!-- 消息队列 -->

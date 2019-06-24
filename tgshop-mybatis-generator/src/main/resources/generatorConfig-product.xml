@@ -25,33 +25,33 @@
                              type="XMLMAPPER"/>
 
         <!-- product 商品 -->
-<!--        <table tableName="item_goods" domainObjectName="Goods" enableCountByExample="false" enableUpdateByExample="false" enableDeleteByExample="false" enableSelectByExample="false" selectByExampleQueryId="false"/>-->
-<!--        <table tableName="item_goods_sku" domainObjectName="GoodsSku" enableCountByExample="false" enableUpdateByExample="false" enableDeleteByExample="false" enableSelectByExample="false" selectByExampleQueryId="false"/>-->
-<!--        <table tableName="item_goods_upload_picture" domainObjectName="GoodsUploadPicture" enableCountByExample="false" enableUpdateByExample="false" enableDeleteByExample="false" enableSelectByExample="false" selectByExampleQueryId="false"/>-->
-<!--        <table tableName="item_goods_sku_picture" domainObjectName="GoodsSkuPicture" enableCountByExample="false" enableUpdateByExample="false" enableDeleteByExample="false" enableSelectByExample="false" selectByExampleQueryId="false"/>-->
-<!--        <table tableName="item_goods_attribute" domainObjectName="GoodsAttribute" enableCountByExample="false" enableUpdateByExample="false" enableDeleteByExample="false" enableSelectByExample="false" selectByExampleQueryId="false"/>-->
-<!--        <table tableName="item_goods_attribute_value" domainObjectName="GoodsAttributeValue" enableCountByExample="false" enableUpdateByExample="false" enableDeleteByExample="false" enableSelectByExample="false" selectByExampleQueryId="false"/>-->
-<!--        <table tableName="item_goods_sku_attribute" domainObjectName="GoodsSkuAttribute" enableCountByExample="false" enableUpdateByExample="false" enableDeleteByExample="false" enableSelectByExample="false" selectByExampleQueryId="false"/>-->
-<!--        <table tableName="item_goods_sku_attribute_value" domainObjectName="GoodsSkuAttributeValue" enableCountByExample="false" enableUpdateByExample="false" enableDeleteByExample="false" enableSelectByExample="false" selectByExampleQueryId="false"/>-->
+        <table tableName="item_goods" domainObjectName="Goods" enableCountByExample="false" enableUpdateByExample="false" enableDeleteByExample="false" enableSelectByExample="false" selectByExampleQueryId="false"/>
+        <table tableName="item_goods_sku" domainObjectName="GoodsSku" enableCountByExample="false" enableUpdateByExample="false" enableDeleteByExample="false" enableSelectByExample="false" selectByExampleQueryId="false"/>
+        <table tableName="item_goods_upload_picture" domainObjectName="GoodsUploadPicture" enableCountByExample="false" enableUpdateByExample="false" enableDeleteByExample="false" enableSelectByExample="false" selectByExampleQueryId="false"/>
+        <table tableName="item_goods_sku_picture" domainObjectName="GoodsSkuPicture" enableCountByExample="false" enableUpdateByExample="false" enableDeleteByExample="false" enableSelectByExample="false" selectByExampleQueryId="false"/>
+        <table tableName="item_goods_attribute" domainObjectName="GoodsAttribute" enableCountByExample="false" enableUpdateByExample="false" enableDeleteByExample="false" enableSelectByExample="false" selectByExampleQueryId="false"/>
+        <table tableName="item_goods_attribute_value" domainObjectName="GoodsAttributeValue" enableCountByExample="false" enableUpdateByExample="false" enableDeleteByExample="false" enableSelectByExample="false" selectByExampleQueryId="false"/>
+        <table tableName="item_goods_sku_attribute" domainObjectName="GoodsSkuAttribute" enableCountByExample="false" enableUpdateByExample="false" enableDeleteByExample="false" enableSelectByExample="false" selectByExampleQueryId="false"/>
+        <table tableName="item_goods_sku_attribute_value" domainObjectName="GoodsSkuAttributeValue" enableCountByExample="false" enableUpdateByExample="false" enableDeleteByExample="false" enableSelectByExample="false" selectByExampleQueryId="false"/>
         <table tableName="item_goods_sku_inventory" domainObjectName="GoodsSkuInventory" enableCountByExample="false" enableUpdateByExample="false" enableDeleteByExample="false" enableSelectByExample="false" selectByExampleQueryId="false"/>
         <table tableName="item_goods_sku_inventory_log" domainObjectName="GoodsSkuInventoryLog" enableCountByExample="false" enableUpdateByExample="false" enableDeleteByExample="false" enableSelectByExample="false" selectByExampleQueryId="false"/>
         <table tableName="item_goods_sku_price" domainObjectName="GoodsSkuPrice" enableCountByExample="false" enableUpdateByExample="false" enableDeleteByExample="false" enableSelectByExample="false" selectByExampleQueryId="false"/>
         <table tableName="item_goods_sku_price_log" domainObjectName="GoodsSkuPriceLog" enableCountByExample="false" enableUpdateByExample="false" enableDeleteByExample="false" enableSelectByExample="false" selectByExampleQueryId="false"/>
-<!--        <table tableName="item_freight_charge_template" domainObjectName="FreightChargeTemplate" enableCountByExample="false" enableUpdateByExample="false" enableDeleteByExample="false" enableSelectByExample="false" selectByExampleQueryId="false"/>-->
+        <table tableName="item_freight_charge_template" domainObjectName="FreightChargeTemplate" enableCountByExample="false" enableUpdateByExample="false" enableDeleteByExample="false" enableSelectByExample="false" selectByExampleQueryId="false"/>
 
-<!--        &lt;!&ndash; 商家 &ndash;&gt;-->
-<!--        &lt;!&ndash;商家-属性&ndash;&gt;-->
-<!--        <table tableName="shop_attribute" domainObjectName="ShopAttribute" enableCountByExample="false" enableUpdateByExample="false" enableDeleteByExample="false" enableSelectByExample="false" selectByExampleQueryId="false"/>-->
-<!--        &lt;!&ndash;商家-属性值&ndash;&gt;-->
-<!--        <table tableName="shop_attr_value" domainObjectName="ShopAttributeValue" enableCountByExample="false" enableUpdateByExample="false" enableDeleteByExample="false" enableSelectByExample="false" selectByExampleQueryId="false"/>-->
-<!--        &lt;!&ndash;商家-类目关系&ndash;&gt;-->
-<!--        <table tableName="shop_category" domainObjectName="ShopCategory" enableCountByExample="false" enableUpdateByExample="false" enableDeleteByExample="false" enableSelectByExample="false" selectByExampleQueryId="false"/>-->
-<!--        &lt;!&ndash;商家-类目-属性&ndash;&gt;-->
-<!--        <table tableName="shop_category_attribute" domainObjectName="ShopCategoryAttribute" enableCountByExample="false" enableUpdateByExample="false" enableDeleteByExample="false" enableSelectByExample="false" selectByExampleQueryId="false"/>-->
-<!--        &lt;!&ndash; 商家-品牌 &ndash;&gt;-->
-<!--        <table tableName="shop_brand" domainObjectName="ShopBrand" enableCountByExample="false" enableUpdateByExample="false" enableDeleteByExample="false" enableSelectByExample="false" selectByExampleQueryId="false"/>-->
-<!--        &lt;!&ndash;商家-类目-属性值&ndash;&gt;-->
-<!--        <table tableName="shop_category_attribute_value" domainObjectName="ShopCategoryAttributeValue" enableCountByExample="false" enableUpdateByExample="false" enableDeleteByExample="false" enableSelectByExample="false" selectByExampleQueryId="false"/>-->
+        <!-- 商家 -->
+        <!--商家-属性-->
+        <table tableName="shop_attribute" domainObjectName="ShopAttribute" enableCountByExample="false" enableUpdateByExample="false" enableDeleteByExample="false" enableSelectByExample="false" selectByExampleQueryId="false"/>
+        <!--商家-属性值-->
+        <table tableName="shop_attr_value" domainObjectName="ShopAttributeValue" enableCountByExample="false" enableUpdateByExample="false" enableDeleteByExample="false" enableSelectByExample="false" selectByExampleQueryId="false"/>
+        <!--商家-类目关系-->
+        <table tableName="shop_category" domainObjectName="ShopCategory" enableCountByExample="false" enableUpdateByExample="false" enableDeleteByExample="false" enableSelectByExample="false" selectByExampleQueryId="false"/>
+        <!--商家-类目-属性-->
+        <table tableName="shop_category_attribute" domainObjectName="ShopCategoryAttribute" enableCountByExample="false" enableUpdateByExample="false" enableDeleteByExample="false" enableSelectByExample="false" selectByExampleQueryId="false"/>
+        <!-- 商家-品牌 -->
+        <table tableName="shop_brand" domainObjectName="ShopBrand" enableCountByExample="false" enableUpdateByExample="false" enableDeleteByExample="false" enableSelectByExample="false" selectByExampleQueryId="false"/>
+        <!--商家-类目-属性值-->
+        <table tableName="shop_category_attribute_value" domainObjectName="ShopCategoryAttributeValue" enableCountByExample="false" enableUpdateByExample="false" enableDeleteByExample="false" enableSelectByExample="false" selectByExampleQueryId="false"/>
 
 
     </context>

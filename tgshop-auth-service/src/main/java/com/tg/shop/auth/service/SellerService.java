@@ -11,6 +11,7 @@ import com.tg.shop.core.entity.ResultObject;
 public interface SellerService {
     /**
      * 登录
+     * 根据密码重新登录
      * @param loginForm
      * @return ResultState
      */

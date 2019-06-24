@@ -52,6 +52,7 @@ public class SellerServiceImpl implements SellerService {
     private IdGenerator idGenerator;
 
 
+
     @Override
     public ResultObject login(LoginParam loginForm) {
         Assert.notNull(loginForm.getUserName(),"seller loginName is null");
@@ -60,9 +61,8 @@ public class SellerServiceImpl implements SellerService {
         String key = RedisUtil.getSellerKey(loginName);
         String token = stringRedisTemplate.opsForValue().get(key);
         if(token!=null){
-            return new ResultObject(token);
+            stringRedisTemplate.delete(token);
         }
-
         Seller seller = sellerDao.findSellerByLoginName(loginName);
 
 
@@ -70,11 +70,6 @@ public class SellerServiceImpl implements SellerService {
             String passwdMd5 = DigestUtils.md5DigestAsHex(loginForm.getPassword().getBytes());
             String dbPasswd = seller.getPassword();
             if(passwdMd5.equals(dbPasswd)){
-                token = UUID.randomUUID().toString().replace("-","");
-                String keyLogin = RedisUtil.getSellerKey(seller.getLoginName());
-                String keyPhone = RedisUtil.getSellerKey(seller.getPhone());
-                stringRedisTemplate.opsForValue().set(keyLogin,token,30, TimeUnit.DAYS);
-                stringRedisTemplate.opsForValue().set(keyPhone,token,30, TimeUnit.DAYS);
                 SellerUser sellerUser = new SellerUser();
                 sellerUser.setSeller(seller);
                 // 查找店铺
@@ -82,9 +77,13 @@ public class SellerServiceImpl implements SellerService {
                     Store store = storeMapper.selectByPrimaryKey(seller.getStoreId());
                     sellerUser.setStore(store);
                 }
+                if(token==null){
+                    token = UUID.randomUUID().toString().replace("-","");
+                }
                 // 放入redis缓存
                 redisTemplate.opsForValue().set(token, sellerUser,30, TimeUnit.DAYS);
             }else {
+
                 return new ResultObject(ErrorCode.LOGIN_PASSWORD_ERROR);
             }
         }else {
