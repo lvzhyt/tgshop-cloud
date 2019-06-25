@@ -20,6 +20,9 @@ public enum ErrorCode {
     NOT_ACCESSIBLE("403", "不可访问"),
     METHOD_NOT_ALLOWED("405", "方法不被允许"),
     UNSUPPORTED_MEDIA_TYPE("415", "不支持当前媒体类型"),
+
+    HYSTRIX_SERVICE_ERROR("0004", "服务熔断错误"),
+
     REQUEST_PARAM_ERROR("1000", "请求参数错误"),
 
     TOKEN_IS_EMPTY("1001","您的登录令牌为空，请登录"),

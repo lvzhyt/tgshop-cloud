@@ -6,8 +6,8 @@ import com.tg.shop.core.domain.product.entity.Goods;
 import com.tg.shop.core.domain.util.PageCondition;
 import com.tg.shop.core.entity.ResultObject;
 import com.tg.shop.search.entity.EsGoods;
-import com.tg.shop.search.fegin.service.FeginGoodsService;
-import com.tg.shop.search.fegin.service.FeginGoodsSkuService;
+import com.tg.shop.search.feign.service.FeignGoodsService;
+import com.tg.shop.search.feign.service.FeignGoodsSkuService;
 import com.tg.shop.search.repositry.GoodsRepository;
 import com.tg.shop.search.service.GoodsSearchService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,9 +25,9 @@ public class GoodsSearchController {
     @Autowired
     private ElasticsearchTemplate elasticsearchTemplate;
     @Resource
-    private FeginGoodsService goodsService;
+    private FeignGoodsService goodsService;
     @Resource
-    private FeginGoodsSkuService goodsSkuService;
+    private FeignGoodsSkuService goodsSkuService;
     @Autowired
     private GoodsRepository goodsRepository;
     @Autowired

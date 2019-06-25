@@ -6,8 +6,8 @@ import com.tg.shop.core.domain.product.info.GoodsInfo;
 import com.tg.shop.core.domain.product.result.vo.GoodsSkuDetailResultVo;
 import com.tg.shop.search.entity.EsGoods;
 import com.tg.shop.search.entity.vo.EsGoodsSearchVo;
-import com.tg.shop.search.fegin.service.FeginGoodsService;
-import com.tg.shop.search.fegin.service.FeginGoodsSkuService;
+import com.tg.shop.search.feign.service.FeignGoodsService;
+import com.tg.shop.search.feign.service.FeignGoodsSkuService;
 import com.tg.shop.search.repositry.GoodsRepository;
 import com.tg.shop.search.service.GoodsSearchService;
 import org.elasticsearch.common.lucene.search.function.CombineFunction;
@@ -36,9 +36,9 @@ public class GoodsSearchServiceImpl implements GoodsSearchService {
     @Resource
     private GoodsRepository goodsRepository;
     @Resource
-    private FeginGoodsService goodsService;
+    private FeignGoodsService goodsService;
     @Resource
-    private FeginGoodsSkuService goodsSkuService;
+    private FeignGoodsSkuService goodsSkuService;
 
     @Override
     public Page<EsGoods> searchGoods(String search, int pageNum, int pageSize) {

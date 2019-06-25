@@ -1,0 +1,22 @@
+package com.tg.shop.search.hystrix;
+
+import com.github.pagehelper.PageInfo;
+import com.tg.shop.core.domain.product.entity.Goods;
+import com.tg.shop.core.domain.util.PageCondition;
+import com.tg.shop.core.entity.ErrorCode;
+import com.tg.shop.core.entity.ResultObject;
+import com.tg.shop.search.feign.service.FeignGoodsService;
+import org.springframework.stereotype.Component;
+
+@Component
+public class FeignGoodsServiceHystrix implements FeignGoodsService {
+    @Override
+    public ResultObject getGoodsById(String goodsId) {
+        return ResultObject.getInstance(ErrorCode.LOGIN_PASSWORD_ERROR);
+    }
+
+    @Override
+    public ResultObject findGoodsPageList(PageCondition<Goods> pageCondition) {
+        return null;
+    }
+}
