@@ -16,7 +16,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 public interface FeignGoodsService {
 
     @RequestMapping("/goods/getGoodsById")
-    ResultObject getGoodsById(String goodsId);
+    ResultObject<Goods> getGoodsById(String goodsId);
 
     @PostMapping("/goods/findGoodsPageList")
     ResultObject findGoodsPageList(PageCondition<Goods> pageCondition);

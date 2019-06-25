@@ -8,15 +8,18 @@ import com.tg.shop.core.entity.ResultObject;
 import com.tg.shop.search.feign.service.FeignGoodsService;
 import org.springframework.stereotype.Component;
 
+/**
+ * @author Administrator
+ */
 @Component
 public class FeignGoodsServiceHystrix implements FeignGoodsService {
     @Override
     public ResultObject getGoodsById(String goodsId) {
-        return ResultObject.getInstance(ErrorCode.LOGIN_PASSWORD_ERROR);
+        return new ResultObject(ErrorCode.HYSTRIX_SERVICE_ERROR);
     }
 
     @Override
     public ResultObject findGoodsPageList(PageCondition<Goods> pageCondition) {
-        return null;
+        return new ResultObject(ErrorCode.HYSTRIX_SERVICE_ERROR);
     }
 }

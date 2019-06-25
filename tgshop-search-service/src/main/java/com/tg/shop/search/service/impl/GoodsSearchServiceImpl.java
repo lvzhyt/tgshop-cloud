@@ -4,6 +4,7 @@ package com.tg.shop.search.service.impl;
 import com.tg.shop.core.domain.product.entity.Goods;
 import com.tg.shop.core.domain.product.info.GoodsInfo;
 import com.tg.shop.core.domain.product.result.vo.GoodsSkuDetailResultVo;
+import com.tg.shop.core.entity.ResultObject;
 import com.tg.shop.search.entity.EsGoods;
 import com.tg.shop.search.entity.vo.EsGoodsSearchVo;
 import com.tg.shop.search.feign.service.FeignGoodsService;
@@ -79,7 +80,8 @@ public class GoodsSearchServiceImpl implements GoodsSearchService {
 
     @Override
     public void updateGoodsIndex(String goodsId) {
-        Goods goods = goodsService.getGoodsById(goodsId);
+        ResultObject resultObject = goodsService.getGoodsById(goodsId);
+        Goods goods = (Goods) resultObject.getData();
         if(goods==null){
             return;
         }

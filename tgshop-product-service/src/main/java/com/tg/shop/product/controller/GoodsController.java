@@ -20,15 +20,15 @@ public class GoodsController {
     private GoodsService goodsService;
 
     @GetMapping("/goods/getGoodsById")
-    public ResultObject getGoodsById(String goodsId){
+    public ResultObject<Goods> getGoodsById(String goodsId){
         Goods goods =  goodsService.getGoodsById(goodsId);
-        return ResultObject.getInstance(goods);
+        return new ResultObject<>(goods);
     }
 
 
     @PostMapping("/goods/findGoodsPageList")
-     ResultObject findGoodsPageList(PageCondition<Goods> pageCondition){
+     ResultObject<PageInfo<Goods>> findGoodsPageList(PageCondition<Goods> pageCondition){
         PageInfo<Goods> page =  goodsService.findGoodsPageList(pageCondition);
-        return ResultObject.getInstance(page);
+        return new ResultObject<>(page);
     }
 }

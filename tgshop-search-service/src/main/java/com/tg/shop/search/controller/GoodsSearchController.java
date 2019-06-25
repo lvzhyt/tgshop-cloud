@@ -37,7 +37,7 @@ public class GoodsSearchController {
     public ResultObject save(){
         EsGoods goods = new EsGoods();
         goodsRepository.save(goods);
-        return ResultObject.getInstance();
+        return new ResultObject();
     }
 
     @PutMapping("/createGoodsIndex")
@@ -50,18 +50,26 @@ public class GoodsSearchController {
     }
 
     @GetMapping("/indexGoodsData")
-    public JSONObject indexGoodsData(){
+    public ResultObject indexGoodsData(){
 
         PageCondition<Goods> pageCondition = new PageCondition<>();
         pageCondition.setPageNum(1);
         pageCondition.setPageSize(50);
         pageCondition.setCondition(new Goods());
-        PageInfo<Goods> goodsPageInfo = goodsService.findGoodsPageList(pageCondition);
+        ResultObject resultObject =  goodsService.findGoodsPageList(pageCondition);
+        if(!resultObject.isSuccess()){
+            return resultObject;
+        }
+        PageInfo<Goods> goodsPageInfo = (PageInfo<Goods>) resultObject.getData();
         int pageCount = goodsPageInfo.getPages();
         for (int i = 0; i < pageCount; i++) {
             if(i>0){
                 pageCondition.setPageNum(i+1);
-                goodsPageInfo = goodsService.findGoodsPageList(pageCondition);
+                ResultObject resultObjectPage  = goodsService.findGoodsPageList(pageCondition);
+                if(!resultObject.isSuccess()){
+                    return resultObject;
+                }
+                goodsPageInfo = (PageInfo<Goods>) resultObjectPage.getData();
             }
             List<Goods> goodsList = goodsPageInfo.getList();
             for (int j = 0; j < goodsList.size(); j++) {
@@ -69,15 +77,15 @@ public class GoodsSearchController {
                 goodsSearchService.updateGoodsIndex(goods.getGoodsId());
             }
         }
-        return new JSONObject();
+        return new ResultObject();
     }
 
     @GetMapping("/searchGoods")
-    public ResultObject searchGoods(@RequestParam("search") String search,
+    public ResultObject<Page<EsGoods>> searchGoods(@RequestParam("search") String search,
                                   @RequestParam(required = false,defaultValue = "1") int pageNum,
                                   @RequestParam(required = false,defaultValue = "10")int pageSize){
         Page<EsGoods> page = goodsSearchService.searchGoods(search,pageNum,pageSize);
-        return ResultObject.getInstance(page);
+        return new ResultObject(page);
     }
 
 }

@@ -11,7 +11,7 @@ import java.util.List;
  * @author Administrator
  */
 @Data
-public class ResultObject implements Serializable {
+public class ResultObject<T> implements Serializable {
 
     /**
      * 返回结果 1 正常 0 异常
@@ -26,12 +26,17 @@ public class ResultObject implements Serializable {
     /**
      * 返回数据
      */
-    private Object data;
+    private T data;
 
     /**
      * 信息
      */
     private String message;
+
+    /**
+     * 字段校验错误
+     */
+    private List<FieldError> fieldErrors;
 
     public ResultObject() {
         this.result=1;
@@ -39,7 +44,7 @@ public class ResultObject implements Serializable {
         this.message = "";
     }
 
-    public ResultObject(Object data) {
+    public ResultObject(T data) {
         this();
         this.data = data;
     }
@@ -61,29 +66,11 @@ public class ResultObject implements Serializable {
         this.code = errorCode.getCode();
         this.message = errorCode.getMessage();
         this.result =errorCode==ErrorCode.SUCCESS?1:0;
-        this.data = fieldErrors;
+        this.fieldErrors = fieldErrors;
     }
 
-    public static ResultObject getInstance() {
-        return new ResultObject();
-    }
-    public static ResultObject getInstance(Object data) {
-        return new ResultObject(data);
-    }
 
-    public static ResultObject getInstance(String message) {
-        return new ResultObject(message);
-    }
-
-    public static ResultObject getInstance(String code, String message) {
-        return new ResultObject(code,message);
-    }
-
-    public static ResultObject getInstance(ErrorCode errorCode) {
-        return new ResultObject(errorCode);
-    }
-
-    public static ResultObject getInstance(ErrorCode errorCode, List<FieldError> fieldErrors) {
-        return new ResultObject(errorCode,fieldErrors);
+    public boolean isSuccess(){
+        return this.result==1;
     }
 }
