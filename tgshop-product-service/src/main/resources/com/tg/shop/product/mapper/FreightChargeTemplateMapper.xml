@@ -174,4 +174,27 @@
       version = #{version,jdbcType=INTEGER}
     where template_id = #{templateId,jdbcType=VARCHAR}
   </update>
+
+
+  <!--  自定义 -->
+  <select id="selectFreightChargeTemplateListByCondition" parameterType="com.tg.shop.core.domain.product.entity.FreightChargeTemplate" resultMap="BaseResultMap">
+    select <include refid="Base_Column_List"/>
+    from item_freight_charge_template
+    <include refid="whereStatement"/>
+  </select>
+  <sql id="whereStatement">
+    <where>
+      <if test="storeId != null">
+        and store_id = #{storeId,jdbcType=VARCHAR}
+      </if>
+      <if test="templateName != null">
+        and template_name = #{templateName,jdbcType=VARCHAR}
+      </if>
+      <if test="templateType != null">
+        and template_type = #{templateType,jdbcType=INTEGER}
+      </if>
+      and is_del=0
+    </where>
+  </sql>
+
 </mapper>

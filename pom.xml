@@ -21,6 +21,7 @@
         <module>tgshop-categories-service</module>
         <module>tgshop-mq-service</module>
         <module>tgshop-trade-service</module>
+        <module>tgshop-search-service</module>
     </modules>
 
     <parent>
@@ -99,14 +100,14 @@
         </dependencies>
     </dependencyManagement>
 
-    <build>
-        <plugins>
-            <plugin>
-                <groupId>org.springframework.boot</groupId>
-                <artifactId>spring-boot-maven-plugin</artifactId>
-            </plugin>
-        </plugins>
-    </build>
+<!--    <build>-->
+<!--        <plugins>-->
+<!--            <plugin>-->
+<!--                <groupId>org.springframework.boot</groupId>-->
+<!--                <artifactId>spring-boot-maven-plugin</artifactId>-->
+<!--            </plugin>-->
+<!--        </plugins>-->
+<!--    </build>-->
 
 
 </project>

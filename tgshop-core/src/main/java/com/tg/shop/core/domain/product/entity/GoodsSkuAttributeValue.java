@@ -9,7 +9,7 @@ public class GoodsSkuAttributeValue implements Serializable {
     /**
      * 表id
      */
-    private String tId;
+    private String tbId;
 
     /**
      * 属性ID 表 item_attribute

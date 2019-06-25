@@ -7,37 +7,37 @@ import org.apache.ibatis.annotations.Mapper;
 public interface PlatformMenuMapper {
     /**
      *
-     * @mbg.generated Thu Jun 20 14:59:35 CST 2019
+     * @mbg.generated Tue Jun 25 14:49:57 CST 2019
      */
     int deleteByPrimaryKey(String menuId);
 
     /**
      *
-     * @mbg.generated Thu Jun 20 14:59:35 CST 2019
+     * @mbg.generated Tue Jun 25 14:49:57 CST 2019
      */
     int insert(PlatformMenu record);
 
     /**
      *
-     * @mbg.generated Thu Jun 20 14:59:35 CST 2019
+     * @mbg.generated Tue Jun 25 14:49:57 CST 2019
      */
     int insertSelective(PlatformMenu record);
 
     /**
      *
-     * @mbg.generated Thu Jun 20 14:59:35 CST 2019
+     * @mbg.generated Tue Jun 25 14:49:57 CST 2019
      */
     PlatformMenu selectByPrimaryKey(String menuId);
 
     /**
      *
-     * @mbg.generated Thu Jun 20 14:59:35 CST 2019
+     * @mbg.generated Tue Jun 25 14:49:57 CST 2019
      */
     int updateByPrimaryKeySelective(PlatformMenu record);
 
     /**
      *
-     * @mbg.generated Thu Jun 20 14:59:35 CST 2019
+     * @mbg.generated Tue Jun 25 14:49:57 CST 2019
      */
     int updateByPrimaryKey(PlatformMenu record);
 }

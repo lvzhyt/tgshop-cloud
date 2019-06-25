@@ -1,6 +1,6 @@
 /*==============================================================*/
 /* DBMS name:      MySQL 5.0                                    */
-/* Created on:     2019/6/20 14:51:15                           */
+/* Created on:     2019/6/25 14:42:52                           */
 /*==============================================================*/
 
 
@@ -742,7 +742,7 @@ alter table item_message_queue_log comment '消息队列日志';
 /*==============================================================*/
 create table item_spec_group
 (
-   t_id                 varchar(32) not null comment 'id 主键',
+   tb_id                varchar(32) not null comment 'id 主键',
    item_group_id        varchar(32) not null comment '商品分组id',
    goods_id             varchar(32) not null comment '商品id',
    item_sku_id          varchar(32) not null comment '商品sku id',
@@ -753,7 +753,7 @@ create table item_spec_group
    modifier             varchar(32) comment '修改人',
    modify_time          datetime comment '修改时间',
    version              int not null default 0 comment '版本号',
-   primary key (t_id)
+   primary key (tb_id)
 );
 
 alter table item_spec_group comment '商品sku分组 单规格商品选规格时用';

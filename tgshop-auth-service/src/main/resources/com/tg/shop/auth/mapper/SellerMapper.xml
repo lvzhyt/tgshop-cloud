@@ -27,8 +27,8 @@
     <result column="version" jdbcType="INTEGER" property="version" />
   </resultMap>
   <sql id="Base_Column_List">
-    seller_id, store_id, role_id, login_name, seller_name, password, nick_name, is_seller_admin,
-    sex, birthday, phone, mail, email_valid, head_img, weichat, id_card, id_card_valid,
+    seller_id, store_id, role_id, login_name, seller_name, password, nick_name, is_seller_admin, 
+    sex, birthday, phone, mail, email_valid, head_img, weichat, id_card, id_card_valid, 
     is_del, creator, create_time, modifier, modify_time, version
   </sql>
   <select id="selectByPrimaryKey" parameterType="java.lang.String" resultMap="BaseResultMap">

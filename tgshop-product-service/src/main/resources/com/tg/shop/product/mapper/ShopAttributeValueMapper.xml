@@ -174,4 +174,34 @@
       version = #{version,jdbcType=INTEGER}
     where attr_value_id = #{attrValueId,jdbcType=VARCHAR}
   </update>
+
+
+  <!--  自定义 -->
+  <select id="findListByCondition" parameterType="com.tg.shop.core.domain.product.entity.ShopAttributeValue" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from shop_attr_value
+    <include refid="whereStatement" />
+  </select>
+  <sql id="whereStatement">
+    <where>
+      <if test="attrValueId != null">
+        and attr_value_id = #{attrValueId,jdbcType=VARCHAR}
+      </if>
+      <if test="storeId != null">
+        and store_id = #{storeId,jdbcType=VARCHAR}
+      </if>
+      <if test="attributeId != null">
+        and attribute_id = #{attributeId,jdbcType=VARCHAR}
+      </if>
+      <if test="attributeName != null">
+        and attribute_name = #{attributeName,jdbcType=VARCHAR}
+      </if>
+      <if test="attributeValue != null">
+        and attribute_value = #{attributeValue,jdbcType=VARCHAR}
+      </if>
+      and is_del = 0
+    </where>
+  </sql>
+
 </mapper>

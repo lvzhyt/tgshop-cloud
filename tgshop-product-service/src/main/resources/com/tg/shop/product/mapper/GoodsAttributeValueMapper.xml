@@ -2,7 +2,7 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.tg.shop.product.mapper.GoodsAttributeValueMapper">
   <resultMap id="BaseResultMap" type="com.tg.shop.core.domain.product.entity.GoodsAttributeValue">
-    <id column="t_id" jdbcType="VARCHAR" property="tId" />
+    <id column="tb_id" jdbcType="VARCHAR" property="tbId" />
     <result column="attr_id" jdbcType="VARCHAR" property="attrId" />
     <result column="value_id" jdbcType="VARCHAR" property="valueId" />
     <result column="goods_id" jdbcType="VARCHAR" property="goodsId" />
@@ -18,26 +18,26 @@
     <result column="version" jdbcType="INTEGER" property="version" />
   </resultMap>
   <sql id="Base_Column_List">
-    t_id, attr_id, value_id, goods_id, attr_name, attr_value_name, attr_type, sort_number, 
+    tb_id, attr_id, value_id, goods_id, attr_name, attr_value_name, attr_type, sort_number, 
     is_del, creator, create_time, modifier, modify_time, version
   </sql>
   <select id="selectByPrimaryKey" parameterType="java.lang.String" resultMap="BaseResultMap">
     select 
     <include refid="Base_Column_List" />
     from item_goods_attribute_value
-    where t_id = #{tId,jdbcType=VARCHAR}
+    where tb_id = #{tbId,jdbcType=VARCHAR}
   </select>
   <delete id="deleteByPrimaryKey" parameterType="java.lang.String">
     delete from item_goods_attribute_value
-    where t_id = #{tId,jdbcType=VARCHAR}
+    where tb_id = #{tbId,jdbcType=VARCHAR}
   </delete>
   <insert id="insert" parameterType="com.tg.shop.core.domain.product.entity.GoodsAttributeValue">
-    insert into item_goods_attribute_value (t_id, attr_id, value_id, 
+    insert into item_goods_attribute_value (tb_id, attr_id, value_id, 
       goods_id, attr_name, attr_value_name, 
       attr_type, sort_number, is_del, 
       creator, create_time, modifier, 
       modify_time, version)
-    values (#{tId,jdbcType=VARCHAR}, #{attrId,jdbcType=VARCHAR}, #{valueId,jdbcType=VARCHAR}, 
+    values (#{tbId,jdbcType=VARCHAR}, #{attrId,jdbcType=VARCHAR}, #{valueId,jdbcType=VARCHAR}, 
       #{goodsId,jdbcType=VARCHAR}, #{attrName,jdbcType=VARCHAR}, #{attrValueName,jdbcType=VARCHAR}, 
       #{attrType,jdbcType=INTEGER}, #{sortNumber,jdbcType=INTEGER}, #{isDel,jdbcType=INTEGER}, 
       #{creator,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP}, #{modifier,jdbcType=VARCHAR}, 
@@ -46,8 +46,8 @@
   <insert id="insertSelective" parameterType="com.tg.shop.core.domain.product.entity.GoodsAttributeValue">
     insert into item_goods_attribute_value
     <trim prefix="(" suffix=")" suffixOverrides=",">
-      <if test="tId != null">
-        t_id,
+      <if test="tbId != null">
+        tb_id,
       </if>
       <if test="attrId != null">
         attr_id,
@@ -90,8 +90,8 @@
       </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides=",">
-      <if test="tId != null">
-        #{tId,jdbcType=VARCHAR},
+      <if test="tbId != null">
+        #{tbId,jdbcType=VARCHAR},
       </if>
       <if test="attrId != null">
         #{attrId,jdbcType=VARCHAR},
@@ -177,7 +177,7 @@
         version = #{version,jdbcType=INTEGER},
       </if>
     </set>
-    where t_id = #{tId,jdbcType=VARCHAR}
+    where tb_id = #{tbId,jdbcType=VARCHAR}
   </update>
   <update id="updateByPrimaryKey" parameterType="com.tg.shop.core.domain.product.entity.GoodsAttributeValue">
     update item_goods_attribute_value
@@ -194,6 +194,43 @@
       modifier = #{modifier,jdbcType=VARCHAR},
       modify_time = #{modifyTime,jdbcType=TIMESTAMP},
       version = #{version,jdbcType=INTEGER}
-    where t_id = #{tId,jdbcType=VARCHAR}
+    where tb_id = #{tbId,jdbcType=VARCHAR}
   </update>
+
+
+  <!--  自定义 -->
+  <select id="findGoodsAttributeValueList" parameterType="com.tg.shop.core.domain.product.entity.GoodsAttributeValue" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from item_goods_attribute_value
+    <include refid="whereStatement"/>
+    order by sort_number
+  </select>
+  <sql id="whereStatement">
+    <where>
+      <if test="tId != null">
+        and t_id = #{tId,jdbcType=VARCHAR}
+      </if>
+      <if test="attrId != null">
+        and  attr_id = #{attrId,jdbcType=VARCHAR}
+      </if>
+      <if test="valueId != null">
+        and value_id = #{valueId,jdbcType=VARCHAR}
+      </if>
+      <if test="goodsId != null">
+        and goods_id = #{goodsId,jdbcType=VARCHAR}
+      </if>
+      <if test="attrName != null">
+        and attr_name = #{attrName,jdbcType=VARCHAR}
+      </if>
+      <if test="attrValueName != null">
+        and attr_value_name = #{attrValueName,jdbcType=VARCHAR}
+      </if>
+      <if test="attrType != null">
+        and attr_type = #{attrType,jdbcType=INTEGER}
+      </if>
+      and is_del = 0
+    </where>
+
+  </sql>
 </mapper>

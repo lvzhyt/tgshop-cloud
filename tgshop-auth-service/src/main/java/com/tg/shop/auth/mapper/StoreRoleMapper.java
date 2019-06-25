@@ -7,37 +7,37 @@ import org.apache.ibatis.annotations.Mapper;
 public interface StoreRoleMapper {
     /**
      *
-     * @mbg.generated Thu Jun 20 14:59:35 CST 2019
+     * @mbg.generated Tue Jun 25 14:49:57 CST 2019
      */
     int deleteByPrimaryKey(String roleId);
 
     /**
      *
-     * @mbg.generated Thu Jun 20 14:59:35 CST 2019
+     * @mbg.generated Tue Jun 25 14:49:57 CST 2019
      */
     int insert(StoreRole record);
 
     /**
      *
-     * @mbg.generated Thu Jun 20 14:59:35 CST 2019
+     * @mbg.generated Tue Jun 25 14:49:57 CST 2019
      */
     int insertSelective(StoreRole record);
 
     /**
      *
-     * @mbg.generated Thu Jun 20 14:59:35 CST 2019
+     * @mbg.generated Tue Jun 25 14:49:57 CST 2019
      */
     StoreRole selectByPrimaryKey(String roleId);
 
     /**
      *
-     * @mbg.generated Thu Jun 20 14:59:35 CST 2019
+     * @mbg.generated Tue Jun 25 14:49:57 CST 2019
      */
     int updateByPrimaryKeySelective(StoreRole record);
 
     /**
      *
-     * @mbg.generated Thu Jun 20 14:59:35 CST 2019
+     * @mbg.generated Tue Jun 25 14:49:57 CST 2019
      */
     int updateByPrimaryKey(StoreRole record);
 }

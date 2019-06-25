@@ -7,37 +7,37 @@ import org.apache.ibatis.annotations.Mapper;
 public interface CategoryAttributeMapper {
     /**
      *
-     * @mbg.generated Sun Jun 23 01:27:47 CST 2019
+     * @mbg.generated Tue Jun 25 14:54:34 CST 2019
      */
-    int deleteByPrimaryKey(String id);
+    int deleteByPrimaryKey(String tbId);
 
     /**
      *
-     * @mbg.generated Sun Jun 23 01:27:47 CST 2019
+     * @mbg.generated Tue Jun 25 14:54:34 CST 2019
      */
     int insert(CategoryAttribute record);
 
     /**
      *
-     * @mbg.generated Sun Jun 23 01:27:47 CST 2019
+     * @mbg.generated Tue Jun 25 14:54:34 CST 2019
      */
     int insertSelective(CategoryAttribute record);
 
     /**
      *
-     * @mbg.generated Sun Jun 23 01:27:47 CST 2019
+     * @mbg.generated Tue Jun 25 14:54:34 CST 2019
      */
-    CategoryAttribute selectByPrimaryKey(String id);
+    CategoryAttribute selectByPrimaryKey(String tbId);
 
     /**
      *
-     * @mbg.generated Sun Jun 23 01:27:47 CST 2019
+     * @mbg.generated Tue Jun 25 14:54:34 CST 2019
      */
     int updateByPrimaryKeySelective(CategoryAttribute record);
 
     /**
      *
-     * @mbg.generated Sun Jun 23 01:27:47 CST 2019
+     * @mbg.generated Tue Jun 25 14:54:34 CST 2019
      */
     int updateByPrimaryKey(CategoryAttribute record);
 }

@@ -7,37 +7,37 @@ import org.apache.ibatis.annotations.Mapper;
 public interface CategoryBrandMapper {
     /**
      *
-     * @mbg.generated Sun Jun 23 01:27:47 CST 2019
+     * @mbg.generated Tue Jun 25 14:54:34 CST 2019
      */
     int deleteByPrimaryKey(String categoryBrandId);
 
     /**
      *
-     * @mbg.generated Sun Jun 23 01:27:47 CST 2019
+     * @mbg.generated Tue Jun 25 14:54:34 CST 2019
      */
     int insert(CategoryBrand record);
 
     /**
      *
-     * @mbg.generated Sun Jun 23 01:27:47 CST 2019
+     * @mbg.generated Tue Jun 25 14:54:34 CST 2019
      */
     int insertSelective(CategoryBrand record);
 
     /**
      *
-     * @mbg.generated Sun Jun 23 01:27:47 CST 2019
+     * @mbg.generated Tue Jun 25 14:54:34 CST 2019
      */
     CategoryBrand selectByPrimaryKey(String categoryBrandId);
 
     /**
      *
-     * @mbg.generated Sun Jun 23 01:27:47 CST 2019
+     * @mbg.generated Tue Jun 25 14:54:34 CST 2019
      */
     int updateByPrimaryKeySelective(CategoryBrand record);
 
     /**
      *
-     * @mbg.generated Sun Jun 23 01:27:47 CST 2019
+     * @mbg.generated Tue Jun 25 14:54:34 CST 2019
      */
     int updateByPrimaryKey(CategoryBrand record);
 }

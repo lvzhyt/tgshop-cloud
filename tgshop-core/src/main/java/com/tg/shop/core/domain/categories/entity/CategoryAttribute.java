@@ -9,7 +9,7 @@ public class CategoryAttribute implements Serializable {
     /**
      * ID
      */
-    private String id;
+    private String tbId;
 
     /**
      * 类目ID

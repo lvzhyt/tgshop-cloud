@@ -185,4 +185,37 @@
       version = #{version,jdbcType=INTEGER}
     where tb_id = #{tbId,jdbcType=VARCHAR}
   </update>
+
+
+  <!--  自定义 -->
+  <select id="getSkuPictureListByCondition" parameterType="com.tg.shop.core.domain.product.entity.GoodsSkuPicture" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from item_goods_sku_picture
+    <include refid="whereStatement"/>
+    order by sort_num
+  </select>
+  <sql id="whereStatement">
+    <where>
+      <if test="goodsId != null">
+        and goods_id = #{goodsId,jdbcType=VARCHAR}
+      </if>
+      <if test="skuId != null">
+        and sku_id = #{skuId,jdbcType=VARCHAR}
+      </if>
+      <if test="pictureId != null">
+        and picture_id = #{pictureId,jdbcType=VARCHAR}
+      </if>
+      <if test="pictureDescription != null">
+        and picture_description = #{pictureDescription,jdbcType=VARCHAR}
+      </if>
+      <if test="pictureType != null">
+        and picture_type = #{pictureType,jdbcType=INTEGER}
+      </if>
+      <if test="sortNum != null">
+        and sort_num = #{sortNum,jdbcType=INTEGER}
+      </if>
+    </where>
+  </sql>
+
 </mapper>

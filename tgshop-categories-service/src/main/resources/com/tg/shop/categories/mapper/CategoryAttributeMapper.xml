@@ -2,7 +2,7 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.tg.shop.categories.mapper.CategoryAttributeMapper">
   <resultMap id="BaseResultMap" type="com.tg.shop.core.domain.categories.entity.CategoryAttribute">
-    <id column="id" jdbcType="VARCHAR" property="id" />
+    <id column="tb_id" jdbcType="VARCHAR" property="tbId" />
     <result column="category_id" jdbcType="VARCHAR" property="categoryId" />
     <result column="attribute_id" jdbcType="VARCHAR" property="attributeId" />
     <result column="attr_type" jdbcType="INTEGER" property="attrType" />
@@ -18,26 +18,26 @@
     <result column="version" jdbcType="INTEGER" property="version" />
   </resultMap>
   <sql id="Base_Column_List">
-    id, category_id, attribute_id, attr_type, option_type, select_type, sort_number, 
+    tb_id, category_id, attribute_id, attr_type, option_type, select_type, sort_number, 
     json_value, is_del, creator, create_time, modifier, modify_time, version
   </sql>
   <select id="selectByPrimaryKey" parameterType="java.lang.String" resultMap="BaseResultMap">
     select 
     <include refid="Base_Column_List" />
     from item_category_attribute
-    where id = #{id,jdbcType=VARCHAR}
+    where tb_id = #{tbId,jdbcType=VARCHAR}
   </select>
   <delete id="deleteByPrimaryKey" parameterType="java.lang.String">
     delete from item_category_attribute
-    where id = #{id,jdbcType=VARCHAR}
+    where tb_id = #{tbId,jdbcType=VARCHAR}
   </delete>
   <insert id="insert" parameterType="com.tg.shop.core.domain.categories.entity.CategoryAttribute">
-    insert into item_category_attribute (id, category_id, attribute_id, 
+    insert into item_category_attribute (tb_id, category_id, attribute_id, 
       attr_type, option_type, select_type, 
       sort_number, json_value, is_del, 
       creator, create_time, modifier, 
       modify_time, version)
-    values (#{id,jdbcType=VARCHAR}, #{categoryId,jdbcType=VARCHAR}, #{attributeId,jdbcType=VARCHAR}, 
+    values (#{tbId,jdbcType=VARCHAR}, #{categoryId,jdbcType=VARCHAR}, #{attributeId,jdbcType=VARCHAR}, 
       #{attrType,jdbcType=INTEGER}, #{optionType,jdbcType=INTEGER}, #{selectType,jdbcType=INTEGER}, 
       #{sortNumber,jdbcType=INTEGER}, #{jsonValue,jdbcType=VARCHAR}, #{isDel,jdbcType=INTEGER}, 
       #{creator,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP}, #{modifier,jdbcType=VARCHAR}, 
@@ -46,8 +46,8 @@
   <insert id="insertSelective" parameterType="com.tg.shop.core.domain.categories.entity.CategoryAttribute">
     insert into item_category_attribute
     <trim prefix="(" suffix=")" suffixOverrides=",">
-      <if test="id != null">
-        id,
+      <if test="tbId != null">
+        tb_id,
       </if>
       <if test="categoryId != null">
         category_id,
@@ -90,8 +90,8 @@
       </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides=",">
-      <if test="id != null">
-        #{id,jdbcType=VARCHAR},
+      <if test="tbId != null">
+        #{tbId,jdbcType=VARCHAR},
       </if>
       <if test="categoryId != null">
         #{categoryId,jdbcType=VARCHAR},
@@ -177,7 +177,7 @@
         version = #{version,jdbcType=INTEGER},
       </if>
     </set>
-    where id = #{id,jdbcType=VARCHAR}
+    where tb_id = #{tbId,jdbcType=VARCHAR}
   </update>
   <update id="updateByPrimaryKey" parameterType="com.tg.shop.core.domain.categories.entity.CategoryAttribute">
     update item_category_attribute
@@ -194,6 +194,6 @@
       modifier = #{modifier,jdbcType=VARCHAR},
       modify_time = #{modifyTime,jdbcType=TIMESTAMP},
       version = #{version,jdbcType=INTEGER}
-    where id = #{id,jdbcType=VARCHAR}
+    where tb_id = #{tbId,jdbcType=VARCHAR}
   </update>
 </mapper>

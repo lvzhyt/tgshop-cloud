@@ -7,37 +7,45 @@ import org.apache.ibatis.annotations.Mapper;
 public interface GoodsSkuInventoryMapper {
     /**
      *
-     * @mbg.generated Sun Jun 23 01:31:39 CST 2019
+     * @mbg.generated Tue Jun 25 14:55:57 CST 2019
      */
     int deleteByPrimaryKey(String skuId);
 
     /**
      *
-     * @mbg.generated Sun Jun 23 01:31:39 CST 2019
+     * @mbg.generated Tue Jun 25 14:55:57 CST 2019
      */
     int insert(GoodsSkuInventory record);
 
     /**
      *
-     * @mbg.generated Sun Jun 23 01:31:39 CST 2019
+     * @mbg.generated Tue Jun 25 14:55:57 CST 2019
      */
     int insertSelective(GoodsSkuInventory record);
 
     /**
      *
-     * @mbg.generated Sun Jun 23 01:31:39 CST 2019
+     * @mbg.generated Tue Jun 25 14:55:57 CST 2019
      */
     GoodsSkuInventory selectByPrimaryKey(String skuId);
 
     /**
      *
-     * @mbg.generated Sun Jun 23 01:31:39 CST 2019
+     * @mbg.generated Tue Jun 25 14:55:57 CST 2019
      */
     int updateByPrimaryKeySelective(GoodsSkuInventory record);
 
     /**
      *
-     * @mbg.generated Sun Jun 23 01:31:39 CST 2019
+     * @mbg.generated Tue Jun 25 14:55:57 CST 2019
      */
     int updateByPrimaryKey(GoodsSkuInventory record);
+
+
+    /**
+     * 根据 id version 更新
+     * @param record
+     * @return
+     */
+    int updateSkuInventoryByVersion(GoodsSkuInventory record);
 }

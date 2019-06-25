@@ -8,6 +8,8 @@
     <result column="delivery_tag" jdbcType="BIGINT" property="deliveryTag" />
     <result column="msg_state" jdbcType="INTEGER" property="msgState" />
     <result column="message_data" jdbcType="VARCHAR" property="messageData" />
+    <result column="delivery_num" jdbcType="INTEGER" property="deliveryNum" />
+    <result column="delivery_time" jdbcType="TIMESTAMP" property="deliveryTime" />
     <result column="is_del" jdbcType="INTEGER" property="isDel" />
     <result column="creator" jdbcType="VARCHAR" property="creator" />
     <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
@@ -16,8 +18,8 @@
     <result column="version" jdbcType="INTEGER" property="version" />
   </resultMap>
   <sql id="Base_Column_List">
-    msg_id, msg_type, ref_key, delivery_tag, msg_state, message_data, is_del, creator, 
-    create_time, modifier, modify_time, version
+    msg_id, msg_type, ref_key, delivery_tag, msg_state, message_data, delivery_num, delivery_time, 
+    is_del, creator, create_time, modifier, modify_time, version
   </sql>
   <select id="selectByPrimaryKey" parameterType="java.lang.String" resultMap="BaseResultMap">
     select 
@@ -32,14 +34,14 @@
   <insert id="insert" parameterType="com.tg.shop.core.domain.mq.entity.MessageQueue">
     insert into item_message_queue (msg_id, msg_type, ref_key, 
       delivery_tag, msg_state, message_data, 
-      is_del, creator, create_time, 
-      modifier, modify_time, version
-      )
+      delivery_num, delivery_time, is_del, 
+      creator, create_time, modifier, 
+      modify_time, version)
     values (#{msgId,jdbcType=VARCHAR}, #{msgType,jdbcType=INTEGER}, #{refKey,jdbcType=VARCHAR}, 
       #{deliveryTag,jdbcType=BIGINT}, #{msgState,jdbcType=INTEGER}, #{messageData,jdbcType=VARCHAR}, 
-      #{isDel,jdbcType=INTEGER}, #{creator,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP}, 
-      #{modifier,jdbcType=VARCHAR}, #{modifyTime,jdbcType=TIMESTAMP}, #{version,jdbcType=INTEGER}
-      )
+      #{deliveryNum,jdbcType=INTEGER}, #{deliveryTime,jdbcType=TIMESTAMP}, #{isDel,jdbcType=INTEGER}, 
+      #{creator,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP}, #{modifier,jdbcType=VARCHAR}, 
+      #{modifyTime,jdbcType=TIMESTAMP}, #{version,jdbcType=INTEGER})
   </insert>
   <insert id="insertSelective" parameterType="com.tg.shop.core.domain.mq.entity.MessageQueue">
     insert into item_message_queue
@@ -61,6 +63,12 @@
       </if>
       <if test="messageData != null">
         message_data,
+      </if>
+      <if test="deliveryNum != null">
+        delivery_num,
+      </if>
+      <if test="deliveryTime != null">
+        delivery_time,
       </if>
       <if test="isDel != null">
         is_del,
@@ -100,6 +108,12 @@
       <if test="messageData != null">
         #{messageData,jdbcType=VARCHAR},
       </if>
+      <if test="deliveryNum != null">
+        #{deliveryNum,jdbcType=INTEGER},
+      </if>
+      <if test="deliveryTime != null">
+        #{deliveryTime,jdbcType=TIMESTAMP},
+      </if>
       <if test="isDel != null">
         #{isDel,jdbcType=INTEGER},
       </if>
@@ -138,6 +152,12 @@
       <if test="messageData != null">
         message_data = #{messageData,jdbcType=VARCHAR},
       </if>
+      <if test="deliveryNum != null">
+        delivery_num = #{deliveryNum,jdbcType=INTEGER},
+      </if>
+      <if test="deliveryTime != null">
+        delivery_time = #{deliveryTime,jdbcType=TIMESTAMP},
+      </if>
       <if test="isDel != null">
         is_del = #{isDel,jdbcType=INTEGER},
       </if>
@@ -166,6 +186,8 @@
       delivery_tag = #{deliveryTag,jdbcType=BIGINT},
       msg_state = #{msgState,jdbcType=INTEGER},
       message_data = #{messageData,jdbcType=VARCHAR},
+      delivery_num = #{deliveryNum,jdbcType=INTEGER},
+      delivery_time = #{deliveryTime,jdbcType=TIMESTAMP},
       is_del = #{isDel,jdbcType=INTEGER},
       creator = #{creator,jdbcType=VARCHAR},
       create_time = #{createTime,jdbcType=TIMESTAMP},

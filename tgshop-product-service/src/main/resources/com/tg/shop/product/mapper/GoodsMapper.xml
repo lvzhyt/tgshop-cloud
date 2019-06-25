@@ -363,4 +363,98 @@
       version = #{version,jdbcType=INTEGER}
     where goods_id = #{goodsId,jdbcType=VARCHAR}
   </update>
+
+
+  <!-- 自定义 -->
+  <resultMap id="GoodsWithSkuListResultMap" type="com.tg.shop.core.domain.product.entity.Goods" extends="BaseResultMap">
+    <collection property="skuList"
+                column="goods_id"
+                select="com.tg.shop.product.mapper.GoodsSkuMapper.findSkuDetailListByGoodsId">
+    </collection>
+
+  </resultMap>
+  <select id="findGoodsList" resultMap="BaseResultMap" parameterType="com.tg.shop.core.domain.product.entity.Goods">
+    select <include refid="Base_Column_List" />
+    from item_goods
+    <include refid="where_statement"/>
+    order by create_time desc
+  </select>
+  <select id="findGoodsWithSkuListPageList" parameterType="com.tg.shop.core.domain.product.entity.Goods" resultMap="GoodsWithSkuListResultMap">
+    select <include refid="Base_Column_List" />
+    from item_goods
+    <include refid="where_statement"/>
+    order by create_time desc
+  </select>
+  <sql id="where_statement">
+    <where>
+      and is_del=0
+      <if test="goodsId != null">
+        and goods_id = #{goodsId,jdbcType=VARCHAR}
+      </if>
+      <if test="goodsName != null">
+        and goods_name like connect ('%',#{goodsName,jdbcType=VARCHAR},'%')
+      </if>
+      <if test="keywords != null">
+        and  keywords like connect ('%',#{keywords,jdbcType=VARCHAR},'%')
+      </if>
+      <if test="goodsStatus != null">
+        and goods_status = #{goodsStatus,jdbcType=INTEGER}
+      </if>
+      <if test="areaId != null">
+        and area_id = #{areaId,jdbcType=VARCHAR}
+      </if>
+      <if test="brandId != null">
+        and brand_id = #{brandId,jdbcType=VARCHAR}
+      </if>
+      <if test="categoryId != null">
+        and category_id = #{categoryId,jdbcType=VARCHAR}
+      </if>
+      <if test="brandName != null">
+        and brand_name = #{brandName,jdbcType=VARCHAR}
+      </if>
+      <if test="categoryName != null">
+        and category_name = #{categoryName,jdbcType=VARCHAR}
+      </if>
+      <if test="goodsSn != null">
+        and goods_sn = #{goodsSn,jdbcType=VARCHAR}
+      </if>
+      <if test="listingTime != null">
+        and listing_time = #{listingTime,jdbcType=TIMESTAMP}
+      </if>
+      <if test="offShowTime != null">
+        and off_show_time = #{offShowTime,jdbcType=TIMESTAMP}
+      </if>
+      <if test="describeUrl != null">
+        and describe_url = #{describeUrl,jdbcType=VARCHAR}
+      </if>
+      <if test="sellerId != null">
+        and seller_id = #{sellerId,jdbcType=VARCHAR}
+      </if>
+      <if test="storeId != null">
+        and store_id = #{storeId,jdbcType=VARCHAR}
+      </if>
+      <if test="shopName != null">
+        and shop_name = #{shopName,jdbcType=VARCHAR}
+      </if>
+      <if test="productOrigin != null">
+        and product_origin = #{productOrigin,jdbcType=VARCHAR}
+      </if>
+      <if test="itemAttributeJsonValue != null">
+        and item_attribute_json_value = #{itemAttributeJsonValue,jdbcType=VARCHAR}
+      </if>
+      <if test="itemSaleAttributeJsonValue != null">
+        and item_sale_attribute_json_value = #{itemSaleAttributeJsonValue,jdbcType=VARCHAR}
+      </if>
+      <if test="specOpen != null">
+        and spec_open = #{specOpen,jdbcType=INTEGER}
+      </if>
+      <if test="specSizeOpen != null">
+        and spec_size_open = #{specSizeOpen,jdbcType=INTEGER}
+      </if>
+      <if test="defaultSkuId != null">
+        and default_sku_id = #{defaultSkuId,jdbcType=VARCHAR}
+      </if>
+    </where>
+  </sql>
+
 </mapper>

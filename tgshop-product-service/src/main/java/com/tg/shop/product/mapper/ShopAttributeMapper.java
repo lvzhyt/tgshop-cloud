@@ -7,37 +7,37 @@ import org.apache.ibatis.annotations.Mapper;
 public interface ShopAttributeMapper {
     /**
      *
-     * @mbg.generated Sun Jun 23 01:31:39 CST 2019
+     * @mbg.generated Tue Jun 25 14:55:57 CST 2019
      */
     int deleteByPrimaryKey(String shopAttributeId);
 
     /**
      *
-     * @mbg.generated Sun Jun 23 01:31:39 CST 2019
+     * @mbg.generated Tue Jun 25 14:55:57 CST 2019
      */
     int insert(ShopAttribute record);
 
     /**
      *
-     * @mbg.generated Sun Jun 23 01:31:39 CST 2019
+     * @mbg.generated Tue Jun 25 14:55:57 CST 2019
      */
     int insertSelective(ShopAttribute record);
 
     /**
      *
-     * @mbg.generated Sun Jun 23 01:31:39 CST 2019
+     * @mbg.generated Tue Jun 25 14:55:57 CST 2019
      */
     ShopAttribute selectByPrimaryKey(String shopAttributeId);
 
     /**
      *
-     * @mbg.generated Sun Jun 23 01:31:39 CST 2019
+     * @mbg.generated Tue Jun 25 14:55:57 CST 2019
      */
     int updateByPrimaryKeySelective(ShopAttribute record);
 
     /**
      *
-     * @mbg.generated Sun Jun 23 01:31:39 CST 2019
+     * @mbg.generated Tue Jun 25 14:55:57 CST 2019
      */
     int updateByPrimaryKey(ShopAttribute record);
 }

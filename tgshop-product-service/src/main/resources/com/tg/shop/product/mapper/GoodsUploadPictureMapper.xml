@@ -185,4 +185,40 @@
       version = #{version,jdbcType=INTEGER}
     where picture_id = #{pictureId,jdbcType=VARCHAR}
   </update>
+
+  <!-- 自定义  -->
+  <sql id="whereStatement">
+    <where>
+      <if test="pictureId != null">
+        and picture_id = #{pictureId,jdbcType=VARCHAR}
+      </if>
+      <if test="storeId != null">
+        and store_id = #{storeId,jdbcType=VARCHAR}
+      </if>
+      <if test="goodsId != null">
+        and goods_id = #{goodsId,jdbcType=VARCHAR}
+      </if>
+      <if test="pictureName != null">
+        and picture_name = #{pictureName,jdbcType=VARCHAR}
+      </if>
+      <if test="pictureUrl != null">
+        and picture_url = #{pictureUrl,jdbcType=VARCHAR}
+      </if>
+      <if test="srcMd5 != null">
+        and src_md5 = #{srcMd5,jdbcType=CHAR}
+      </if>
+      <if test="picMd5 != null">
+        and pic_md5 = #{picMd5,jdbcType=VARCHAR}
+      </if>
+      <if test="fileSize != null">
+        and file_size = #{fileSize,jdbcType=INTEGER}
+      </if>
+    </where>
+  </sql>
+  <select id="findListByCondition" parameterType="com.tg.shop.core.domain.product.entity.GoodsUploadPicture" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from item_goods_upload_picture
+    <include refid="whereStatement"/>
+  </select>
 </mapper>

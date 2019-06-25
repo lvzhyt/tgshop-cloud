@@ -8,16 +8,17 @@
         <outputRelativeToContentRoot value="true" />
         <module name="tgshop-eureka-service" />
         <module name="tgshop-mybatis-generator" />
-        <module name="tgshop-categories-service" />
         <module name="tgshop-auth-service" />
-        <module name="tgshop-mq-service" />
-        <module name="tgshop-trade-service" />
-        <module name="tgshop-service-zuul" />
-        <module name="tgshop-manager-seller" />
-        <module name="tgshop-core" />
         <module name="tgshop-product-service" />
+        <module name="tgshop-mq-service" />
+        <module name="tgshop-service-zuul" />
+        <module name="tgshop-categories-service" />
+        <module name="tgshop-core" />
+        <module name="tgshop-trade-service" />
         <module name="tgshop-auth-api" />
+        <module name="tgshop-search-service" />
         <module name="tgshop-zuul-seller" />
+        <module name="tgshop-manager-seller" />
       </profile>
     </annotationProcessing>
   </component>
@@ -32,6 +33,7 @@
       <module name="tgshop-mq-service" options="-parameters" />
       <module name="tgshop-mybatis-generator" options="-parameters" />
       <module name="tgshop-product-service" options="-parameters" />
+      <module name="tgshop-search-service" options="-parameters" />
       <module name="tgshop-service-zuul" options="-parameters" />
       <module name="tgshop-trade-service" options="-parameters" />
       <module name="tgshop-zuul-seller" options="-parameters" />

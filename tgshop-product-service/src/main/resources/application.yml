@@ -5,10 +5,24 @@ spring:
   application:
     name: tgshop-product-service
 
+  #redis
+  redis:
+    host: 192.168.116.128
+    port: 6379
 
+  #datasource
+  datasource:
+    url: jdbc:mysql://localhost:3306/tgshop_cloud?useUnicode=true&characterEncoding=utf8&serverTimezone=GMT%2B8
+    username: root
+    password: 123456
 
 eureka:
   client:
     service-url:
       #设置与Eureka Server交互的地址，查询服务和注册服务都需要依赖这个地址。默认是http://localhost:8761/eureka ；多个地址可使用 , 分隔。
       defaultZone: http://localhost:8761/eureka/,http://localhost:8762/eureka/,http://localhost:8763/eureka/
+
+generator:
+  snowflake:
+    worker-id: 1
+    data-center: 1

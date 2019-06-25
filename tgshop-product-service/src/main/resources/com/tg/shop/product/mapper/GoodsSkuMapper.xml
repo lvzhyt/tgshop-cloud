@@ -351,4 +351,205 @@
       version = #{version,jdbcType=INTEGER}
     where sku_id = #{skuId,jdbcType=VARCHAR}
   </update>
+
+
+  <!--  自定义 -->
+  <select id="findSkuByCondition" resultMap="BaseResultMap" parameterType="com.tg.shop.core.domain.product.entity.GoodsSku">
+    select <include refid="Base_Column_List"/>
+    from item_goods_sku
+    <include refid="whereStatement"/>
+  </select>
+  <resultMap id="SkuInventoryResultMap" type="com.tg.shop.core.domain.product.result.vo.GoodsSkuInventoryResultVo">
+    <id column="sku_id" jdbcType="VARCHAR" property="skuId" />
+    <result column="goods_id" jdbcType="VARCHAR" property="goodsId" />
+    <result column="sku_no" jdbcType="VARCHAR" property="skuNo" />
+    <result column="color_attr_val_name" jdbcType="VARCHAR" property="colorAttrValName" />
+    <result column="size_attr_val_name" jdbcType="VARCHAR" property="sizeAttrValName" />
+    <result column="sku_status" jdbcType="INTEGER" property="skuStatus" />
+    <result column="spec_face_pictures" jdbcType="VARCHAR" property="specFacePictures" />
+    <result column="inventory_num" jdbcType="INTEGER" property="inventoryNum" />
+    <result column="lock_num" jdbcType="INTEGER" property="lockNum" />
+    <result column="left_num" jdbcType="INTEGER" property="leftNum" />
+  </resultMap>
+  <resultMap id="SkuPriceResultMap" type="com.tg.shop.core.domain.product.result.vo.GoodsSkuPriceResultVo">
+    <id column="sku_id" jdbcType="VARCHAR" property="skuId" />
+    <result column="goods_id" jdbcType="VARCHAR" property="goodsId" />
+    <result column="sku_no" jdbcType="VARCHAR" property="skuNo" />
+    <result column="color_attr_val_name" jdbcType="VARCHAR" property="colorAttrValName" />
+    <result column="size_attr_val_name" jdbcType="VARCHAR" property="sizeAttrValName" />
+    <result column="sku_status" jdbcType="INTEGER" property="skuStatus" />
+    <result column="spec_face_pictures" jdbcType="VARCHAR" property="specFacePictures" />
+    <result column="cost_price" jdbcType="DECIMAL" property="costPrice" />
+    <result column="market_price" jdbcType="DECIMAL" property="marketPrice" />
+    <result column="sale_price" jdbcType="DECIMAL" property="salePrice" />
+    <result column="plus_price_open" jdbcType="INTEGER" property="plusPriceOpen" />
+    <result column="plus_price" jdbcType="DECIMAL" property="plusPrice" />
+    <result column="super_vip_price_open" jdbcType="INTEGER" property="superVipPriceOpen" />
+    <result column="super_vip_price" jdbcType="DECIMAL" property="superVipPrice" />
+  </resultMap>
+
+  <resultMap id="SkuDetailResultMap" type="com.tg.shop.core.domain.product.result.vo.GoodsSkuDetailResultVo" extends="BaseResultMap">
+    <!--    <id column="sku_id" jdbcType="VARCHAR" property="skuId" />-->
+    <!--    <result column="goods_id" jdbcType="VARCHAR" property="goodsId" />-->
+    <!--    <result column="sku_no" jdbcType="VARCHAR" property="skuNo" />-->
+    <!--    <result column="color_attr_val_name" jdbcType="VARCHAR" property="colorAttrValName" />-->
+    <!--    <result column="size_attr_val_name" jdbcType="VARCHAR" property="sizeAttrValName" />-->
+    <!--    <result column="sku_status" jdbcType="INTEGER" property="skuStatus" />-->
+    <!--    <result column="spec_face_pictures" jdbcType="VARCHAR" property="specFacePictures" />-->
+    <result column="inventory_num" jdbcType="INTEGER" property="inventoryNum" />
+    <result column="lock_num" jdbcType="INTEGER" property="lockNum" />
+    <result column="left_num" jdbcType="INTEGER" property="leftNum" />
+    <result column="cost_price" jdbcType="DECIMAL" property="costPrice" />
+    <result column="market_price" jdbcType="DECIMAL" property="marketPrice" />
+    <result column="sale_price" jdbcType="DECIMAL" property="salePrice" />
+    <result column="plus_price_open" jdbcType="INTEGER" property="plusPriceOpen" />
+    <result column="plus_price" jdbcType="DECIMAL" property="plusPrice" />
+    <result column="super_vip_price_open" jdbcType="INTEGER" property="superVipPriceOpen" />
+    <result column="super_vip_price" jdbcType="DECIMAL" property="superVipPrice" />
+  </resultMap>
+  <select id="findSkuInventoryListByGoodsId" resultMap="SkuInventoryResultMap" parameterType="java.lang.String">
+    SELECT
+      t.sku_id,
+      t.goods_id,
+      t.sku_no,
+      t.color_attr_val_name,
+      t.size_attr_val_name,
+      t.sku_status,
+      t.spec_face_pictures,
+      ti.inventory_num,
+      ti.lock_num,
+      ti.left_num
+    FROM
+      item_goods_sku t
+        LEFT JOIN item_goods_sku_inventory ti ON t.sku_id = ti.sku_id
+    WHERE t.is_del=0 and t.goods_id = #{goodsId,jdbcType=VARCHAR}
+  </select>
+  <select id="findSkuPriceListByGoodsId" resultMap="SkuPriceResultMap" parameterType="java.lang.String">
+    SELECT
+      t.sku_id,
+      t.goods_id,
+      t.sku_no,
+      t.color_attr_val_name,
+      t.size_attr_val_name,
+      t.sku_status,
+      t.spec_face_pictures,
+      cost_price,
+      market_price,
+      sale_price,
+      plus_price_open,
+      plus_price,
+      super_vip_price_open,
+      super_vip_price
+    FROM
+      item_goods_sku t
+        LEFT JOIN item_goods_sku_price tp ON t.sku_id = tp.sku_id
+    WHERE
+      t.is_del =0
+      and t.goods_id = #{goodsId,jdbcType=VARCHAR}
+  </select>
+  <select id="findSkuDetailListByGoodsId" resultMap="SkuDetailResultMap" parameterType="java.lang.String">
+    SELECT
+      t.sku_id,
+      t.goods_id,
+      t.sku_no,
+      t.color_attr_val_name,
+      t.size_attr_val_name,
+      t.sku_status,
+      t.spec_face_pictures,
+      t.picture_main,
+      t.picture_description,
+      t.template_id,
+      t.weight,
+      t.volume,
+      t.item_size,
+      cost_price,
+      market_price,
+      sale_price,
+      plus_price_open,
+      plus_price,
+      super_vip_price_open,
+      super_vip_price,
+      ti.inventory_num,
+      ti.lock_num,
+      ti.left_num
+    FROM
+      item_goods_sku t
+        LEFT JOIN item_goods_sku_price tp ON t.sku_id = tp.sku_id
+        LEFT JOIN item_goods_sku_inventory ti ON t.sku_id = ti.sku_id
+    WHERE
+      t.is_del = 0
+      AND t.goods_id = #{goodsId,jdbcType=VARCHAR}
+  </select>
+
+  <sql id="whereStatement">
+    <where>
+      <if test="skuId != null">
+        and sku_id = #{skuId,jdbcType=VARCHAR}
+      </if>
+      <if test="goodsId != null">
+        and goods_id = #{goodsId,jdbcType=VARCHAR}
+      </if>
+      <if test="sellerId != null">
+        and seller_id = #{sellerId,jdbcType=VARCHAR}
+      </if>
+      <if test="storeId != null">
+        and store_id = #{storeId,jdbcType=VARCHAR}
+      </if>
+      <if test="areaId != null">
+        and area_id = #{areaId,jdbcType=VARCHAR}
+      </if>
+      <if test="skuGoodsName != null">
+        and sku_goods_name = #{skuGoodsName,jdbcType=VARCHAR}
+      </if>
+      <if test="skuNo != null">
+        and sku_no = #{skuNo,jdbcType=VARCHAR}
+      </if>
+      <if test="attrValueJson != null">
+        and attr_value_json = #{attrValueJson,jdbcType=VARCHAR}
+      </if>
+      <if test="colorAttrValId != null">
+        and color_attr_val_id = #{colorAttrValId,jdbcType=VARCHAR}
+      </if>
+      <if test="colorAttrValName != null">
+        and color_attr_val_name = #{colorAttrValName,jdbcType=VARCHAR}
+      </if>
+      <if test="sizeAttrValId != null">
+        and size_attr_val_id = #{sizeAttrValId,jdbcType=VARCHAR}
+      </if>
+      <if test="sizeAttrValName != null">
+        and size_attr_val_name = #{sizeAttrValName,jdbcType=VARCHAR}
+      </if>
+      <if test="skuType != null">
+        and sku_type = #{skuType,jdbcType=INTEGER}
+      </if>
+      <if test="skuStatus != null">
+        and sku_status = #{skuStatus,jdbcType=INTEGER}
+      </if>
+      <if test="specFacePictures != null">
+        and spec_face_pictures = #{specFacePictures,jdbcType=VARCHAR}
+      </if>
+      <if test="pictureMain != null">
+        and picture_main = #{pictureMain,jdbcType=VARCHAR}
+      </if>
+      <if test="pictureDescription != null">
+        and picture_description = #{pictureDescription,jdbcType=VARCHAR}
+      </if>
+      <if test="templateId != null">
+        and template_id = #{templateId,jdbcType=VARCHAR}
+      </if>
+      <if test="volume != null">
+        and volume = #{volume,jdbcType=DECIMAL}
+      </if>
+      <if test="weight != null">
+        and weight = #{weight,jdbcType=DECIMAL}
+      </if>
+      <if test="itemSize != null">
+        and item_size = #{itemSize,jdbcType=VARCHAR}
+      </if>
+      <if test="isDel != null">
+        and is_del = #{isDel,jdbcType=INTEGER}
+      </if>
+    </where>
+  </sql>
+
 </mapper>

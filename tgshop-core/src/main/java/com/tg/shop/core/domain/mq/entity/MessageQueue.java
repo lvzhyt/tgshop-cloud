@@ -37,6 +37,16 @@ public class MessageQueue implements Serializable {
     private String messageData;
 
     /**
+     * 投递次数
+     */
+    private Integer deliveryNum;
+
+    /**
+     * 投递时间
+     */
+    private Date deliveryTime;
+
+    /**
      * 删除状态
      */
     private Integer isDel;

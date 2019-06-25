@@ -7,17 +7,17 @@ import lombok.Data;
 @Data
 public class PlatformRoleMenu implements Serializable {
     /**
-     * 
+     * role_menu_id
      */
     private String roleMenuId;
 
     /**
-     * 
+     * 角色Id
      */
     private String roleId;
 
     /**
-     * 
+     * 权限id
      */
     private String menuId;
 

@@ -29,9 +29,9 @@
     <result column="version" jdbcType="INTEGER" property="version" />
   </resultMap>
   <sql id="Base_Column_List">
-    store_id, seller_id, store_name, store_code, tel, link_man_name, link_man_tel, remark,
-    shop_status, run_status, province_code, province_name, city_code, city_name, street_name,
-    address_detail, longitude, Latitude, modify_status, is_del, creator, create_time,
+    store_id, seller_id, store_name, store_code, tel, link_man_name, link_man_tel, remark, 
+    shop_status, run_status, province_code, province_name, city_code, city_name, street_name, 
+    address_detail, longitude, Latitude, modify_status, is_del, creator, create_time, 
     modifier, modify_time, version
   </sql>
   <select id="selectByPrimaryKey" parameterType="java.lang.String" resultMap="BaseResultMap">
@@ -45,7 +45,7 @@
     where store_id = #{storeId,jdbcType=VARCHAR}
   </delete>
   <insert id="insert" parameterType="com.tg.shop.core.domain.auth.entity.Store">
-    insert into shop_store (store_id, seller_id, store_name,
+    insert into shop_store (store_id, seller_id, store_name, 
       store_code, tel, link_man_name, 
       link_man_tel, remark, shop_status, 
       run_status, province_code, province_name, 

@@ -46,7 +46,7 @@
         </dependency>
         <dependency>
             <groupId>com.tg.shop.cloud</groupId>
-            <artifactId>tgshop-core</artifactId>
+            <artifactId>tgshop-cloud-core</artifactId>
             <version>1.0-SNAPSHOT</version>
             <scope>compile</scope>
         </dependency>
