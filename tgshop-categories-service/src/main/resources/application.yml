@@ -1,9 +1,9 @@
 server:
-  port: 9101
+  port: 9190
 
 spring:
   application:
-    name: tgshop-auth-service
+    name: tgshop-categories-service
 
   #redis
   redis:

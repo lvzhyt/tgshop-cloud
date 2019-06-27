@@ -1,6 +1,5 @@
 package com.tg.shop.search.hystrix;
 
-import com.github.pagehelper.PageInfo;
 import com.tg.shop.core.domain.product.entity.Goods;
 import com.tg.shop.core.domain.util.PageCondition;
 import com.tg.shop.core.entity.ErrorCode;

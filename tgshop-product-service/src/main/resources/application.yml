@@ -26,3 +26,7 @@ generator:
   snowflake:
     worker-id: 1
     data-center: 1
+
+tgshop:
+  swagger:
+    enable: true

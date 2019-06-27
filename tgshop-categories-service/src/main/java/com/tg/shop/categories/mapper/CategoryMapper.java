@@ -3,6 +3,8 @@ package com.tg.shop.categories.mapper;
 import com.tg.shop.core.domain.categories.entity.Category;
 import org.apache.ibatis.annotations.Mapper;
 
+import java.util.List;
+
 @Mapper
 public interface CategoryMapper {
     /**
@@ -40,4 +42,6 @@ public interface CategoryMapper {
      * @mbg.generated Tue Jun 25 14:54:34 CST 2019
      */
     int updateByPrimaryKey(Category record);
+
+    List<Category> findCategoryList(Category category);
 }

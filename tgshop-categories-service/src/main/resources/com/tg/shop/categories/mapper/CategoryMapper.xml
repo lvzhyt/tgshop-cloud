@@ -209,4 +209,40 @@
       version = #{version,jdbcType=INTEGER}
     where category_id = #{categoryId,jdbcType=VARCHAR}
   </update>
+
+
+  <!--  自定义 -->
+  <select id="findCategoryList" parameterType="com.tg.shop.core.domain.categories.entity.Category" resultMap="BaseResultMap">
+    select <include refid="Base_Column_List"/>
+    from item_category
+    <include refid="whereStatement"/>
+  </select>
+
+  <sql id="whereStatement">
+    <where>
+      <if test="categoryId != null">
+        and category_id = #{categoryId,jdbcType=VARCHAR}
+      </if>
+      <if test="categoryName != null">
+        and category_name like concat('%',#{categoryName,jdbcType=VARCHAR},'%')
+      </if>
+      <if test="hasLeaf != null">
+        and  has_leaf = #{hasLeaf,jdbcType=INTEGER}
+      </if>
+      <if test="lev != null">
+        and  lev = #{lev,jdbcType=INTEGER}
+      </if>
+      <if test="parentCategoryId != null">
+        and parent_category_id = #{parentCategoryId,jdbcType=VARCHAR}
+      </if>
+      <if test="homeShow != null">
+        and home_show = #{homeShow,jdbcType=INTEGER}
+      </if>
+      <if test="rootPath != null">
+        and root_path like concat('%',#{rootPath,jdbcType=VARCHAR},'%')
+      </if>
+      and is_del = 0
+    </where>
+  </sql>
+
 </mapper>

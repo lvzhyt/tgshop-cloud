@@ -35,7 +35,7 @@ public class SellerAuthController {
     @PostMapping("/login")
     public ResultObject login(@RequestBody @Valid LoginParam loginParam, BindingResult bindingResult){
         if(bindingResult.hasErrors()){
-            return ResultObject.getInstance(ErrorCode.REQUEST_ERROR,bindingResult.getFieldErrors());
+            return new ResultObject(ErrorCode.REQUEST_ERROR,bindingResult.getFieldErrors());
         }
         ResultObject resultState = sellerService.login(loginParam);
         return resultState;
@@ -45,7 +45,7 @@ public class SellerAuthController {
     @GetMapping("/userInfo")
     public ResultObject getInfo(@RequestParam String token){
         if(!redisTemplate.hasKey(token)){
-            return ResultObject.getInstance(ErrorCode.TOKEN_LOSE_EFFICACY);
+            return new ResultObject(ErrorCode.TOKEN_LOSE_EFFICACY);
         }
         SellerUser sellerUser = (SellerUser) redisTemplate.opsForValue().get(token);
         Seller seller = sellerUser.getSeller();
@@ -56,7 +56,7 @@ public class SellerAuthController {
         user.setUserName(seller.getSellerName());
         user.setRoles(new String[]{"super_admin", "admin"});
         user.setAvator("https://file.iviewui.com/dist/a0e88e83800f138b94d2414621bd9704.png");
-        return ResultObject.getInstance(user);
+        return new ResultObject(user);
     }
 
 }

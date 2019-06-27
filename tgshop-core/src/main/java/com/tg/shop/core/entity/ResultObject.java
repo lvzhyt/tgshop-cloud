@@ -10,7 +10,6 @@ import java.util.List;
  * 请求返回数据
  * @author Administrator
  */
-@Data
 public class ResultObject<T> implements Serializable {
 
     /**
@@ -33,10 +32,6 @@ public class ResultObject<T> implements Serializable {
      */
     private String message;
 
-    /**
-     * 字段校验错误
-     */
-    private List<FieldError> fieldErrors;
 
     public ResultObject() {
         this.result=1;
@@ -62,15 +57,47 @@ public class ResultObject<T> implements Serializable {
         this.result =errorCode==ErrorCode.SUCCESS?1:0;
     }
 
-    public ResultObject(ErrorCode errorCode,List<FieldError> fieldErrors) {
+    public ResultObject(ErrorCode errorCode,T fieldErrors) {
         this.code = errorCode.getCode();
         this.message = errorCode.getMessage();
         this.result =errorCode==ErrorCode.SUCCESS?1:0;
-        this.fieldErrors = fieldErrors;
+        this.data = fieldErrors;
     }
 
 
     public boolean isSuccess(){
         return this.result==1;
+    }
+
+    public int getResult() {
+        return result;
+    }
+
+    public void setResult(int result) {
+        this.result = result;
+    }
+
+    public String getCode() {
+        return code;
+    }
+
+    public void setCode(String code) {
+        this.code = code;
+    }
+
+    public T getData() {
+        return data;
+    }
+
+    public void setData(T data) {
+        this.data = data;
+    }
+
+    public String getMessage() {
+        return message;
+    }
+
+    public void setMessage(String message) {
+        this.message = message;
     }
 }

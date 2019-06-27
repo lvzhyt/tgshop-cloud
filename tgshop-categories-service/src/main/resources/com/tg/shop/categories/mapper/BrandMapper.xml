@@ -185,4 +185,34 @@
       version = #{version,jdbcType=INTEGER}
     where brand_id = #{brandId,jdbcType=VARCHAR}
   </update>
+
+
+  <!--  自定义 -->
+  <sql id="whereStatement">
+    <where>
+      <if test="brandName != null">
+        and ( brand_name like concat('%', #{brandName,jdbcType=VARCHAR},'%')
+        or brand_name_en like concat('%',#{brandName,jdbcType=VARCHAR},'%')
+        )
+      </if>
+      <if test="brandNameEn != null">
+        and brand_name_en like concat('%',#{brandNameEn,jdbcType=VARCHAR},'%')
+      </if>
+
+      <if test="initial != null">
+        and initial = #{initial,jdbcType=VARCHAR}
+      </if>
+      <if test="weight != null">
+        and weight = #{weight,jdbcType=INTEGER}
+      </if>
+      and is_del = 0
+    </where>
+  </sql>
+  <select id="findBrandList" parameterType="com.tg.shop.core.domain.categories.entity.Brand" resultMap="BaseResultMap">
+    select <include refid="Base_Column_List" />
+    from item_brand
+    <include refid="whereStatement" />
+    order by initial, brand_name
+  </select>
+
 </mapper>

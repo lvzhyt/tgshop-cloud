@@ -1,7 +1,5 @@
-package com.tg.shop.auth.controller;
+package com.tg.shop.categories.controller;
 
-import com.tg.shop.core.generator.IdGenerator;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -10,13 +8,13 @@ import org.springframework.web.bind.annotation.RestController;
  * @author Administrator
  */
 @RestController
-public class AuthController {
+public class WelcomeController {
 
     @Value("${spring.application.name}")
     private String applicationName;
 
     @GetMapping("/")
-    public String welcome(){
+    public String home(){
         return "Welcome to "+applicationName;
     }
 }

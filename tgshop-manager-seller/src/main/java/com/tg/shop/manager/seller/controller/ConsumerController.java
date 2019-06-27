@@ -22,7 +22,7 @@ public class ConsumerController {
 
     @RequestMapping("/")
     public String welcome(){
-        return "welcome to"+applicationName;
+        return "welcome to "+applicationName;
     }
 
     @GetMapping("/hello/{name}")

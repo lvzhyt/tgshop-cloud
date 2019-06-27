@@ -20,6 +20,6 @@ public class SellerErrorLogController {
     @PostMapping("/errorLog")
     public ResultObject saveErrorLogger(@RequestBody ErrorInfoParam errorInfo){
         log.error(JSONObject.toJSONString(errorInfo));
-        return ResultObject.getInstance();
+        return new ResultObject();
     }
 }

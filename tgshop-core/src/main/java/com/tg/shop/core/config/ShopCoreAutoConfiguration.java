@@ -11,7 +11,7 @@ import org.springframework.context.annotation.Configuration;
  * @author Administrator
  */
 @Configuration
-@EnableConfigurationProperties({SnowflakeGeneratorProperties.class})
+@EnableConfigurationProperties({SnowflakeGeneratorProperties.class,SwaggerProperties.class})
 public class ShopCoreAutoConfiguration {
     public ShopCoreAutoConfiguration() {
     }
