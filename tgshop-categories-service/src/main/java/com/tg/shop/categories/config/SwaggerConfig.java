@@ -2,7 +2,7 @@ package com.tg.shop.categories.config;
 
 import com.tg.shop.core.config.SwaggerProperties;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
+import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
@@ -26,7 +26,8 @@ import java.util.List;
  * @Date: 2018/12/18 10:24
  */
 @Configuration
-@EnableSwagger2
+@EnableConfigurationProperties({SwaggerProperties.class})
+
 public class SwaggerConfig implements WebMvcConfigurer {
 
     @Autowired

@@ -1,16 +1,16 @@
 package com.tg.shop.core.config;
 
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.context.properties.ConfigurationProperties;
+import org.springframework.context.annotation.Configuration;
 
 /**
  * @author Administrator
  */
-@ConfigurationProperties(
-        prefix = "tgshop.swagger"
-)
+@Configuration
+@ConfigurationProperties(prefix = "tgshop.swagger")
 public class SwaggerProperties {
-    private boolean enable;
+
+    private boolean enable = false;
 
     public boolean isEnable() {
         return enable;

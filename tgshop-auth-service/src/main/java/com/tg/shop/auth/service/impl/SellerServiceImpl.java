@@ -5,8 +5,7 @@ import com.tg.shop.auth.mapper.SellerMapper;
 import com.tg.shop.auth.mapper.StoreMapper;
 import com.tg.shop.auth.request.LoginParam;
 import com.tg.shop.auth.service.SellerService;
-import com.tg.shop.core.domain.ResultState;
-import com.tg.shop.core.domain.auth.cache.SellerUser;
+import com.tg.shop.core.domain.auth.cache.SellerStore;
 import com.tg.shop.core.domain.auth.entity.Seller;
 import com.tg.shop.core.domain.auth.entity.Store;
 import com.tg.shop.core.entity.ErrorCode;
@@ -70,18 +69,18 @@ public class SellerServiceImpl implements SellerService {
             String passwdMd5 = DigestUtils.md5DigestAsHex(loginForm.getPassword().getBytes());
             String dbPasswd = seller.getPassword();
             if(passwdMd5.equals(dbPasswd)){
-                SellerUser sellerUser = new SellerUser();
-                sellerUser.setSeller(seller);
+                SellerStore sellerStore = new SellerStore();
+                sellerStore.setSeller(seller);
                 // 查找店铺
                 if(seller.getStoreId()!=null){
                     Store store = storeMapper.selectByPrimaryKey(seller.getStoreId());
-                    sellerUser.setStore(store);
+                    sellerStore.setStore(store);
                 }
                 if(token==null){
                     token = UUID.randomUUID().toString().replace("-","");
                 }
                 // 放入redis缓存
-                redisTemplate.opsForValue().set(token, sellerUser,30, TimeUnit.DAYS);
+                redisTemplate.opsForValue().set(token, sellerStore,30, TimeUnit.DAYS);
             }else {
 
                 return new ResultObject(ErrorCode.LOGIN_PASSWORD_ERROR);

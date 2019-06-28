@@ -208,8 +208,8 @@
   </select>
   <sql id="whereStatement">
     <where>
-      <if test="tId != null">
-        and t_id = #{tId,jdbcType=VARCHAR}
+      <if test="tbId != null">
+        and tb_id = #{tId,jdbcType=VARCHAR}
       </if>
       <if test="attrId != null">
         and  attr_id = #{attrId,jdbcType=VARCHAR}

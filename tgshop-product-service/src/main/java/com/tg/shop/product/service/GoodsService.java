@@ -2,6 +2,7 @@ package com.tg.shop.product.service;
 
 import com.github.pagehelper.PageInfo;
 import com.tg.shop.core.domain.product.entity.Goods;
+import com.tg.shop.core.domain.product.entity.GoodsSku;
 import com.tg.shop.core.domain.util.PageCondition;
 
 /**
@@ -23,4 +24,6 @@ public interface GoodsService {
     Goods getGoodsBySn(String goodsSn);
 
     PageInfo<Goods> findGoodsWithSkuListPageList(PageCondition<Goods> pageCondition);
+
+    int saveGoodsAndSku(Goods goods, GoodsSku sku);
 }

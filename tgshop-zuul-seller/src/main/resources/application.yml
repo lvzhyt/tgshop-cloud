@@ -18,6 +18,10 @@ zuul:
     api-auth:
       path: /api-auth/**
       serviceId: tgshop-auth-service
+    #/api-categories/ 开头匹配到tgshop-auth-service
+    api-categories:
+      path: /api-categories/**
+      serviceId: tgshop-categories-service
     #/api-product/ 开头匹配到service-producer
     api-product:
       path: /api-product/**

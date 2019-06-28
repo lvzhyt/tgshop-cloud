@@ -12,14 +12,26 @@ import java.io.Serializable;
  * @Author: tg
  * @Date: 2019/3/16 16:54
  */
-@Data
-@NoArgsConstructor
-@AllArgsConstructor
-public class SellerUser implements Serializable {
+
+public class SellerStore implements Serializable {
 
     private Seller seller;
 
     private Store store;
 
+    public Seller getSeller() {
+        return seller;
+    }
 
+    public void setSeller(Seller seller) {
+        this.seller = seller;
+    }
+
+    public Store getStore() {
+        return store;
+    }
+
+    public void setStore(Store store) {
+        this.store = store;
+    }
 }

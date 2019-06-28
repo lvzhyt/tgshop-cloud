@@ -1,10 +1,6 @@
 package com.tg.shop.core.entity;
 
-import lombok.Data;
-import org.springframework.validation.FieldError;
-
 import java.io.Serializable;
-import java.util.List;
 
 /**
  * 请求返回数据
@@ -57,11 +53,11 @@ public class ResultObject<T> implements Serializable {
         this.result =errorCode==ErrorCode.SUCCESS?1:0;
     }
 
-    public ResultObject(ErrorCode errorCode,T fieldErrors) {
+    public ResultObject(ErrorCode errorCode,T data) {
         this.code = errorCode.getCode();
         this.message = errorCode.getMessage();
         this.result =errorCode==ErrorCode.SUCCESS?1:0;
-        this.data = fieldErrors;
+        this.data = data;
     }
 
 

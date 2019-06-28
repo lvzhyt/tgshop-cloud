@@ -2,18 +2,28 @@ package com.tg.shop.core.domain.product.entity;
 
 import java.io.Serializable;
 import java.util.Date;
+
+import com.tg.shop.core.validate.InsertValid;
+import com.tg.shop.core.validate.UpdateValid;
+import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
+
+import javax.validation.constraints.NotEmpty;
 
 @Data
 public class Goods implements Serializable {
     /**
      * 商品ID
      */
+    @ApiModelProperty(value = "商品ID",required = true)
+    @NotEmpty(groups = {UpdateValid.class},message = "商品Id不能为空")
     private String goodsId;
 
     /**
      * 商品名
      */
+    @ApiModelProperty(value = "商品名称",required = true)
+    @NotEmpty(groups = {InsertValid.class},message = "商品名称不能为空")
     private String goodsName;
 
     /**

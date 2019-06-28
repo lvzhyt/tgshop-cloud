@@ -4,10 +4,14 @@ import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import com.tg.shop.core.domain.base.BaseEntityInfo;
 import com.tg.shop.core.domain.product.entity.Goods;
+import com.tg.shop.core.domain.product.entity.GoodsSku;
 import com.tg.shop.core.domain.util.PageCondition;
+import com.tg.shop.product.dao.GoodsSkuDao;
 import com.tg.shop.product.mapper.GoodsMapper;
+import com.tg.shop.product.mapper.GoodsSkuMapper;
 import com.tg.shop.product.service.GoodsService;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.Assert;
 
 import javax.annotation.Resource;
@@ -22,6 +26,8 @@ public class GoodsServiceImpl implements GoodsService {
 
     @Resource
     private GoodsMapper goodsMapper;
+    @Resource
+    private GoodsSkuDao goodsSkuDao;
 //    @Resource
 //    private GoodsEsProducer goodsEsProducer;
 
@@ -82,5 +88,13 @@ public class GoodsServiceImpl implements GoodsService {
         PageInfo<Goods> pageInfo = new PageInfo(list);
 
         return pageInfo;
+    }
+
+    @Override
+    @Transactional(rollbackFor = Exception.class)
+    public int saveGoodsAndSku(Goods goods, GoodsSku sku) {
+        int count = goodsMapper.insertSelective(goods);
+        goodsSkuDao.saveSku(sku);
+        return count;
     }
 }

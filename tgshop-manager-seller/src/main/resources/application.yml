@@ -19,3 +19,5 @@ feign:
 tgshop:
   swagger:
     enable: true
+  conf:
+    goodsAuditEnable: false

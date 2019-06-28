@@ -2,8 +2,7 @@ package com.tg.shop.auth.controller;
 
 import com.tg.shop.auth.request.LoginParam;
 import com.tg.shop.auth.service.SellerService;
-import com.tg.shop.core.domain.ResultState;
-import com.tg.shop.core.domain.auth.cache.SellerUser;
+import com.tg.shop.core.domain.auth.cache.SellerStore;
 import com.tg.shop.core.domain.auth.entity.Seller;
 import com.tg.shop.core.domain.auth.entity.User;
 import com.tg.shop.core.entity.ErrorCode;
@@ -16,7 +15,6 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
 import javax.validation.Valid;
-import java.util.UUID;
 
 /**
  * @author Administrator
@@ -47,8 +45,8 @@ public class SellerAuthController {
         if(!redisTemplate.hasKey(token)){
             return new ResultObject(ErrorCode.TOKEN_LOSE_EFFICACY);
         }
-        SellerUser sellerUser = (SellerUser) redisTemplate.opsForValue().get(token);
-        Seller seller = sellerUser.getSeller();
+        SellerStore sellerStore = (SellerStore) redisTemplate.opsForValue().get(token);
+        Seller seller = sellerStore.getSeller();
         seller.setSellerId("001");
         seller.setSellerName("Seller");
         User user = new User();

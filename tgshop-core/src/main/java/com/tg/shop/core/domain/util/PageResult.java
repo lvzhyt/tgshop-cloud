@@ -10,7 +10,6 @@ import java.util.List;
  * @Author: tg
  * @Date: 2019/3/25 11:58
  */
-@Data
 public class PageResult<T> implements Serializable {
 
     private Pager pager;
@@ -27,5 +26,22 @@ public class PageResult<T> implements Serializable {
         this.pager.setPages(pageInfo.getPages());
         this.pager.setTotal(pageInfo.getTotal());
         this.list = pageInfo.getList();
+    }
+
+
+    public Pager getPager() {
+        return pager;
+    }
+
+    public void setPager(Pager pager) {
+        this.pager = pager;
+    }
+
+    public List<T> getList() {
+        return list;
+    }
+
+    public void setList(List<T> list) {
+        this.list = list;
     }
 }
