@@ -4,6 +4,7 @@ import com.alibaba.fastjson.JSONObject;
 import com.github.pagehelper.PageInfo;
 import com.tg.shop.core.domain.ResultState;
 import com.tg.shop.core.domain.auth.entity.Store;
+import com.tg.shop.core.domain.base.BaseEntityInfo;
 import com.tg.shop.core.domain.categories.entity.Attribute;
 import com.tg.shop.core.domain.product.entity.Goods;
 import com.tg.shop.core.domain.product.entity.GoodsAttributeValue;
@@ -18,6 +19,7 @@ import com.tg.shop.core.generator.IdGenerator;
 import com.tg.shop.core.utils.*;
 import com.tg.shop.core.validate.InsertValid;
 import com.tg.shop.product.request.param.AddGoodsSpecAttrParam;
+import com.tg.shop.product.request.param.UpdateSizeSkuListParam;
 import com.tg.shop.product.service.GoodsAttributeValueService;
 import com.tg.shop.product.service.GoodsService;
 import com.tg.shop.product.service.GoodsSkuService;
@@ -262,7 +264,8 @@ public class GoodsController {
      * @param goodsId
      * @return
      */
-    @GetMapping("/goods/goodsAttrs")
+    @ApiOperation(value = "goodsAttrs",tags = "获取商品属性")
+    @GetMapping("/getGoodsAttrs")
     public JSONObject getGoodsAttrs(@ApiParam(required = true) @RequestParam String goodsId){
         JSONObject data = new JSONObject();
         Goods goods = goodsService.getGoodsById(goodsId);
@@ -288,6 +291,91 @@ public class GoodsController {
         }
 
         return JSONResultUtil.createJsonObject(data);
+    }
+
+
+    @ApiOperation(value = "updateSizeSkuList",tags = "更新尺码SKU列表")
+    @PostMapping("/updateSizeSkuList")
+    public JSONObject updateSizeSkuList(@RequestBody @Valid UpdateSizeSkuListParam param, BindingResult bindingResult){
+        if(bindingResult.hasErrors()){
+            return JSONResultUtil.createJsonObject(ErrorCodeFeature.VALID_BIND_ERROR,bindingResult.getFieldErrors());
+        }
+        Assert.notNull(CacheSellerHolderLocal.getSeller(),"商家未登陆");
+        String sellerId = CacheSellerHolderLocal.getSeller().getSellerId();
+        Store store =CacheStoreHolderLocal.getStore();
+        String goodsId = param.getGoodsId();
+        ShopAttributeValue colorAttrVal = shopAttributeValueService.getShopAttributeValueById(param.getColorAttrValId());
+        ShopAttributeValueSimpleVo colorSimpleVo = new ShopAttributeValueSimpleVo();
+        BeanUtils.copyProperties(colorAttrVal,colorSimpleVo);
+        GoodsSku condition = new GoodsSku();
+        condition.setGoodsId(goodsId);
+        condition.setColorAttrValId(param.getColorAttrValId());
+        Goods goods = goodsService.getGoodsById(goodsId);
+        List<String> sizeAttrValIds = param.getSizeAttrValIds();
+        List<GoodsSku> allWithDelList = goodsSkuService.findSkuByCondition(condition);
+        List<GoodsSku> newList = new ArrayList<>();
+        List<GoodsSku> updateAddList = new ArrayList<>();
+        List<GoodsSku> delList = new ArrayList<>(allWithDelList);
+        for (String sizeAttrValId : sizeAttrValIds){
+            boolean exists = false;
+            for (GoodsSku sku :
+                    allWithDelList) {
+                if(sku.getSizeAttrValId()!=null && sizeAttrValId.equals(sku.getSizeAttrValId())){
+                    exists = true;
+                    if(sku.getIsDel()==1){
+                        // 校验SkuNo 唯一 不删除状态是否有此SKU
+                        GoodsSku tmp = goodsSkuService.findUniqueBySkuNo(sku.getSkuNo());
+                        if(tmp!=null){
+                            sku.setSkuNo(idGenerator.nextStringId());
+                        }
+                        sku.setIsDel(BaseEntityInfo.STATE_OK);
+                        sku.setModifier(sellerId);
+                        sku.setModifyTime(new Date());
+                        updateAddList.add(sku);
+                    }
+                    // 从删除列表移除
+                    delList.remove(sku);
+                }
+            }
+            if(!exists){
+                ShopAttributeValue sizeAttrVal = shopAttributeValueService.getShopAttributeValueById(sizeAttrValId);
+                ShopAttributeValueSimpleVo sizeSimpleVo = new ShopAttributeValueSimpleVo();
+                BeanUtils.copyProperties(sizeAttrVal,sizeSimpleVo);
+                List<ShopAttributeValueSimpleVo> jsonVoList = new ArrayList<>();
+                jsonVoList.add(colorSimpleVo);
+                jsonVoList.add(sizeSimpleVo);
+                String attrJson = JSONObject.toJSONString(jsonVoList);
+                GoodsSku sku = new GoodsSku();
+                sku.setSkuId(idGenerator.nextStringId());
+                sku.setSkuNo(idGenerator.nextStringId());
+                sku.setGoodsId(goodsId);
+
+                String skuName = getSkuName(goods,colorAttrVal.getAttributeValue(),sizeAttrVal.getAttributeValue());
+                sku.setSkuGoodsName(skuName);
+                sku.setSellerId(store.getSellerId());
+                sku.setStoreId(store.getStoreId());
+                sku.setAttrValueJson(attrJson);
+                sku.setColorAttrValId(colorAttrVal.getAttrValueId());
+                sku.setColorAttrValName(colorAttrVal.getAttributeValue());
+                sku.setSizeAttrValId(sizeAttrVal.getAttrValueId());
+                sku.setSizeAttrValName(sizeAttrVal.getAttributeValue());
+                sku.setCreator(sellerId);
+                sku.setCreateTime(new Date());
+                newList.add(sku);
+            }
+        }
+        for (GoodsSku sku :
+                delList) {
+            sku.setIsDel(BaseEntityInfo.STATE_DELETE);
+            sku.setModifier(sellerId);
+            sku.setModifyTime(new Date());
+        }
+
+        int count = goodsSkuService.batchCreateAndDelSku(newList,updateAddList,delList);
+        // 返回新的SKU列表
+        List<GoodsSku> result = goodsSkuService.findSkuByGoodsId(goodsId);
+
+        return JSONResultUtil.createJsonObject(result);
     }
 
 }
