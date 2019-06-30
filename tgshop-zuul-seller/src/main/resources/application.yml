@@ -34,3 +34,8 @@ zuul:
     github:
       path: /github/**
       url: https://github.com/
+
+# 超时设置
+ribbon:
+  ReadTimeout: 10000  # 单位毫秒数
+  SocketTimeout: 10000

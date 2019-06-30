@@ -30,6 +30,9 @@ public enum ErrorCode {
     LOGIN_USER_NOT_EXISTS("1003","用户不存在"),
     LOGIN_PASSWORD_ERROR("1004","登录密码错误"),
 
+    EMPTY_DATA_ERROR("2001", "查询为空"),
+
+
     SERVER_ERROR("9999", "system error");
 
 

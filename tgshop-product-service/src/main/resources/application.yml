@@ -33,3 +33,14 @@ generator:
 tgshop:
   swagger:
     enable: true
+  conf:
+    goodsAuditEnable: false
+
+# oss
+aliyun:
+  oss:
+    endpoint: oss-cn-shanghai.aliyuncs.com
+    access-key-id: LTAIeWcftS8x79Vw
+    access-key-secret: zCt4j93bJ6oBgRKCuJRODdfsYptizb
+    bucket-name: tgshop
+    pub-service: http://tgshop.oss-cn-shanghai.aliyuncs.com

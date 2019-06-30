@@ -2,7 +2,9 @@ package com.tg.shop.core.domain.product.entity;
 
 import java.io.Serializable;
 import java.util.Date;
+import java.util.List;
 
+import com.tg.shop.core.domain.product.result.vo.GoodsSkuDetailResultVo;
 import com.tg.shop.core.validate.InsertValid;
 import com.tg.shop.core.validate.UpdateValid;
 import io.swagger.annotations.ApiModelProperty;
@@ -157,4 +159,56 @@ public class Goods implements Serializable {
     private Integer version;
 
     private static final long serialVersionUID = 1L;
+
+
+    /**
+     *  商品状态Info
+     */
+    private String goodsStatusInfo;
+
+    /**
+     * sku详情列表
+     */
+    private List<GoodsSkuDetailResultVo> skuList;
+
+    /**
+     * 商品状态,1: 未发布，2：待审核，3：审核驳回，4：待上架，5：在售，6：已下架，7：锁定， 8： 申请解锁
+     * @return
+     */
+    public String  getGoodsStatusInfo(){
+        if(this.goodsStatus==null){
+            return "";
+        }
+        switch (this.goodsStatus){
+            case 1:{
+                this.goodsStatusInfo="未发布";
+                break;
+            }case 2:{
+                this.goodsStatusInfo="待审核";
+                break;
+            }case 3:{
+                this.goodsStatusInfo="审核驳回";
+                break;
+            }case 4:{
+                this.goodsStatusInfo="待上架";
+                break;
+            }case 5:{
+                this.goodsStatusInfo="在售";
+                break;
+            }case 6:{
+                this.goodsStatusInfo="已下架";
+                break;
+            }case 7:{
+                this.goodsStatusInfo="锁定";
+                break;
+            }case 8:{
+                this.goodsStatusInfo="申请解锁";
+                break;
+            }default:{
+                this.goodsStatusInfo="";
+            }
+        }
+
+        return this.goodsStatusInfo;
+    }
 }

@@ -5,6 +5,20 @@ spring:
   application:
     name: tgshop-manager-seller
 
+  #redis
+  redis:
+    host: 192.168.116.128
+    port: 6379
+
+  #datasource
+  datasource:
+    url: jdbc:mysql://localhost:3306/tgshop_cloud?useUnicode=true&characterEncoding=utf8&serverTimezone=GMT%2B8
+    username: root
+    password: 123456
+  #jackson
+  jackson:
+    date-format: yyyy-MM-dd HH:mm:ss
+
 eureka:
   client:
     service-url:
