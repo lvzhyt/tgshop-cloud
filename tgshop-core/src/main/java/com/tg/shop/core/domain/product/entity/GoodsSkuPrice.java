@@ -73,6 +73,16 @@ public class GoodsSkuPrice implements Serializable {
     private BigDecimal superVipPrice;
 
     /**
+     * 促销活动id
+     */
+    private String promoteId;
+
+    /**
+     * 促销活动名称
+     */
+    private String promoteName;
+
+    /**
      * 备注
      */
     private String remark;

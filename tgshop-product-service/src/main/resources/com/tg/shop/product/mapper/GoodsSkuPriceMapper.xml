@@ -15,6 +15,8 @@
     <result column="plus_price" jdbcType="DECIMAL" property="plusPrice" />
     <result column="super_vip_price_open" jdbcType="INTEGER" property="superVipPriceOpen" />
     <result column="super_vip_price" jdbcType="DECIMAL" property="superVipPrice" />
+    <result column="promote_id" jdbcType="VARCHAR" property="promoteId" />
+    <result column="promote_name" jdbcType="VARCHAR" property="promoteName" />
     <result column="remark" jdbcType="VARCHAR" property="remark" />
     <result column="is_del" jdbcType="INTEGER" property="isDel" />
     <result column="creator" jdbcType="VARCHAR" property="creator" />
@@ -25,8 +27,8 @@
   </resultMap>
   <sql id="Base_Column_List">
     sku_id, area_id, store_id, seller_id, goods_id, sku_no, cost_price, market_price, 
-    sale_price, plus_price_open, plus_price, super_vip_price_open, super_vip_price, remark, 
-    is_del, creator, create_time, modifier, modify_time, version
+    sale_price, plus_price_open, plus_price, super_vip_price_open, super_vip_price, promote_id, 
+    promote_name, remark, is_del, creator, create_time, modifier, modify_time, version
   </sql>
   <select id="selectByPrimaryKey" parameterType="java.lang.String" resultMap="BaseResultMap">
     select 
@@ -43,16 +45,18 @@
       seller_id, goods_id, sku_no, 
       cost_price, market_price, sale_price, 
       plus_price_open, plus_price, super_vip_price_open, 
-      super_vip_price, remark, is_del, 
-      creator, create_time, modifier, 
-      modify_time, version)
+      super_vip_price, promote_id, promote_name, 
+      remark, is_del, creator, 
+      create_time, modifier, modify_time, 
+      version)
     values (#{skuId,jdbcType=VARCHAR}, #{areaId,jdbcType=VARCHAR}, #{storeId,jdbcType=VARCHAR}, 
       #{sellerId,jdbcType=VARCHAR}, #{goodsId,jdbcType=VARCHAR}, #{skuNo,jdbcType=VARCHAR}, 
       #{costPrice,jdbcType=DECIMAL}, #{marketPrice,jdbcType=DECIMAL}, #{salePrice,jdbcType=DECIMAL}, 
       #{plusPriceOpen,jdbcType=INTEGER}, #{plusPrice,jdbcType=DECIMAL}, #{superVipPriceOpen,jdbcType=INTEGER}, 
-      #{superVipPrice,jdbcType=DECIMAL}, #{remark,jdbcType=VARCHAR}, #{isDel,jdbcType=INTEGER}, 
-      #{creator,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP}, #{modifier,jdbcType=VARCHAR}, 
-      #{modifyTime,jdbcType=TIMESTAMP}, #{version,jdbcType=INTEGER})
+      #{superVipPrice,jdbcType=DECIMAL}, #{promoteId,jdbcType=VARCHAR}, #{promoteName,jdbcType=VARCHAR}, 
+      #{remark,jdbcType=VARCHAR}, #{isDel,jdbcType=INTEGER}, #{creator,jdbcType=VARCHAR}, 
+      #{createTime,jdbcType=TIMESTAMP}, #{modifier,jdbcType=VARCHAR}, #{modifyTime,jdbcType=TIMESTAMP}, 
+      #{version,jdbcType=INTEGER})
   </insert>
   <insert id="insertSelective" parameterType="com.tg.shop.core.domain.product.entity.GoodsSkuPrice">
     insert into item_goods_sku_price
@@ -95,6 +99,12 @@
       </if>
       <if test="superVipPrice != null">
         super_vip_price,
+      </if>
+      <if test="promoteId != null">
+        promote_id,
+      </if>
+      <if test="promoteName != null">
+        promote_name,
       </if>
       <if test="remark != null">
         remark,
@@ -158,6 +168,12 @@
       <if test="superVipPrice != null">
         #{superVipPrice,jdbcType=DECIMAL},
       </if>
+      <if test="promoteId != null">
+        #{promoteId,jdbcType=VARCHAR},
+      </if>
+      <if test="promoteName != null">
+        #{promoteName,jdbcType=VARCHAR},
+      </if>
       <if test="remark != null">
         #{remark,jdbcType=VARCHAR},
       </if>
@@ -220,6 +236,12 @@
       <if test="superVipPrice != null">
         super_vip_price = #{superVipPrice,jdbcType=DECIMAL},
       </if>
+      <if test="promoteId != null">
+        promote_id = #{promoteId,jdbcType=VARCHAR},
+      </if>
+      <if test="promoteName != null">
+        promote_name = #{promoteName,jdbcType=VARCHAR},
+      </if>
       <if test="remark != null">
         remark = #{remark,jdbcType=VARCHAR},
       </if>
@@ -258,6 +280,8 @@
       plus_price = #{plusPrice,jdbcType=DECIMAL},
       super_vip_price_open = #{superVipPriceOpen,jdbcType=INTEGER},
       super_vip_price = #{superVipPrice,jdbcType=DECIMAL},
+      promote_id = #{promoteId,jdbcType=VARCHAR},
+      promote_name = #{promoteName,jdbcType=VARCHAR},
       remark = #{remark,jdbcType=VARCHAR},
       is_del = #{isDel,jdbcType=INTEGER},
       creator = #{creator,jdbcType=VARCHAR},
