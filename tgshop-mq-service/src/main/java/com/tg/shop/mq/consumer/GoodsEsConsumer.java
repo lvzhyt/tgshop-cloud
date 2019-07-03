@@ -5,7 +5,7 @@ import com.alibaba.fastjson.JSONObject;
 import com.rabbitmq.client.Channel;
 import com.tg.shop.core.domain.mq.entity.MessageQueue;
 import com.tg.shop.mq.config.RabbitMqConfigInfo;
-import com.tg.shop.mq.fegin.service.FeginGoodsSearchService;
+import com.tg.shop.mq.feign.service.FeignGoodsSearchService;
 import com.tg.shop.mq.service.MessageQueueService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.amqp.core.Message;
@@ -14,9 +14,14 @@ import org.springframework.amqp.rabbit.annotation.RabbitListener;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import javax.annotation.Resource;
 import java.io.IOException;
 import java.util.Date;
 
+/**
+ * 商品索引 消息消费者
+ * @author Administrator
+ */
 @Slf4j
 @Component
 @RabbitListener(queues = RabbitMqConfigInfo.QUEUE_PRODUCT_ES)
@@ -24,8 +29,8 @@ public class GoodsEsConsumer {
 
     @Autowired
     private MessageQueueService messageQueueService;
-    @Autowired
-    private FeginGoodsSearchService feginGoodsSearchService;
+    @Resource
+    private FeignGoodsSearchService feignGoodsSearchService;
 
 
     @RabbitHandler
@@ -35,7 +40,7 @@ public class GoodsEsConsumer {
         try {
             JSONObject jsonData = JSON.parseObject(messageQueue.getMessageData());
             String goodsId = jsonData.getString("goodsId");
-            feginGoodsSearchService.updateGoodsIndex(goodsId);
+            feignGoodsSearchService.updateGoodsSearchIndex(goodsId);
             messageQueue.setDeliveryTag(message.getMessageProperties().getDeliveryTag());
             messageQueue.setMsgState(1);
             messageQueue.setDeliveryTime(new Date());

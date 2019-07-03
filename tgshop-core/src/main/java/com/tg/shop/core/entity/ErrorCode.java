@@ -32,6 +32,8 @@ public enum ErrorCode {
 
     EMPTY_DATA_ERROR("2001", "查询为空"),
 
+    HYSTRIX_ERROR("8001", "服务熔断"),
+
 
     SERVER_ERROR("9999", "system error");
 

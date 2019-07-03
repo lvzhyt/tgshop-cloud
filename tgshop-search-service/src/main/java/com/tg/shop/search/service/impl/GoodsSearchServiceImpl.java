@@ -36,9 +36,9 @@ public class GoodsSearchServiceImpl implements GoodsSearchService {
 
     @Resource
     private GoodsRepository goodsRepository;
-    @Resource
+//    @Resource
     private FeignGoodsService goodsService;
-    @Resource
+//    @Resource
     private FeignGoodsSkuService goodsSkuService;
 
     @Override

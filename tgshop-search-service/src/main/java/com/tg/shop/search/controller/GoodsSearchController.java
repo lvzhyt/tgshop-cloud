@@ -24,9 +24,9 @@ public class GoodsSearchController {
 
     @Autowired
     private ElasticsearchTemplate elasticsearchTemplate;
-    @Resource
+//    @Resource
     private FeignGoodsService goodsService;
-    @Resource
+//    @Resource
     private FeignGoodsSkuService goodsSkuService;
     @Autowired
     private GoodsRepository goodsRepository;

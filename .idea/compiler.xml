@@ -9,15 +9,15 @@
         <module name="tgshop-eureka-service" />
         <module name="tgshop-mybatis-generator" />
         <module name="tgshop-auth-service" />
-        <module name="tgshop-product-service" />
         <module name="tgshop-mq-service" />
+        <module name="tgshop-zuul-seller" />
         <module name="tgshop-service-zuul" />
         <module name="tgshop-categories-service" />
         <module name="tgshop-core" />
         <module name="tgshop-trade-service" />
-        <module name="tgshop-auth-api" />
+        <module name="tgshop-product-service" />
         <module name="tgshop-search-service" />
-        <module name="tgshop-zuul-seller" />
+        <module name="tgshop-auth-api" />
         <module name="tgshop-manager-seller" />
       </profile>
     </annotationProcessing>
