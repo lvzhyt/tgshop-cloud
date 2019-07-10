@@ -6,19 +6,21 @@
         <sourceOutputDir name="target/generated-sources/annotations" />
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
-        <module name="tgshop-eureka-service" />
-        <module name="tgshop-mybatis-generator" />
-        <module name="tgshop-auth-service" />
-        <module name="tgshop-mq-service" />
-        <module name="tgshop-zuul-seller" />
-        <module name="tgshop-service-zuul" />
-        <module name="tgshop-categories-service" />
-        <module name="tgshop-core" />
         <module name="tgshop-trade-service" />
-        <module name="tgshop-product-service" />
         <module name="tgshop-search-service" />
+        <module name="tgshop-mq-consumer-service" />
         <module name="tgshop-auth-api" />
         <module name="tgshop-manager-seller" />
+        <module name="tgshop-mq-service" />
+        <module name="tgshop-mq-producer-service" />
+        <module name="tgshop-service-zuul" />
+        <module name="tgshop-zuul-seller" />
+        <module name="tgshop-eureka-service" />
+        <module name="tgshop-product-service" />
+        <module name="tgshop-core" />
+        <module name="tgshop-mybatis-generator" />
+        <module name="tgshop-categories-service" />
+        <module name="tgshop-auth-service" />
       </profile>
     </annotationProcessing>
   </component>
@@ -30,6 +32,8 @@
       <module name="tgshop-core" options="-parameters" />
       <module name="tgshop-eureka-service" options="-parameters" />
       <module name="tgshop-manager-seller" options="-parameters" />
+      <module name="tgshop-mq-consumer-service" options="-parameters" />
+      <module name="tgshop-mq-producer-service" options="-parameters" />
       <module name="tgshop-mq-service" options="-parameters" />
       <module name="tgshop-mybatis-generator" options="-parameters" />
       <module name="tgshop-product-service" options="-parameters" />

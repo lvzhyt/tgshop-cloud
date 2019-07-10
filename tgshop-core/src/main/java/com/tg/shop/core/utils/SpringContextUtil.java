@@ -1,4 +1,4 @@
-package com.tg.shop.auth.utils;
+package com.tg.shop.core.utils;
 
 import org.apache.commons.lang3.Validate;
 import org.slf4j.Logger;

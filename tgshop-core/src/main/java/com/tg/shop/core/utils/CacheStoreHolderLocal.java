@@ -17,4 +17,8 @@ public class CacheStoreHolderLocal {
     public static Store getStore(){
         return local.get();
     }
+
+    public static void remove() {
+        local.remove();
+    }
 }

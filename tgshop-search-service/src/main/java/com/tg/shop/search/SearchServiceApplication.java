@@ -5,9 +5,12 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.cloud.netflix.eureka.EnableEurekaClient;
 import org.springframework.cloud.openfeign.EnableFeignClients;
 
+/**
+ * @author Administrator
+ */
 @SpringBootApplication
 @EnableEurekaClient
-@EnableFeignClients
+@EnableFeignClients(basePackages = "com.tg.shop.search.feign.service")
 public class SearchServiceApplication {
     public static void main(String[] args) {
         SpringApplication.run(SearchServiceApplication.class);

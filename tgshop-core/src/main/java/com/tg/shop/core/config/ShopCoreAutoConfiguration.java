@@ -4,6 +4,7 @@ package com.tg.shop.core.config;
 import com.tg.shop.core.exception.handler.GlobalDefaultExceptionHandler;
 import com.tg.shop.core.generator.IdGenerator;
 import com.tg.shop.core.generator.snowflake.SnowflakeIdWorker;
+import com.tg.shop.core.utils.SpringContextUtil;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -14,7 +15,7 @@ import org.springframework.context.annotation.Import;
  */
 @Configuration
 @EnableConfigurationProperties({SnowflakeGeneratorProperties.class,SwaggerProperties.class})
-@Import({GlobalDefaultExceptionHandler.class})
+@Import({GlobalDefaultExceptionHandler.class,SpringContextUtil.class})
 public class ShopCoreAutoConfiguration {
     public ShopCoreAutoConfiguration() {
     }

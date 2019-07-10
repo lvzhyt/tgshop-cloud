@@ -1,6 +1,7 @@
 package com.tg.shop.search.service;
 
 
+import com.tg.shop.core.entity.ResultObject;
 import com.tg.shop.search.entity.EsGoods;
 import com.tg.shop.search.entity.vo.EsGoodsSearchVo;
 import org.springframework.data.domain.Page;
@@ -52,6 +53,6 @@ public interface GoodsSearchService {
      */
     Page<EsGoods> searchGoods(String search, GeoPoint location, double offset, int pageNum, int pageSize);
 
-    void updateGoodsIndex(String goodsId);
+    ResultObject updateGoodsIndex(String goodsId);
 
 }

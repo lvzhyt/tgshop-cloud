@@ -53,4 +53,11 @@ public class AuthenticationInterceptor implements HandlerInterceptor {
 
         return true;
     }
+
+    @Override
+    public void afterCompletion(HttpServletRequest request, HttpServletResponse response, Object handler, Exception ex) throws Exception {
+        TokenHolderLocal.remove();
+        CacheSellerHolderLocal.remove();
+        CacheStoreHolderLocal.remove();
+    }
 }

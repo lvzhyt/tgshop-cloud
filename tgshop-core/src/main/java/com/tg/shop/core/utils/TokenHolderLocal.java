@@ -16,4 +16,8 @@ public class TokenHolderLocal {
     public static String getToken(){
         return local.get();
     }
+
+    public static void remove() {
+        local.remove();
+    }
 }

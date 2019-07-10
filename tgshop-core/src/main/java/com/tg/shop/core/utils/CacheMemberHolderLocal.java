@@ -17,4 +17,8 @@ public class CacheMemberHolderLocal {
     public static Member getMember(){
         return local.get();
     }
+
+    public static void remove() {
+        local.remove();
+    }
 }
