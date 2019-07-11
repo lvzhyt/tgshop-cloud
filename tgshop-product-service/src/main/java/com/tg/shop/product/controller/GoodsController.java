@@ -86,7 +86,7 @@ public class GoodsController {
         return new ResultObject<>(goods);
     }
 
-    @ApiOperation(value = "findSellerGoodsPageList",tags = "商家商品列表")
+    @ApiOperation("商家商品列表")
     @PostMapping("/findSellerGoodsPageList")
      public ResultObject<PageResult<Goods>> findSellerGoodsPageList(@RequestBody PageCondition<Goods> pageCondition){
         Assert.notNull(CacheSellerHolderLocal.getSeller(),"商家没有登录");
@@ -101,7 +101,7 @@ public class GoodsController {
         return new ResultObject<>(new PageResult<>(page));
     }
 
-    @ApiOperation(value = "findGoodsPageList",tags = "商品列表")
+    @ApiOperation("商品列表")
     @PostMapping("/findGoodsPageList")
     public ResultObject<PageResult<Goods>> findGoodsPageList(@RequestBody PageCondition<Goods> pageCondition){
         JacksonPojoUtil.convertEmptyStringToNull(pageCondition.getCondition());
@@ -180,7 +180,7 @@ public class GoodsController {
      * @param bindingResult
      * @return
      */
-    @ApiOperation(value = "",tags = "添加商品规格")
+    @ApiOperation("添加商品规格")
     @PostMapping("/addSpecAttr")
     public JSONObject addGoodsSpecAttr(@RequestBody @Valid AddGoodsSpecAttrParam goodsSpecAttrForm, BindingResult bindingResult){
         if(bindingResult.hasErrors()){
@@ -268,7 +268,7 @@ public class GoodsController {
      * @param goodsId
      * @return
      */
-    @ApiOperation(value = "getGoodsSkuList",tags = "商品SKU列表")
+    @ApiOperation("商品SKU列表")
     @GetMapping("/getGoodsSkuList")
     public JSONObject getGoodsSkuList(@ApiParam(required = true) @RequestParam String goodsId) {
         List<GoodsSku> goodsSkuList = goodsSkuService.findSkuByGoodsId(goodsId);
@@ -280,7 +280,7 @@ public class GoodsController {
      * @param goodsId
      * @return
      */
-    @ApiOperation(value = "goodsAttrs",tags = "获取商品属性")
+    @ApiOperation("获取商品属性")
     @GetMapping("/getGoodsAttrs")
     public JSONObject getGoodsAttrs(@ApiParam(required = true) @RequestParam String goodsId){
         JSONObject data = new JSONObject();
@@ -310,7 +310,7 @@ public class GoodsController {
     }
 
 
-    @ApiOperation(value = "updateSizeSkuList",tags = "更新尺码SKU列表")
+    @ApiOperation("更新尺码SKU列表")
     @PostMapping("/updateSizeSkuList")
     public JSONObject updateSizeSkuList(@RequestBody @Valid UpdateSizeSkuListParam param, BindingResult bindingResult){
         if(bindingResult.hasErrors()){
@@ -477,7 +477,7 @@ public class GoodsController {
     }
 
 
-    @ApiOperation(value = "validateGoodsShow",tags = "校验满足申请上架条件")
+    @ApiOperation("校验满足申请上架条件")
     @GetMapping("/validateGoodsShow")
     public JSONObject validateGoodsShow(@ApiParam(required = true) @RequestParam String goodsId){
         String errors = validGoodsShow(goodsId);
@@ -518,7 +518,7 @@ public class GoodsController {
     }
 
 
-    @ApiOperation(value = "applyForGoodsShow",tags = "申请上架")
+    @ApiOperation("申请上架")
     @GetMapping("/applyForGoodsShow")
     public JSONObject applyForGoodsShow(@ApiParam(required = true) @RequestParam String goodsId){
         Assert.notNull(CacheSellerHolderLocal.getSeller(),"商家未登录");
@@ -545,7 +545,7 @@ public class GoodsController {
      * @param parameter
      * @return
      */
-    @ApiOperation(value = "updateGoodsStatus",tags = "更改商品状态")
+    @ApiOperation("更改商品状态")
     @PostMapping("/updateGoodsStatus")
     public JSONObject updateGoodsStatus(@RequestBody @Valid UpdateGoodsStatusParameter parameter, BindingResult bindingResult){
         Assert.notNull(CacheSellerHolderLocal.getSeller(),"商家未登录");
@@ -635,6 +635,17 @@ public class GoodsController {
         return JSONResultUtil.createJsonObject(count);
     }
 
+    /**
+     * 校验货号唯一 goodsSn
+     * @param goodsSn
+     * @return
+     */
+    @GetMapping("/validGoodsSn")
+    public JSONObject validGoodsSnUnique(@ApiParam(required = true) @RequestParam String goodsSn){
+        Goods goods = goodsService.getGoodsBySn(goodsSn);
+        boolean flag = goods==null;
+        return JSONResultUtil.createJsonObject(flag);
+    }
 
     /**
      * 校验商品可改变的状态
@@ -653,6 +664,8 @@ public class GoodsController {
                 valid = changeStatus==2;
                 break;
             }case 2:{
+                valid = changeStatus==1;
+                break;
             }case 3:{
                 valid = changeStatus==1;
                 break;
@@ -678,4 +691,30 @@ public class GoodsController {
         return valid;
     }
 
+
+    @ApiOperation("删除商品规格属性")
+    @PostMapping("/deleteGoodsSpecAttr")
+    public ResultObject deleteGoodsSpecAttr(@RequestBody @Valid DeleteGoodsSpecAttrParameter parameter, BindingResult bindingResult){
+        if(bindingResult.hasErrors()){
+            return new ResultObject<>(ErrorCode.REQUEST_PARAM_ERROR,bindingResult.getFieldErrors());
+        }
+        String goodsId = parameter.getGoodsId();
+        String tbId = parameter.getTbId();
+        GoodsAttributeValue goodsAttributeValue = goodsAttributeValueService.getGoodsAttributeValueById(tbId);
+        Assert.notNull(goodsAttributeValue,"goodsAttributeValue is not exist tbId: "+tbId);
+        GoodsSku goodsSku = new GoodsSku();
+        goodsSku.setGoodsId(goodsId);
+        if(CommonDictionary.GOODS_SPEC_COLOR_ATTR_ID.equals(goodsAttributeValue.getAttrId())){
+            goodsSku.setColorAttrValId(goodsAttributeValue.getValueId());
+        }
+        if(CommonDictionary.GOODS_SPEC_SIZE_ATTR_ID.equals(goodsAttributeValue.getAttrId())){
+            goodsSku.setSizeAttrValId(goodsAttributeValue.getValueId());
+        }
+        List<GoodsSku> goodsSkuList = goodsSkuService.findSkuByCondition(goodsSku);
+        String modifier = CacheSellerHolderLocal.getSeller().getSellerName();
+        goodsAttributeValue.setModifier(modifier);
+        goodsAttributeValue.setModifyTime(new Date());
+        ResultObject resultObject = goodsAttributeValueService.deleteSpecAttrValue(goodsAttributeValue, goodsSkuList);
+        return resultObject;
+    }
 }

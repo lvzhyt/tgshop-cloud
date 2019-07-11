@@ -13,6 +13,7 @@ import org.springframework.stereotype.Repository;
 import org.springframework.util.Assert;
 
 import javax.annotation.Resource;
+import java.util.Date;
 import java.util.List;
 
 @Repository
@@ -28,7 +29,21 @@ public class GoodsSkuDaoImpl implements GoodsSkuDao {
     public int deleteSku(GoodsSku goodsSku) {
         Assert.notNull(goodsSku.getSkuId(),"SkuId为空");
         goodsSku.setIsDel(BaseEntityInfo.STATE_DELETE);
-        return goodsSkuMapper.updateByPrimaryKeySelective(goodsSku);
+        int result =  goodsSkuMapper.updateByPrimaryKeySelective(goodsSku);
+        // 删除库存 价格
+        GoodsSkuInventory skuInventory = new GoodsSkuInventory();
+        skuInventory.setSkuId(goodsSku.getSkuId());
+        skuInventory.setIsDel(BaseEntityInfo.STATE_DELETE);
+        skuInventory.setModifyTime(new Date());
+        skuInventory.setModifier(goodsSku.getModifier());
+        goodsSkuInventoryMapper.updateByPrimaryKeySelective(skuInventory);
+        GoodsSkuPrice skuPrice = new GoodsSkuPrice();
+        skuPrice.setSkuId(goodsSku.getSkuId());
+        skuPrice.setModifyTime(new Date());
+        skuPrice.setModifier(goodsSku.getModifier());
+        goodsSkuPriceMapper.updateByPrimaryKeySelective(skuPrice);
+
+        return result;
     }
 
     @Override

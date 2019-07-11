@@ -1,6 +1,8 @@
 package com.tg.shop.product.service;
 
 import com.tg.shop.core.domain.product.entity.GoodsAttributeValue;
+import com.tg.shop.core.domain.product.entity.GoodsSku;
+import com.tg.shop.core.entity.ResultObject;
 
 import java.util.List;
 
@@ -22,4 +24,12 @@ public interface GoodsAttributeValueService {
      * @return
      */
     GoodsAttributeValue findGoodsAttrValUnique(String goodsId, String attrId, String valueId);
+
+    /**
+     * 删除商品属性
+     * @param goodsAttributeValue
+     * @param goodsSkuList
+     * @return
+     */
+    ResultObject deleteSpecAttrValue(GoodsAttributeValue goodsAttributeValue, List<GoodsSku> goodsSkuList);
 }
