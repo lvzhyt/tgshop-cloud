@@ -717,4 +717,5 @@ public class GoodsController {
         ResultObject resultObject = goodsAttributeValueService.deleteSpecAttrValue(goodsAttributeValue, goodsSkuList);
         return resultObject;
     }
+
 }

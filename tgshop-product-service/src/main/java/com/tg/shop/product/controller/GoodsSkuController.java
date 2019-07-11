@@ -7,6 +7,7 @@ import com.tg.shop.core.domain.product.entity.*;
 import com.tg.shop.core.domain.product.result.vo.GoodsSkuDetailResultVo;
 import com.tg.shop.core.domain.product.result.vo.GoodsSkuInventoryResultVo;
 import com.tg.shop.core.domain.product.result.vo.GoodsSkuPriceResultVo;
+import com.tg.shop.core.entity.ErrorCode;
 import com.tg.shop.core.entity.ResultObject;
 import com.tg.shop.core.generator.IdGenerator;
 import com.tg.shop.core.utils.CacheSellerHolderLocal;
@@ -15,6 +16,7 @@ import com.tg.shop.core.utils.JSONResultUtil;
 import com.tg.shop.product.request.param.UpdateGoodsSkuInventoryParameter;
 import com.tg.shop.product.request.param.UpdateGoodsSkuPicParameter;
 import com.tg.shop.product.request.param.UpdateGoodsSkuPriceParameter;
+import com.tg.shop.product.request.param.UpdateSkuStatusParameter;
 import com.tg.shop.product.service.*;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -47,7 +49,7 @@ public class GoodsSkuController {
     @Autowired
     private GoodsSkuInventoryService goodsSkuInventoryService;
 
-    @ApiOperation(value = "listSkuByGoodsId",tags = {"商品SKU列表"})
+    @ApiOperation("商品SKU列表")
     @GetMapping("/listSkuByGoodsId")
     public ResultObject<List<GoodsSku>> listSkuByGoodsId(@RequestParam(required = true) String goodsId){
        List<GoodsSku> list = goodsSkuService.findSkuByGoodsId(goodsId);
@@ -55,7 +57,7 @@ public class GoodsSkuController {
     }
 
 
-    @ApiOperation(value = "updateGoodsSkuPic",tags = {"更新sku图片","商品详情页"})
+    @ApiOperation("更新sku图片")
     @PostMapping("/updateGoodsSkuPic")
     public JSONObject updateGoodsSkuPic(@RequestBody @Valid UpdateGoodsSkuPicParameter param, BindingResult bindingResult){
         Assert.notNull(CacheSellerHolderLocal.getSeller(),"商家未登录");
@@ -137,7 +139,7 @@ public class GoodsSkuController {
         return goodsSkuPicture;
     }
 
-    @ApiOperation(value = "listSkuPriceByGoodsId",tags = {"sku价格列表","商品价格页"})
+    @ApiOperation("sku价格列表")
     @GetMapping("/listSkuPriceByGoodsId")
     public JSONObject listSkuPriceByGoodsId(@ApiParam(required = true) @RequestParam String goodsId){
         List<GoodsSkuPriceResultVo> list = goodsSkuService.findSkuPriceListByGoodsId(goodsId);
@@ -238,7 +240,7 @@ public class GoodsSkuController {
             }
         }
         if(parameter.getPlusPriceOpen()!=null){
-            boolean changed = skuPrice.getPlusPriceOpen()==null || parameter.getPlusPriceOpen()!=skuPrice.getPlusPriceOpen();
+            boolean changed = skuPrice.getPlusPriceOpen()==null || !parameter.getPlusPriceOpen().equals(skuPrice.getPlusPriceOpen());
             if(changed){
                 return true;
             }
@@ -250,7 +252,7 @@ public class GoodsSkuController {
             }
         }
         if(parameter.getSuperVipPriceOpen()!=null){
-            boolean changed = skuPrice.getSuperVipPriceOpen()==null || parameter.getSuperVipPriceOpen()!=skuPrice.getSuperVipPriceOpen();
+            boolean changed = skuPrice.getSuperVipPriceOpen()==null || (int)parameter.getSuperVipPriceOpen()!=skuPrice.getSuperVipPriceOpen();
             if(changed){
                 return true;
             }
@@ -266,7 +268,7 @@ public class GoodsSkuController {
     }
 
 
-    @ApiOperation(value = "getSkuInventoryListByGoodsId",tags = {"库存查询","商品库存页"})
+    @ApiOperation("库存查询")
     @GetMapping("/getSkuInventoryListByGoodsId")
     public JSONObject getSkuInventoryListByGoodsId(@ApiParam(required = true) @RequestParam String goodsId){
         List<GoodsSkuInventoryResultVo> list = goodsSkuService.findSkuInventoryListByGoodsId(goodsId);
@@ -317,5 +319,29 @@ public class GoodsSkuController {
         List<GoodsSkuDetailResultVo> list = goodsSkuService.findSkuDetailListByGoodsId(goodsId);
 
         return JSONResultUtil.createJsonObject(list);
+    }
+
+
+
+    /**
+     * 更新SKU状态
+     * @param parameter
+     * @param bindingResult
+     * @return
+     */
+    @ApiOperation("开启关闭SKU")
+    @PostMapping("/updateSkuStatus")
+    public ResultObject updateSkuStatus(@Valid @RequestBody UpdateSkuStatusParameter parameter, BindingResult bindingResult){
+        if(bindingResult.hasErrors()){
+            return new ResultObject<>(ErrorCode.REQUEST_PARAM_ERROR, bindingResult.getFieldErrors());
+        }
+        GoodsSku goodsSku = new GoodsSku();
+        goodsSku.setSkuId(parameter.getSkuId());
+        goodsSku.setSkuStatus(parameter.getSkuStatus());
+        goodsSku.setModifyTime(new Date());
+        goodsSku.setModifier(CacheSellerHolderLocal.getSeller().getSellerId());
+        int count = goodsSkuService.updateSkuById(goodsSku);
+
+        return new ResultObject<>(count);
     }
 }
