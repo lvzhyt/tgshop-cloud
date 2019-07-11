@@ -8,9 +8,11 @@
         <outputRelativeToContentRoot value="true" />
         <module name="tgshop-trade-service" />
         <module name="tgshop-search-service" />
+        <module name="tgshop-mq-consumer-service" />
         <module name="tgshop-auth-api" />
         <module name="tgshop-manager-seller" />
         <module name="tgshop-mq-service" />
+        <module name="tgshop-mq-producer-service" />
         <module name="tgshop-service-zuul" />
         <module name="tgshop-zuul-seller" />
         <module name="tgshop-eureka-service" />
@@ -21,10 +23,6 @@
         <module name="tgshop-auth-service" />
       </profile>
     </annotationProcessing>
-    <bytecodeTargetLevel>
-      <module name="tgshop-mq-consumer-service" target="1.8" />
-      <module name="tgshop-mq-producer-service" target="1.8" />
-    </bytecodeTargetLevel>
   </component>
   <component name="JavacSettings">
     <option name="ADDITIONAL_OPTIONS_OVERRIDE">

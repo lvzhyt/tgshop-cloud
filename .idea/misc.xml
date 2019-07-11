@@ -13,8 +13,6 @@
     <option name="ignoredFiles">
       <set>
         <option value="$PROJECT_DIR$/tgshop-core-module/pom.xml" />
-        <option value="$PROJECT_DIR$/tgshop-mq-consumer-service/pom.xml" />
-        <option value="$PROJECT_DIR$/tgshop-mq-producer-service/pom.xml" />
       </set>
     </option>
   </component>
