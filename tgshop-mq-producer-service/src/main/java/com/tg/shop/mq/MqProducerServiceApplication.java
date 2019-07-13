@@ -12,7 +12,6 @@ import org.springframework.cloud.openfeign.EnableFeignClients;
 @SpringBootApplication
 @EnableEurekaClient
 @MapperScan("com.tg.shop.mq.mapper")
-@EnableFeignClients(basePackages = "com.tg.shop.mq.feign.service")
 public class MqProducerServiceApplication {
     public static void main(String[] args) {
         SpringApplication.run(MqProducerServiceApplication.class);

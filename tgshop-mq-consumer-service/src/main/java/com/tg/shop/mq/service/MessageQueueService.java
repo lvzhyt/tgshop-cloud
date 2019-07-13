@@ -21,4 +21,10 @@ public interface MessageQueueService {
      */
     boolean deliveryAndRequeueAble(String msgId, int maxDeliveryNum);
 
+    /**
+     * 消息重试
+     * @param msgId
+     * @return
+     */
+    boolean requeueAble(String msgId);
 }

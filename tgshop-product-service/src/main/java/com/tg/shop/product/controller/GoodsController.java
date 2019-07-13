@@ -18,11 +18,13 @@ import com.tg.shop.core.generator.IdGenerator;
 import com.tg.shop.core.utils.*;
 import com.tg.shop.core.validate.InsertValid;
 import com.tg.shop.product.config.ShopConfigureProperties;
+import com.tg.shop.product.feign.service.FeignMessageQueueService;
 import com.tg.shop.product.request.param.*;
 import com.tg.shop.product.service.*;
 import com.tg.shop.product.utils.GoodsAttributeUtil;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
+import lombok.extern.slf4j.Slf4j;
 import net.coobird.thumbnailator.Thumbnails;
 import org.apache.commons.io.FilenameUtils;
 import org.apache.commons.lang3.StringUtils;
@@ -36,6 +38,7 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import javax.annotation.Resource;
 import javax.validation.Valid;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
@@ -50,6 +53,7 @@ import static com.tg.shop.core.domain.ResultState.MESSAGE_TYPE_SUCCESS;
 /**
  * @author Administrator
  */
+@Slf4j
 @RestController
 @RequestMapping("/goods")
 public class GoodsController {
@@ -70,6 +74,10 @@ public class GoodsController {
     private OssUploadService ossUploadService;
     @Autowired
     private ShopConfigureProperties shopConfigureProperties;
+
+    @Resource
+    private FeignMessageQueueService feignMessageQueueService;
+
 
     @GetMapping("/getGoodsById")
     public ResultObject<Goods> getGoodsById(String goodsId){
@@ -559,12 +567,19 @@ public class GoodsController {
             String msg = "状态由"+goods.getGoodsStatus()+"到"+parameter.getGoodsStatus();
             return JSONResultUtil.createJsonObject(msg);
         }
+        int currentStatus = goods.getGoodsStatus();
+        int changeStatus = parameter.getGoodsStatus();
+        // 上架、下架 需要ES索引
+        boolean needEsIndex = currentStatus!=changeStatus && (currentStatus==5||changeStatus==5);
 
         goods.setGoodsId(goodsId);
         goods.setGoodsStatus(parameter.getGoodsStatus());
         goods.setModifier(CacheSellerHolderLocal.getSeller().getSellerId());
         goods.setModifyTime(new Date());
         int count = goodsService.updateGoodsById(goods);
+        if(needEsIndex){
+            elasticSearchIndexGoods(goodsId);
+        }
 
         JSONObject data = new JSONObject();
         data.put("count",count);
@@ -574,26 +589,48 @@ public class GoodsController {
     }
 
     /**
+     * elasticSearch 商品索引
+     * @param goodsId
+     */
+    private void elasticSearchIndexGoods(String goodsId) {
+        try {
+            ResultObject resultObject = feignMessageQueueService.goodsElasticSearch(goodsId);
+            if (!resultObject.isSuccess()) {
+                log.error("ES index error.batchUpdateGoodsStatus feignMessageQueueService.goodsId:" + goodsId + " " + JSONObject.toJSONString(resultObject));
+            }
+        } catch (Exception e) {
+            log.error("ES index error.batchUpdateGoodsStatus feignMessageQueueService.goodsId:" + goodsId, e);
+        }
+    }
+
+    /**
      * 批量操作 上架 下架
      * @param parameter
      * @param bindingResult
      * @return
      */
     @PostMapping("/batchUpdateGoodsStatus")
-    public JSONObject batchUpdateGoodsStatus(@RequestBody @Valid BatchUpdateGoodsStatusParameter parameter, BindingResult bindingResult){
+    public ResultObject batchUpdateGoodsStatus(@RequestBody @Valid BatchUpdateGoodsStatusParameter parameter, BindingResult bindingResult){
         Assert.notNull(CacheSellerHolderLocal.getSeller(),"商家未登录");
         if(bindingResult.hasErrors()){
-            return JSONResultUtil.createJsonObject(bindingResult.getFieldErrors());
+            return new ResultObject<>(ErrorCode.REQUEST_PARAM_ERROR,bindingResult.getFieldErrors());
         }
         String[] goodsIds = parameter.getGoodsIds();
-        String msg = "";
+        String skipGoodsSn = "";
         int count =0;
         for (String goodsId :
                 goodsIds) {
             Goods goods = goodsService.getGoodsById(goodsId);
+            int currentStatus = goods.getGoodsStatus();
+            int changeStatus = parameter.getGoodsStatus();
             boolean valid = validSellerGoodsStatusEnable(goods.getGoodsStatus(),parameter.getGoodsStatus());
+            // 上架、下架 需要ES索引
+            boolean needEsIndex = currentStatus!=changeStatus && (currentStatus==5||changeStatus==5);
+
+            // 不能跳转的状态，跳过
             if(!valid){
-                msg += goods.getGoodsSn()+" ";
+                skipGoodsSn += goods.getGoodsSn()+" ";
+                continue;
             }
             goods = new Goods();
             goods.setGoodsId(goodsId);
@@ -601,11 +638,13 @@ public class GoodsController {
             goods.setModifier(CacheSellerHolderLocal.getSeller().getSellerId());
             goods.setModifyTime(new Date());
             count += goodsService.updateGoodsById(goods);
+            if(needEsIndex){
+                elasticSearchIndexGoods(goodsId);
+            }
         }
-        String successMessage = String.format("一共:%d 成功:%d",goodsIds.length,count);
-        JSONObject jsonObject = JSONResultUtil.createJsonObject(new ResultState(MESSAGE_TYPE_SUCCESS,successMessage));
-
-        return jsonObject;
+        String successMessage = String.format("一共:%d 成功:%d skipGoodsSn:%s",goodsIds.length,count,skipGoodsSn);
+        ResultObject resultObject = new ResultObject<>(successMessage);
+        return resultObject;
     }
 
 

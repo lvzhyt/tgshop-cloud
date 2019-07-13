@@ -2,14 +2,14 @@ package com.tg.shop.product.hystrix;
 
 import com.tg.shop.core.entity.ErrorCode;
 import com.tg.shop.core.entity.ResultObject;
-import com.tg.shop.product.feign.service.FeignMessageQueueControllerService;
+import com.tg.shop.product.feign.service.FeignMessageQueueService;
 import org.springframework.stereotype.Component;
 
 /**
  * @author Administrator
  */
 @Component
-public class FeignMessageQueueControllerServiceHystrix implements FeignMessageQueueControllerService {
+public class FeignMessageQueueServiceHystrix implements FeignMessageQueueService {
 
     @Override
     public ResultObject sendHelloMq(String message) {

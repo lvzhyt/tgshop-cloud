@@ -15,6 +15,9 @@ spring:
     url: jdbc:mysql://localhost:3306/tgshop_cloud?useUnicode=true&characterEncoding=utf8&serverTimezone=GMT%2B8
     username: root
     password: 123456
+  #jackson
+  jackson:
+    date-format: yyyy-MM-dd HH:mm:ss
 
   # rabbitmq
   rabbitmq:
@@ -30,6 +33,12 @@ spring:
         acknowledge-mode: manual
       simple:
         acknowledge-mode: manual
+#        retry:
+#          enabled: true
+#          max-attempts: 5
+#          initial-interval: 500
+#          multiplier: 2
+#          max-interval: 120000
 eureka:
   client:
     service-url:

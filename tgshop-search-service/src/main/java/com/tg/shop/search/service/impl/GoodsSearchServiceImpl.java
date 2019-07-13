@@ -17,8 +17,6 @@ import org.elasticsearch.index.query.functionscore.FunctionScoreQueryBuilder;
 import org.elasticsearch.index.query.functionscore.ScoreFunctionBuilder;
 import org.elasticsearch.index.query.functionscore.ScoreFunctionBuilders;
 import org.springframework.beans.BeanUtils;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -77,7 +75,7 @@ public class GoodsSearchServiceImpl implements GoodsSearchService {
 
     @Override
     public ResultObject updateGoodsIndex(String goodsId) {
-        ResultObject resultObject = feignProductService.getGoodsById(goodsId);
+        ResultObject<Goods> resultObject = feignProductService.getGoodsById(goodsId);
         if(!resultObject.isSuccess()){
             return resultObject;
         }
@@ -85,7 +83,7 @@ public class GoodsSearchServiceImpl implements GoodsSearchService {
         if(goods==null){
             return new ResultObject("8001","商品不存在.goodsId:"+goodsId );
         }
-        ResultObject<List<GoodsSkuDetailResultVo>> skuResultObject = feignProductService.findSkuDetailListByGoodsId(goods.getGoodsId());
+        ResultObject<List<GoodsSkuDetailResultVo>> skuResultObject = feignProductService.getSkuDetailListByGoodsId(goods.getGoodsId());
         if(!skuResultObject.isSuccess()){
             return skuResultObject;
         }
@@ -101,10 +99,11 @@ public class GoodsSearchServiceImpl implements GoodsSearchService {
             // 评价数
             esGoods.setCommentNum(0);
 
+            // 商品索引
             if(goods.getGoodsStatus()== GoodsInfo.STATUS_SHOW_ON){
                 goodsRepository.save(esGoods);
             }else {
-                if(goodsRepository.existsById(esGoods.getGoodsId())){
+                if(goodsRepository.existsById(esGoods.getSkuId())){
                     goodsRepository.delete(esGoods);
                 }
             }

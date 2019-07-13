@@ -1,7 +1,7 @@
 package com.tg.shop.product.controller;
 
 import com.tg.shop.core.entity.ResultObject;
-import com.tg.shop.product.feign.service.FeignMessageQueueControllerService;
+import com.tg.shop.product.feign.service.FeignMessageQueueService;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
@@ -15,11 +15,11 @@ import javax.annotation.Resource;
 public class FeignDemoController {
 
     @Resource
-    private FeignMessageQueueControllerService feignMessageQueueControllerService;
+    private FeignMessageQueueService feignMessageQueueService;
 
     @GetMapping("/feign/mq/sendHelloMq")
     public ResultObject helloFeign(String message){
-        return feignMessageQueueControllerService.sendHelloMq(message);
+        return feignMessageQueueService.sendHelloMq(message);
     }
 
 
@@ -30,6 +30,6 @@ public class FeignDemoController {
      */
     @GetMapping("/feign/mq/goodsEs")
     public ResultObject goodsElasticSearch(@RequestParam String goodsId){
-        return feignMessageQueueControllerService.goodsElasticSearch(goodsId);
+        return feignMessageQueueService.goodsElasticSearch(goodsId);
     }
 }

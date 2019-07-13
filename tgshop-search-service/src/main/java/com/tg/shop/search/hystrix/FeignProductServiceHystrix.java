@@ -26,7 +26,7 @@ public class FeignProductServiceHystrix implements FeignProductService {
     }
 
     @Override
-    public ResultObject<List<GoodsSkuDetailResultVo>> findSkuDetailListByGoodsId(String goodsId) {
+    public ResultObject<List<GoodsSkuDetailResultVo>> getSkuDetailListByGoodsId(String goodsId) {
         return new ResultObject<>(ErrorCode.HYSTRIX_SERVICE_ERROR);
     }
 }

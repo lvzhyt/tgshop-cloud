@@ -6,9 +6,7 @@ import com.tg.shop.core.domain.util.PageCondition;
 import com.tg.shop.core.entity.ResultObject;
 import com.tg.shop.search.hystrix.FeignProductServiceHystrix;
 import org.springframework.cloud.openfeign.FeignClient;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -18,12 +16,22 @@ import java.util.List;
 @FeignClient(value = "tgshop-product-service",fallback = FeignProductServiceHystrix.class)
 public interface FeignProductService {
 
-    @GetMapping("/goods/getGoodsById")
-    ResultObject<Goods> getGoodsById(String goodsId);
+    /**
+     * 获取商品
+     * @param goodsId
+     * @return
+     */
+    @RequestMapping(value = "/goods/getGoodsById",method = RequestMethod.GET)
+    ResultObject<Goods> getGoodsById(@RequestParam("goodsId") String goodsId);
 
-    @PostMapping("/goods/findGoodsPageList")
-    ResultObject findGoodsPageList(PageCondition<Goods> pageCondition);
+    @RequestMapping(value = "/goods/findGoodsPageList",method=RequestMethod.POST)
+    ResultObject findGoodsPageList(@RequestBody PageCondition<Goods> pageCondition);
 
-    @GetMapping("/sku/findSkuDetailListByGoodsId")
-    ResultObject<List<GoodsSkuDetailResultVo>> findSkuDetailListByGoodsId(String goodsId);
+    /**
+     * 获取商品sku详情列表
+     * @param goodsId
+     * @return
+     */
+    @RequestMapping(value = "/sku/getSkuDetailListByGoodsId",method = RequestMethod.GET)
+    ResultObject<List<GoodsSkuDetailResultVo>> getSkuDetailListByGoodsId(@RequestParam("goodsId") String goodsId);
 }

@@ -4,6 +4,7 @@ import com.alibaba.fastjson.JSONObject;
 import com.tg.shop.core.domain.ResultState;
 import com.tg.shop.core.domain.auth.entity.Seller;
 import com.tg.shop.core.domain.product.entity.*;
+import com.tg.shop.core.domain.product.info.GoodsInfo;
 import com.tg.shop.core.domain.product.result.vo.GoodsSkuDetailResultVo;
 import com.tg.shop.core.domain.product.result.vo.GoodsSkuInventoryResultVo;
 import com.tg.shop.core.domain.product.result.vo.GoodsSkuPriceResultVo;
@@ -13,6 +14,7 @@ import com.tg.shop.core.generator.IdGenerator;
 import com.tg.shop.core.utils.CacheSellerHolderLocal;
 import com.tg.shop.core.utils.ErrorCodeFeature;
 import com.tg.shop.core.utils.JSONResultUtil;
+import com.tg.shop.product.feign.service.FeignMessageQueueService;
 import com.tg.shop.product.request.param.UpdateGoodsSkuInventoryParameter;
 import com.tg.shop.product.request.param.UpdateGoodsSkuPicParameter;
 import com.tg.shop.product.request.param.UpdateGoodsSkuPriceParameter;
@@ -21,17 +23,20 @@ import com.tg.shop.product.service.*;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.util.Assert;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
+import javax.annotation.Resource;
 import javax.validation.Valid;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+@Slf4j
 @RestController
 @RequestMapping("/sku")
 public class GoodsSkuController {
@@ -48,6 +53,10 @@ public class GoodsSkuController {
     private GoodsSkuPriceService goodsSkuPriceService;
     @Autowired
     private GoodsSkuInventoryService goodsSkuInventoryService;
+    @Autowired
+    private GoodsService goodsService;
+    @Resource
+    private FeignMessageQueueService feignMessageQueueService;
 
     @ApiOperation("商品SKU列表")
     @GetMapping("/listSkuByGoodsId")
@@ -158,11 +167,15 @@ public class GoodsSkuController {
         String sellerName = CacheSellerHolderLocal.getSeller().getSellerName();
         String[] skuIds = parameter.getSkuIds();
         int count = 0;
+        String goodsId = null;
         for (String skuId :
                 skuIds) {
             GoodsSkuPrice skuPrice = goodsSkuPriceService.getBySkuId(skuId);
             if(!checkPriceChange(skuPrice,parameter)){
                 continue;
+            }
+            if(goodsId==null){
+                goodsId = skuPrice.getGoodsId();
             }
             GoodsSkuPriceLog priceLog = new GoodsSkuPriceLog();
             BeanUtils.copyProperties(skuPrice,priceLog);
@@ -208,6 +221,13 @@ public class GoodsSkuController {
             priceLog.setModifier(null);
             priceLog.setModifyTime(null);
             count += goodsSkuPriceService.updateSkuPrice(skuPrice,priceLog);
+        }
+        if(goodsId!=null){
+            Goods goods = goodsService.getGoodsById(goodsId);
+            // 出售中的商品 商品索引ES
+            if(goods.getGoodsStatus()== GoodsInfo.STATUS_SHOW_ON){
+                elasticSearchIndexGoods(goodsId);
+            }
         }
         JSONObject resultCount = new JSONObject();
         resultCount.put("count",count);
@@ -314,6 +334,7 @@ public class GoodsSkuController {
      * @param goodsId
      * @return
      */
+    @ApiOperation("获取商品sku详情列表")
     @GetMapping("/getSkuDetailListByGoodsId")
     public JSONObject getSkuDetailListByGoodsId(@ApiParam(required = true) @RequestParam String goodsId){
         List<GoodsSkuDetailResultVo> list = goodsSkuService.findSkuDetailListByGoodsId(goodsId);
@@ -343,5 +364,21 @@ public class GoodsSkuController {
         int count = goodsSkuService.updateSkuById(goodsSku);
 
         return new ResultObject<>(count);
+    }
+
+
+    /**
+     * elasticSearch 商品索引
+     * @param goodsId
+     */
+    private void elasticSearchIndexGoods(String goodsId) {
+        try {
+            ResultObject resultObject = feignMessageQueueService.goodsElasticSearch(goodsId);
+            if (!resultObject.isSuccess()) {
+                log.error("ES index error.batchUpdateGoodsStatus feignMessageQueueService.goodsId:" + goodsId + " " + JSONObject.toJSONString(resultObject));
+            }
+        } catch (Exception e) {
+            log.error("ES index error.batchUpdateGoodsStatus feignMessageQueueService.goodsId:" + goodsId, e);
+        }
     }
 }

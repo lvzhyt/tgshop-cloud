@@ -4,6 +4,7 @@ import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import com.rabbitmq.client.Channel;
 import com.tg.shop.core.domain.mq.entity.MessageQueue;
+import com.tg.shop.core.entity.ResultObject;
 import com.tg.shop.mq.config.RabbitMqConfigInfo;
 import com.tg.shop.mq.feign.service.FeignGoodsSearchService;
 import com.tg.shop.mq.service.MessageQueueService;
@@ -40,7 +41,13 @@ public class GoodsEsConsumer {
         try {
             JSONObject jsonData = JSON.parseObject(messageQueue.getMessageData());
             String goodsId = jsonData.getString("goodsId");
-            feignGoodsSearchService.updateGoodsSearchIndex(goodsId);
+            ResultObject resultObject = feignGoodsSearchService.updateGoodsSearchIndex(goodsId);
+            if(!resultObject.isSuccess()){
+                boolean reQueue = messageQueueService.requeueAble(messageQueue.getMsgId());
+                channel.basicNack(message.getMessageProperties().getDeliveryTag(),false,reQueue);
+                log.error("feignGoodsSearchService.updateGoodsSearchIndex() "+JSONObject.toJSONString(resultObject));
+                return;
+            }
             messageQueue.setDeliveryTag(message.getMessageProperties().getDeliveryTag());
             messageQueue.setMsgState(1);
             messageQueue.setDeliveryTime(new Date());
@@ -48,10 +55,10 @@ public class GoodsEsConsumer {
             channel.basicAck(message.getMessageProperties().getDeliveryTag(),false);
         } catch (Exception e) {
             try {
-                boolean reQueue = messageQueueService.deliveryAndRequeueAble(messageQueue.getMsgId(),RabbitMqConfigInfo.DEFAULT_MAX_DELIVERY_NUM);
+                boolean reQueue = messageQueueService.requeueAble(messageQueue.getMsgId());
                 channel.basicNack(message.getMessageProperties().getDeliveryTag(),false,reQueue);
             } catch (IOException ex) {
-                log.error("商品索引异常.basicNack"+ex.getMessage(),ex);
+                log.error("商品索引,消息重试异常.basicNack"+ex.getMessage(),ex);
             }
             log.error("商品索引异常."+e.getMessage(),e);
         }

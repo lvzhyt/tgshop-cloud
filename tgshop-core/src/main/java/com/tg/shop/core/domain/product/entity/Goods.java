@@ -9,10 +9,12 @@ import com.tg.shop.core.validate.InsertValid;
 import com.tg.shop.core.validate.UpdateValid;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import javax.validation.constraints.NotEmpty;
 
 @Data
+@NoArgsConstructor
 public class Goods implements Serializable {
     /**
      * 商品ID
