@@ -593,6 +593,7 @@ public class GoodsController {
      * @param goodsId
      */
     private void elasticSearchIndexGoods(String goodsId) {
+        log.info("商品索引. goodsId: "+goodsId);
         try {
             ResultObject resultObject = feignMessageQueueService.goodsElasticSearch(goodsId);
             if (!resultObject.isSuccess()) {

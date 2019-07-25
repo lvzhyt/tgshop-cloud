@@ -29,6 +29,11 @@ public enum ErrorCode {
     TOKEN_LOSE_EFFICACY("1002","您的登录令牌已失效，请重新登录"),
     LOGIN_USER_NOT_EXISTS("1003","用户不存在"),
     LOGIN_PASSWORD_ERROR("1004","登录密码错误"),
+    REGISTER_USER_ALREADY_EXISTS("1005","用户已存在"),
+    /**
+     * 权限不足
+     */
+    TOKEN_AUTH_POWER_ERROR("1005","权限不足"),
 
     EMPTY_DATA_ERROR("2001", "查询为空"),
 

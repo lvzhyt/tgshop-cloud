@@ -1,0 +1,128 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.tg.shop.trade.mapper.OrderLogMapper">
+  <resultMap id="BaseResultMap" type="com.tg.shop.core.domain.trade.entity.OrderLog">
+    <id column="order_log_id" jdbcType="VARCHAR" property="orderLogId" />
+    <result column="order_id" jdbcType="VARCHAR" property="orderId" />
+    <result column="order_sn" jdbcType="VARCHAR" property="orderSn" />
+    <result column="order_state" jdbcType="VARCHAR" property="orderState" />
+    <result column="remark" jdbcType="VARCHAR" property="remark" />
+    <result column="operator" jdbcType="VARCHAR" property="operator" />
+    <result column="creator" jdbcType="VARCHAR" property="creator" />
+    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    order_log_id, order_id, order_sn, order_state, remark, operator, creator, create_time
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.String" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from trade_order_log
+    where order_log_id = #{orderLogId,jdbcType=VARCHAR}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String">
+    delete from trade_order_log
+    where order_log_id = #{orderLogId,jdbcType=VARCHAR}
+  </delete>
+  <insert id="insert" parameterType="com.tg.shop.core.domain.trade.entity.OrderLog">
+    insert into trade_order_log (order_log_id, order_id, order_sn, 
+      order_state, remark, operator, 
+      creator, create_time)
+    values (#{orderLogId,jdbcType=VARCHAR}, #{orderId,jdbcType=VARCHAR}, #{orderSn,jdbcType=VARCHAR}, 
+      #{orderState,jdbcType=VARCHAR}, #{remark,jdbcType=VARCHAR}, #{operator,jdbcType=VARCHAR}, 
+      #{creator,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP})
+  </insert>
+  <insert id="insertSelective" parameterType="com.tg.shop.core.domain.trade.entity.OrderLog">
+    insert into trade_order_log
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="orderLogId != null">
+        order_log_id,
+      </if>
+      <if test="orderId != null">
+        order_id,
+      </if>
+      <if test="orderSn != null">
+        order_sn,
+      </if>
+      <if test="orderState != null">
+        order_state,
+      </if>
+      <if test="remark != null">
+        remark,
+      </if>
+      <if test="operator != null">
+        operator,
+      </if>
+      <if test="creator != null">
+        creator,
+      </if>
+      <if test="createTime != null">
+        create_time,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="orderLogId != null">
+        #{orderLogId,jdbcType=VARCHAR},
+      </if>
+      <if test="orderId != null">
+        #{orderId,jdbcType=VARCHAR},
+      </if>
+      <if test="orderSn != null">
+        #{orderSn,jdbcType=VARCHAR},
+      </if>
+      <if test="orderState != null">
+        #{orderState,jdbcType=VARCHAR},
+      </if>
+      <if test="remark != null">
+        #{remark,jdbcType=VARCHAR},
+      </if>
+      <if test="operator != null">
+        #{operator,jdbcType=VARCHAR},
+      </if>
+      <if test="creator != null">
+        #{creator,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null">
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.tg.shop.core.domain.trade.entity.OrderLog">
+    update trade_order_log
+    <set>
+      <if test="orderId != null">
+        order_id = #{orderId,jdbcType=VARCHAR},
+      </if>
+      <if test="orderSn != null">
+        order_sn = #{orderSn,jdbcType=VARCHAR},
+      </if>
+      <if test="orderState != null">
+        order_state = #{orderState,jdbcType=VARCHAR},
+      </if>
+      <if test="remark != null">
+        remark = #{remark,jdbcType=VARCHAR},
+      </if>
+      <if test="operator != null">
+        operator = #{operator,jdbcType=VARCHAR},
+      </if>
+      <if test="creator != null">
+        creator = #{creator,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null">
+        create_time = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where order_log_id = #{orderLogId,jdbcType=VARCHAR}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.tg.shop.core.domain.trade.entity.OrderLog">
+    update trade_order_log
+    set order_id = #{orderId,jdbcType=VARCHAR},
+      order_sn = #{orderSn,jdbcType=VARCHAR},
+      order_state = #{orderState,jdbcType=VARCHAR},
+      remark = #{remark,jdbcType=VARCHAR},
+      operator = #{operator,jdbcType=VARCHAR},
+      creator = #{creator,jdbcType=VARCHAR},
+      create_time = #{createTime,jdbcType=TIMESTAMP}
+    where order_log_id = #{orderLogId,jdbcType=VARCHAR}
+  </update>
+</mapper>

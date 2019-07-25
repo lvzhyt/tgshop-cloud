@@ -4,7 +4,7 @@ package com.tg.shop.mq.producer.impl;
 import com.alibaba.fastjson.JSONObject;
 import com.tg.shop.core.domain.mq.entity.MessageQueue;
 import com.tg.shop.core.generator.IdGenerator;
-import com.tg.shop.mq.config.RabbitMqConfigInfo;
+import com.tg.shop.core.mq.RabbitMqConfigInfo;
 import com.tg.shop.mq.producer.GoodsEsProducer;
 import com.tg.shop.mq.service.MessageQueueService;
 import lombok.extern.slf4j.Slf4j;

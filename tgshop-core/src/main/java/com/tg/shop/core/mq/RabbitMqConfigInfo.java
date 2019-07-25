@@ -1,4 +1,4 @@
-package com.tg.shop.mq.config;
+package com.tg.shop.core.mq;
 
 public interface RabbitMqConfigInfo {
 
@@ -79,5 +79,18 @@ public interface RabbitMqConfigInfo {
      * 修改库存
      */
     int MQ_TYPE_TRADE_UPDATE_STOCK = 4;
+
+
+
+    /**
+     * 发送短信
+     */
+    String EXCHANGE_SMS ="sms.shop.exchange";
+    String QUEUE_SMS ="sms.shop.queue";
+    String KEY_SMS_ES_INDEX ="sms.shop.key";
+    int MQ_TYPE_SMS = 5;
+
+
+
 
 }

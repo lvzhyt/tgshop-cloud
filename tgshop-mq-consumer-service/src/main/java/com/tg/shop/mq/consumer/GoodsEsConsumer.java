@@ -5,7 +5,7 @@ import com.alibaba.fastjson.JSONObject;
 import com.rabbitmq.client.Channel;
 import com.tg.shop.core.domain.mq.entity.MessageQueue;
 import com.tg.shop.core.entity.ResultObject;
-import com.tg.shop.mq.config.RabbitMqConfigInfo;
+import com.tg.shop.core.mq.RabbitMqConfigInfo;
 import com.tg.shop.mq.feign.service.FeignGoodsSearchService;
 import com.tg.shop.mq.service.MessageQueueService;
 import lombok.extern.slf4j.Slf4j;

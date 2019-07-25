@@ -2,6 +2,7 @@ package com.tg.shop.auth.service;
 
 
 import com.tg.shop.auth.request.LoginParam;
+import com.tg.shop.core.entity.ResultObject;
 
 /**
  * @Author: tg
@@ -23,5 +24,5 @@ public interface MemberService {
      * @param loginForm
      * @return 错误信息
      */
-    String registerByPhone(LoginParam loginForm);
+    ResultObject registerByPhone(LoginParam loginForm);
 }

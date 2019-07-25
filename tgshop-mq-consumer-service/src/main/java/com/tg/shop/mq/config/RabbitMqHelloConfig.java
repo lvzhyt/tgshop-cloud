@@ -1,5 +1,6 @@
 package com.tg.shop.mq.config;
 
+import com.tg.shop.core.mq.RabbitMqConfigInfo;
 import org.springframework.amqp.core.Binding;
 import org.springframework.amqp.core.BindingBuilder;
 import org.springframework.amqp.core.DirectExchange;

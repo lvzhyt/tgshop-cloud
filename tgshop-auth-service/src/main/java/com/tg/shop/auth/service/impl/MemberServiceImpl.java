@@ -5,6 +5,8 @@ import com.tg.shop.auth.mapper.MemberMapper;
 import com.tg.shop.auth.request.LoginParam;
 import com.tg.shop.auth.service.MemberService;
 import com.tg.shop.core.domain.auth.entity.Member;
+import com.tg.shop.core.entity.ErrorCode;
+import com.tg.shop.core.entity.ResultObject;
 import com.tg.shop.core.generator.IdGenerator;
 import com.tg.shop.core.utils.RedisUtil;
 import com.tg.shop.core.utils.RegexUtil;
@@ -74,7 +76,7 @@ public class MemberServiceImpl implements MemberService {
     }
 
     @Override
-    public String registerByPhone(LoginParam loginForm) {
+    public ResultObject registerByPhone(LoginParam loginForm) {
         Assert.notNull(loginForm.getUserName(),"注册手机不能为空.");
         Assert.notNull(loginForm.getPassword(),"注册密码不能为空.");
         String loginName = loginForm.getUserName();
@@ -88,7 +90,7 @@ public class MemberServiceImpl implements MemberService {
 
         Member member = memberDao.findMemberByLoginName(loginName);
         if (member!=null){
-            return "用户名/手机号已存在.";
+            return new ResultObject(ErrorCode.REGISTER_USER_ALREADY_EXISTS);
         }
         member = new Member();
         member.setMemberId(idGenerator.nextStringId());
@@ -103,7 +105,7 @@ public class MemberServiceImpl implements MemberService {
         member.setNickName(loginForm.getUserName());
         int result = memberMapper.insertSelective(member);
         stringRedisTemplate.delete(keyRegisterPhone);
-        return null;
+        return new ResultObject(result);
     }
 
 

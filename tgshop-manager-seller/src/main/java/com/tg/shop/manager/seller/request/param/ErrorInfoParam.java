@@ -1,4 +1,4 @@
-package com.tg.shop.manager.seller.request;
+package com.tg.shop.manager.seller.request.param;
 
 import lombok.Data;
 

@@ -6,10 +6,11 @@ import com.tg.shop.core.domain.mq.entity.MessageQueue;
 import com.tg.shop.core.domain.mq.entity.MessageQueueLog;
 
 import com.tg.shop.core.generator.IdGenerator;
-import com.tg.shop.mq.config.RabbitMqConfigInfo;
+import com.tg.shop.core.mq.RabbitMqConfigInfo;
 import com.tg.shop.mq.mapper.MessageQueueLogMapper;
 import com.tg.shop.mq.mapper.MessageQueueMapper;
 import com.tg.shop.mq.service.MessageQueueService;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.StringRedisTemplate;
@@ -20,6 +21,7 @@ import javax.annotation.Resource;
 import java.util.Date;
 import java.util.concurrent.TimeUnit;
 
+@Slf4j
 @Service
 public class MessageQueueServiceImpl implements MessageQueueService {
 

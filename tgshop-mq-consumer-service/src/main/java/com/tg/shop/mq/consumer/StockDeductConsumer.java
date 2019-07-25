@@ -1,7 +1,7 @@
 package com.tg.shop.mq.consumer;
 
 import com.rabbitmq.client.Channel;
-import com.tg.shop.mq.config.RabbitMqConfigInfo;
+import com.tg.shop.core.mq.RabbitMqConfigInfo;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.amqp.core.Message;
 import org.springframework.amqp.rabbit.annotation.RabbitHandler;
