@@ -24,6 +24,7 @@
     </annotationProcessing>
     <bytecodeTargetLevel>
       <module name="tgshop-mq-service" target="1.8" />
+      <module name="tgshop-trade-service2" target="1.8" />
     </bytecodeTargetLevel>
   </component>
   <component name="JavacSettings">
@@ -42,6 +43,7 @@
       <module name="tgshop-search-service" options="-parameters" />
       <module name="tgshop-service-zuul" options="-parameters" />
       <module name="tgshop-trade-service" options="-parameters" />
+      <module name="tgshop-trade-service2" options="-parameters" />
       <module name="tgshop-zuul-seller" options="-parameters" />
     </option>
   </component>

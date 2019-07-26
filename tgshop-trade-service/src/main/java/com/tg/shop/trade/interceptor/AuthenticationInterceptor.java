@@ -27,6 +27,7 @@ import java.util.concurrent.TimeUnit;
 
 /**
  * 认证拦截器
+ * 拦截@UserToken  @SellerToken 注解
  * 获取redis的token对象,放到ThreadLocal
  * @Author: tg
  * @Date: 2019/3/18 15:44
@@ -42,6 +43,8 @@ public class AuthenticationInterceptor implements HandlerInterceptor {
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
 
         String token = request.getHeader("token");
+        String servletPath = request.getServletPath();
+        System.out.println("path:"+servletPath);
 
         // 如果不是映射到方法直接通过
         if (!(handler instanceof HandlerMethod)){
@@ -49,72 +52,64 @@ public class AuthenticationInterceptor implements HandlerInterceptor {
         }
         HandlerMethod handlerMethod = (HandlerMethod) handler;
         Method method = handlerMethod.getMethod();
-        // 检查是否有匿名访问AnonymousAccess注释，有则跳过认证
-        if (method.isAnnotationPresent(AnonymousAccess.class)) {
-            AnonymousAccess anonymousAccess = method.getAnnotation(AnonymousAccess.class);
-            if (anonymousAccess.required()) {
-                return true;
-            }
-        }
-        // 开启权限认证注解
-//        if(method.isAnnotationPresent(AuthToken.class)){}
+        Class klass = method.getDeclaringClass();
 
-        // 所有访问需要token认证
-        if(!redisTemplate.hasKey(token)){
-            ResultObject resultObject = new ResultObject(ErrorCode.TOKEN_LOSE_EFFICACY);
-            response.setHeader("Content-Type", "application/json;charset=UTF-8");
-            response.getWriter().write(JSONObject.toJSONString(resultObject));
-            return false;
-        }
-        Object object = redisTemplate.opsForValue().get(token);
-        if(method.isAnnotationPresent(SellerToken.class)){
-            SellerToken sellerToken = method.getAnnotation(SellerToken.class);
-            if (sellerToken.required()) {
-                if(object instanceof SellerStore){
-                    SellerStore sellerStore = (SellerStore) object;
-                    CacheSellerHolderLocal.setSeller(sellerStore.getSeller());
-                    CacheStoreHolderLocal.setStore(sellerStore.getStore());
-                    if(sellerStore.getStore()==null){
-                        ResultObject resultObject = new ResultObject("8001","没有创建店铺");
-                        response.setHeader("Content-Type", "application/json;charset=UTF-8");
-                        response.getWriter().write(JSONObject.toJSONString(resultObject));
-                        return false;
-                    }
-                }else{
-                    ResultObject resultObject = new ResultObject(ErrorCode.TOKEN_AUTH_POWER_ERROR);
+        if(klass.isAnnotationPresent(SellerToken.class)||method.isAnnotationPresent(SellerToken.class)){
+            if(StringUtils.isEmpty(token)|| !redisTemplate.hasKey(token)){
+                ErrorCode  errorCode = StringUtils.isEmpty(token)?ErrorCode.TOKEN_IS_EMPTY:ErrorCode.TOKEN_LOSE_EFFICACY;
+                ResultObject resultObject = new ResultObject(errorCode);
+                response.setHeader("Content-Type", "application/json;charset=UTF-8");
+                response.getWriter().write(JSONObject.toJSONString(resultObject));
+                return false;
+            }
+            Object object = redisTemplate.opsForValue().get(token);
+            if(object instanceof SellerStore){
+                SellerStore sellerStore = (SellerStore) object;
+                CacheSellerHolderLocal.setSeller(sellerStore.getSeller());
+                CacheStoreHolderLocal.setStore(sellerStore.getStore());
+                if(sellerStore.getStore()==null){
+                    ResultObject resultObject = new ResultObject("8001","没有创建店铺");
                     response.setHeader("Content-Type", "application/json;charset=UTF-8");
                     response.getWriter().write(JSONObject.toJSONString(resultObject));
                     return false;
                 }
-                TokenHolderLocal.setToken(token);
-                // 更新超时时间 TimeUnit.MINUTES
-                redisTemplate.expire(token,30, TimeUnit.DAYS);
-                return true;
+            }else{
+                ResultObject resultObject = new ResultObject(ErrorCode.TOKEN_AUTH_POWER_ERROR);
+                response.setHeader("Content-Type", "application/json;charset=UTF-8");
+                response.getWriter().write(JSONObject.toJSONString(resultObject));
+                return false;
             }
+            TokenHolderLocal.setToken(token);
+            // 更新超时时间 TimeUnit.MINUTES
+            redisTemplate.expire(token,30, TimeUnit.DAYS);
+            return true;
+
         }
-        if (method.isAnnotationPresent(UserToken.class)) {
-            UserToken userToken = method.getAnnotation(UserToken.class);
-            if (userToken.required()) {
-                if(object instanceof Member){
-                    CacheMemberHolderLocal.setMember((Member) object);
-                }else{
-                    // 非member的token访问 UserToken,返回权限不足
-                    ResultObject resultObject = new ResultObject(ErrorCode.TOKEN_AUTH_POWER_ERROR);
-                    response.setHeader("Content-Type", "application/json;charset=UTF-8");
-                    response.getWriter().write(JSONObject.toJSONString(resultObject));
-                    return false;
-                }
-                TokenHolderLocal.setToken(token);
-                // 更新超时时间 TimeUnit.MINUTES
-                redisTemplate.expire(token,30, TimeUnit.DAYS);
-                return true;
+        if (klass.isAnnotationPresent(UserToken.class)||method.isAnnotationPresent(UserToken.class)) {
+            if(StringUtils.isEmpty(token)|| !redisTemplate.hasKey(token)){
+                ErrorCode  errorCode = StringUtils.isEmpty(token)?ErrorCode.TOKEN_IS_EMPTY:ErrorCode.TOKEN_LOSE_EFFICACY;
+                ResultObject resultObject = new ResultObject(errorCode);
+                response.setHeader("Content-Type", "application/json;charset=UTF-8");
+                response.getWriter().write(JSONObject.toJSONString(resultObject));
+                return false;
             }
+            Object object = redisTemplate.opsForValue().get(token);
+            if(object instanceof Member){
+                CacheMemberHolderLocal.setMember((Member) object);
+            }else{
+                // 非member的token访问 UserToken,返回权限不足
+                ResultObject resultObject = new ResultObject(ErrorCode.TOKEN_AUTH_POWER_ERROR);
+                response.setHeader("Content-Type", "application/json;charset=UTF-8");
+                response.getWriter().write(JSONObject.toJSONString(resultObject));
+                return false;
+            }
+            TokenHolderLocal.setToken(token);
+            // 更新超时时间 TimeUnit.MINUTES
+            redisTemplate.expire(token,30, TimeUnit.DAYS);
+            return true;
         }
 
-        ResultObject resultObject = new ResultObject(ErrorCode.TOKEN_AUTH_POWER_ERROR);
-        response.setHeader("Content-Type", "application/json;charset=UTF-8");
-        response.getWriter().write(JSONObject.toJSONString(resultObject));
-        return false;
+        return true;
     }
 
     @Override

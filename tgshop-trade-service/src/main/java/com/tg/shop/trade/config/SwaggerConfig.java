@@ -1,7 +1,9 @@
 package com.tg.shop.trade.config;
 
+import com.google.common.base.Predicate;
 import com.tg.shop.core.config.SwaggerProperties;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
@@ -17,6 +19,7 @@ import springfox.documentation.spi.DocumentationType;
 import springfox.documentation.spring.web.plugins.Docket;
 import springfox.documentation.swagger2.annotations.EnableSwagger2;
 
+import javax.validation.Valid;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -28,8 +31,8 @@ import java.util.List;
 @EnableSwagger2
 public class SwaggerConfig implements WebMvcConfigurer {
 
-    @Autowired
-    private SwaggerProperties swaggerProperties;
+    @Value("${tgshop.swagger.enable:true}")
+    private boolean swaggerEnable;
 
     @Override
     public void addResourceHandlers(ResourceHandlerRegistry registry){
@@ -40,9 +43,7 @@ public class SwaggerConfig implements WebMvcConfigurer {
 
     @Bean
     public Docket createRestApi(){
-        if(!swaggerProperties.isEnable()){
-            return null;
-        }
+        Predicate<String> pathSelector = swaggerEnable?PathSelectors.any():PathSelectors.none();
 
         ParameterBuilder tokenPar = new ParameterBuilder();
         List<Parameter> pars = new ArrayList<>();
@@ -53,7 +54,7 @@ public class SwaggerConfig implements WebMvcConfigurer {
                 .apiInfo(apiInfo())
                 .select()
                 .apis(RequestHandlerSelectors.basePackage("com.tg.shop.trade"))
-                .paths(PathSelectors.any())
+                .paths(pathSelector)
                 .build()
                 .globalOperationParameters(pars);
 
@@ -62,7 +63,7 @@ public class SwaggerConfig implements WebMvcConfigurer {
     private ApiInfo apiInfo() {
             return new ApiInfoBuilder()
                 .title("API doc 接口文档")
-                .description("Trade API 接口")
+                .description("Trade API 接口. SwaggerEnable: "+swaggerEnable)
                 .version("1.0")
                 .build();
     }

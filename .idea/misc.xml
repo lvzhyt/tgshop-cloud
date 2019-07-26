@@ -14,6 +14,7 @@
       <set>
         <option value="$PROJECT_DIR$/tgshop-core-module/pom.xml" />
         <option value="$PROJECT_DIR$/tgshop-mq-service/pom.xml" />
+        <option value="$PROJECT_DIR$/tgshop-trade-service2/pom.xml" />
       </set>
     </option>
   </component>

@@ -16,6 +16,7 @@
     <file url="file://$PROJECT_DIR$/tgshop-search-service" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/tgshop-service-zuul" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/tgshop-trade-service" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/tgshop-trade-service2" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/tgshop-zuul-seller" charset="UTF-8" />
   </component>
 </project>
