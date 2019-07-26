@@ -54,4 +54,11 @@ public interface GoodsSkuMapper {
     List<GoodsSkuPriceResultVo> findSkuPriceListByGoodsId(String goodsId);
 
     List<GoodsSkuDetailResultVo> findSkuDetailListByGoodsId(String goodsId);
+
+    /**
+     * SKU 详情
+     * @param skuId
+     * @return
+     */
+    GoodsSkuDetailResultVo findSkuDetailBySkuId(String skuId);
 }

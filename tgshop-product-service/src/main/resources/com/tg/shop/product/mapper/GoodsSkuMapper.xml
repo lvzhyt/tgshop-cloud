@@ -481,6 +481,42 @@
       AND t.goods_id = #{goodsId,jdbcType=VARCHAR}
   </select>
 
+
+  <select id="findSkuDetailBySkuId" resultMap="SkuDetailResultMap" parameterType="java.lang.String">
+    SELECT
+      t.sku_id,
+      t.goods_id,
+      t.sku_no,
+      t.color_attr_val_name,
+      t.size_attr_val_name,
+      t.sku_status,
+      t.spec_face_pictures,
+      t.picture_main,
+      t.picture_description,
+      t.template_id,
+      t.weight,
+      t.volume,
+      t.item_size,
+      cost_price,
+      market_price,
+      sale_price,
+      plus_price_open,
+      plus_price,
+      super_vip_price_open,
+      super_vip_price,
+      ti.inventory_num,
+      ti.lock_num,
+      ti.left_num
+    FROM
+      item_goods_sku t
+        LEFT JOIN item_goods_sku_price tp ON t.sku_id = tp.sku_id
+        LEFT JOIN item_goods_sku_inventory ti ON t.sku_id = ti.sku_id
+    WHERE
+      t.is_del = 0
+      AND t.sku_id = #{skuId,jdbcType=VARCHAR}
+    limit 1
+  </select>
+
   <sql id="whereStatement">
     <where>
       <if test="skuId != null">

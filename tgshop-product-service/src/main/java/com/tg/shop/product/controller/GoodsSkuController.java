@@ -342,6 +342,18 @@ public class GoodsSkuController {
         return JSONResultUtil.createJsonObject(list);
     }
 
+    /**
+     *  获取sku详情
+     * @param skuId
+     * @return
+     */
+    @ApiOperation("获取sku详情")
+    @GetMapping("/getSkuDetailBySkuId")
+    public ResultObject<GoodsSkuDetailResultVo> getSkuDetailBySkuId(@ApiParam(required = true) @RequestParam String skuId){
+        GoodsSkuDetailResultVo goodsSkuDetailResultVo = goodsSkuService.findSkuDetailBySkuId(skuId);
+        return new ResultObject<>(goodsSkuDetailResultVo);
+    }
+
 
 
     /**

@@ -111,4 +111,14 @@ public class GoodsSkuServiceImpl implements GoodsSkuService {
     public List<GoodsSkuDetailResultVo> findSkuDetailListByGoodsId(String goodsId) {
         return goodsSkuMapper.findSkuDetailListByGoodsId(goodsId);
     }
+
+    /**
+     * SKU 详情
+     * @param skuId
+     * @return
+     */
+    @Override
+    public GoodsSkuDetailResultVo findSkuDetailBySkuId(String skuId){
+        return goodsSkuMapper.findSkuDetailBySkuId(skuId);
+    }
 }

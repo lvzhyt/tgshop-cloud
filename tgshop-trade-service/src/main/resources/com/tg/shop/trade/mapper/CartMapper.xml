@@ -29,7 +29,7 @@
     from trade_cart
     where cart_id = #{cartId,jdbcType=VARCHAR}
   </select>
-  <delete id="deleteByPrimaryKey" parameterType="java.lang.String">
+    <delete id="deleteByPrimaryKey" parameterType="java.lang.String">
     delete from trade_cart
     where cart_id = #{cartId,jdbcType=VARCHAR}
   </delete>
@@ -220,4 +220,21 @@
       version = #{version,jdbcType=INTEGER}
     where cart_id = #{cartId,jdbcType=VARCHAR}
   </update>
+
+<!--  自定义 -->
+  <select id="findCartByMember" parameterType="java.lang.String" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from trade_cart
+    where member_id = #{memberId,jdbcType=VARCHAR}
+  </select>
+
+  <select id="findCartByMemberSkuId" parameterType="java.lang.String" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from trade_cart
+    where member_id = #{memberId,jdbcType=VARCHAR}
+    and sku_id = #{skuId,jdbcType=VARCHAR}
+    limit 1
+  </select>
 </mapper>

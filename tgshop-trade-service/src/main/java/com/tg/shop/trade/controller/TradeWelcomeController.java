@@ -8,7 +8,6 @@ import org.springframework.web.bind.annotation.RestController;
 /**
  * @author Administrator
  */
-@AnonymousAccess
 @RestController
 public class TradeWelcomeController {
 

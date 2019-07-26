@@ -67,4 +67,12 @@ public interface GoodsSkuService {
      * @return
      */
     List<GoodsSkuDetailResultVo> findSkuDetailListByGoodsId(String goodsId);
+
+
+    /**
+     * SKU 详情
+     * @param skuId
+     * @return
+     */
+    GoodsSkuDetailResultVo findSkuDetailBySkuId(String skuId);
 }

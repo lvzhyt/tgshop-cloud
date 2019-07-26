@@ -38,6 +38,8 @@ public enum ErrorCode {
 
     EMPTY_DATA_ERROR("2001", "查询为空"),
 
+    TRADE_NOT_ENOUGH_INVENTORY("3001", "库存不足"),
+
     HYSTRIX_ERROR("8001", "服务熔断"),
 
 
