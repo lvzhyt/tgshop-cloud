@@ -12,10 +12,10 @@ import javax.validation.constraints.NotEmpty;
 public class RegisterParam {
 
     @NotEmpty
-    private String userName;
+    private String mobile;
 
     @NotEmpty
-    @Length(min = 6,max = 10)
+    @Length(min = 6,max = 20)
     private String password;
 
     /**

@@ -15,8 +15,12 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+/**
+ * 大于短信
+ * 启动 打开@Service
+ */
 @Slf4j
-@Service
+//@Service
 public class DysmsServiceImpl implements SmsService {
 
 //    @Value("aliyun.dysms.accessKeyId")

@@ -30,6 +30,7 @@ public enum ErrorCode {
     LOGIN_USER_NOT_EXISTS("1003","用户不存在"),
     LOGIN_PASSWORD_ERROR("1004","登录密码错误"),
     REGISTER_USER_ALREADY_EXISTS("1005","用户已存在"),
+    REGISTER_CODE_ERROR("1006","验证码错误"),
     /**
      * 权限不足
      */

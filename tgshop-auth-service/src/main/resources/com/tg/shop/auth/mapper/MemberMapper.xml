@@ -38,7 +38,7 @@
     from item_member
     where member_id = #{memberId,jdbcType=VARCHAR}
   </select>
-  <delete id="deleteByPrimaryKey" parameterType="java.lang.String">
+    <delete id="deleteByPrimaryKey" parameterType="java.lang.String">
     delete from item_member
     where member_id = #{memberId,jdbcType=VARCHAR}
   </delete>
@@ -315,4 +315,21 @@
       version = #{version,jdbcType=INTEGER}
     where member_id = #{memberId,jdbcType=VARCHAR}
   </update>
+
+
+<!--  自定义 -->
+  <select id="findByRecord" parameterType="com.tg.shop.core.domain.auth.entity.Member" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from item_member
+    <where>
+      is_del = 0
+      <if test="phone!=null">
+        and phone = #{phone,jdbcType=VARCHAR}
+      </if>
+      <if test="loginName!=null">
+        and login_name = #{loginName,jdbcType=VARCHAR}
+      </if>
+    </where>
+  </select>
 </mapper>

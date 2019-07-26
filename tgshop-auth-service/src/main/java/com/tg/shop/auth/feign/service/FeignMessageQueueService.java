@@ -1,10 +1,11 @@
 package com.tg.shop.auth.feign.service;
 
 import com.tg.shop.auth.hystrix.FeignMessageQueueServiceHystrix;
+import com.tg.shop.core.domain.sms.SmsMessage;
 import com.tg.shop.core.entity.ResultObject;
 import org.springframework.cloud.openfeign.FeignClient;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 
 /**
  * @author Administrator
@@ -12,20 +13,11 @@ import org.springframework.web.bind.annotation.RequestParam;
 @FeignClient(value = "tgshop-mq-producer-service",fallback = FeignMessageQueueServiceHystrix.class)
 public interface FeignMessageQueueService {
 
-
     /**
-     * Hello Feign
-     * @param message
+     * 发送短信
+     * @param smsMessage
      * @return
      */
-    @GetMapping("/mq/sendHelloMq")
-    ResultObject sendHelloMq(@RequestParam String message);
-
-    /**
-     * 商品索引
-     * @param goodsId
-     * @return
-     */
-    @GetMapping("/mq/goodsEs")
-    ResultObject goodsElasticSearch(@RequestParam String goodsId);
+    @PostMapping("/mq/smsMessage")
+    ResultObject sendSmsMessage(@RequestBody SmsMessage smsMessage);
 }

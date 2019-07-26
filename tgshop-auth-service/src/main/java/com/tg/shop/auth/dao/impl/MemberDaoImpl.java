@@ -38,10 +38,10 @@ public class MemberDaoImpl implements MemberDao {
         }else{
             record.setLoginName(loginName);
         }
-//        List<Member> list = memberMapper.findByRecord(record);
-//        if(!list.isEmpty()){
-//            return list.get(0);
-//        }
+        List<Member> list = memberMapper.findByRecord(record);
+        if(!list.isEmpty()){
+            return list.get(0);
+        }
         return null;
     }
 

@@ -46,8 +46,8 @@ public class SmsConsumer {
         MessageQueue messageQueue = JSON.parseObject(msg, MessageQueue.class);
         try {
             SmsMessage smsMessage = JSONObject.parseObject(messageQueue.getMessageData(),SmsMessage.class);
-            SmsResponse smsResponse = smsService.sendMessage(smsMessage);
             System.out.println("发送短信 "+smsMessage);
+            SmsResponse smsResponse = smsService.sendMessage(smsMessage);
             if(smsResponse.getResult()==0){
                 boolean reQueue = messageQueueService.requeueAble(messageQueue.getMsgId());
                 channel.basicNack(message.getMessageProperties().getDeliveryTag(),false,reQueue);
