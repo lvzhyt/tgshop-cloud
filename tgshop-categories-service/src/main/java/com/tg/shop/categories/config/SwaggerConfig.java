@@ -1,8 +1,7 @@
 package com.tg.shop.categories.config;
 
-import com.tg.shop.core.config.SwaggerProperties;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.context.properties.EnableConfigurationProperties;
+import com.google.common.base.Predicate;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
@@ -26,12 +25,11 @@ import java.util.List;
  * @Date: 2018/12/18 10:24
  */
 @Configuration
-@EnableConfigurationProperties({SwaggerProperties.class})
-
+@EnableSwagger2
 public class SwaggerConfig implements WebMvcConfigurer {
 
-    @Autowired
-    private SwaggerProperties swaggerProperties;
+    @Value("${tgshop.swagger.enable:true}")
+    private boolean swaggerEnable;
 
     @Override
     public void addResourceHandlers(ResourceHandlerRegistry registry){
@@ -42,9 +40,7 @@ public class SwaggerConfig implements WebMvcConfigurer {
 
     @Bean
     public Docket createRestApi(){
-        if(!swaggerProperties.isEnable()){
-            return null;
-        }
+        Predicate<String> pathSelector = swaggerEnable?PathSelectors.any():PathSelectors.none();
 
         ParameterBuilder tokenPar = new ParameterBuilder();
         List<Parameter> pars = new ArrayList<>();
@@ -55,16 +51,16 @@ public class SwaggerConfig implements WebMvcConfigurer {
                 .apiInfo(apiInfo())
                 .select()
                 .apis(RequestHandlerSelectors.basePackage("com.tg.shop.categories"))
-                .paths(PathSelectors.any())
+                .paths(pathSelector)
                 .build()
                 .globalOperationParameters(pars);
 
     }
 
     private ApiInfo apiInfo() {
-            return new ApiInfoBuilder()
+        return new ApiInfoBuilder()
                 .title("API doc 接口文档")
-                .description("类目接口 Category API")
+                .description("Category API 接口. SwaggerEnable: "+swaggerEnable)
                 .version("1.0")
                 .build();
     }
