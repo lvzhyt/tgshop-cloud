@@ -76,7 +76,7 @@ public class GoodsSearchServiceImpl implements GoodsSearchService {
     @Override
     public ResultObject updateGoodsIndex(String goodsId) {
         ResultObject<Goods> resultObject = feignProductService.getGoodsById(goodsId);
-        if(!resultObject.isSuccess()){
+        if(resultObject.getResult()==0){
             return resultObject;
         }
         Goods goods = (Goods) resultObject.getData();
@@ -84,7 +84,7 @@ public class GoodsSearchServiceImpl implements GoodsSearchService {
             return new ResultObject("8001","商品不存在.goodsId:"+goodsId );
         }
         ResultObject<List<GoodsSkuDetailResultVo>> skuResultObject = feignProductService.getSkuDetailListByGoodsId(goods.getGoodsId());
-        if(!skuResultObject.isSuccess()){
+        if(skuResultObject.getResult()==0){
             return skuResultObject;
         }
         List<GoodsSkuDetailResultVo> list = skuResultObject.getData();

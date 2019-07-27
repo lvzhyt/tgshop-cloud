@@ -389,13 +389,6 @@
   </resultMap>
 
   <resultMap id="SkuDetailResultMap" type="com.tg.shop.core.domain.product.result.vo.GoodsSkuDetailResultVo" extends="BaseResultMap">
-    <!--    <id column="sku_id" jdbcType="VARCHAR" property="skuId" />-->
-    <!--    <result column="goods_id" jdbcType="VARCHAR" property="goodsId" />-->
-    <!--    <result column="sku_no" jdbcType="VARCHAR" property="skuNo" />-->
-    <!--    <result column="color_attr_val_name" jdbcType="VARCHAR" property="colorAttrValName" />-->
-    <!--    <result column="size_attr_val_name" jdbcType="VARCHAR" property="sizeAttrValName" />-->
-    <!--    <result column="sku_status" jdbcType="INTEGER" property="skuStatus" />-->
-    <!--    <result column="spec_face_pictures" jdbcType="VARCHAR" property="specFacePictures" />-->
     <result column="inventory_num" jdbcType="INTEGER" property="inventoryNum" />
     <result column="lock_num" jdbcType="INTEGER" property="lockNum" />
     <result column="left_num" jdbcType="INTEGER" property="leftNum" />
@@ -406,6 +399,7 @@
     <result column="plus_price" jdbcType="DECIMAL" property="plusPrice" />
     <result column="super_vip_price_open" jdbcType="INTEGER" property="superVipPriceOpen" />
     <result column="super_vip_price" jdbcType="DECIMAL" property="superVipPrice" />
+    <result column="store_name" jdbcType="VARCHAR" property="storeName" />
   </resultMap>
   <select id="findSkuInventoryListByGoodsId" resultMap="SkuInventoryResultMap" parameterType="java.lang.String">
     SELECT
@@ -452,6 +446,7 @@
       t.sku_id,
       t.goods_id,
       t.sku_no,
+      t.sku_goods_name,
       t.color_attr_val_name,
       t.size_attr_val_name,
       t.sku_status,
@@ -487,8 +482,11 @@
       t.sku_id,
       t.goods_id,
       t.sku_no,
+      t.sku_goods_name,
       t.color_attr_val_name,
       t.size_attr_val_name,
+      t.store_id,
+      tg.shop_name as store_name,
       t.sku_status,
       t.spec_face_pictures,
       t.picture_main,
@@ -509,12 +507,12 @@
       ti.left_num
     FROM
       item_goods_sku t
+        LEFT JOIN item_goods tg on t.goods_id = tg.goods_id
         LEFT JOIN item_goods_sku_price tp ON t.sku_id = tp.sku_id
         LEFT JOIN item_goods_sku_inventory ti ON t.sku_id = ti.sku_id
     WHERE
       t.is_del = 0
       AND t.sku_id = #{skuId,jdbcType=VARCHAR}
-    limit 1
   </select>
 
   <sql id="whereStatement">

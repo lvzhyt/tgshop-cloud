@@ -48,3 +48,12 @@ aliyun:
     access-key-secret: zCt4j93bJ6oBgRKCuJRODdfsYptizb
     bucket-name: tgshop
     pub-service: http://tgshop.oss-cn-shanghai.aliyuncs.com
+
+# mybatis sql 日志
+logging:
+  level:
+    com:
+      tg:
+        shop:
+          product:
+            mapper=debug:

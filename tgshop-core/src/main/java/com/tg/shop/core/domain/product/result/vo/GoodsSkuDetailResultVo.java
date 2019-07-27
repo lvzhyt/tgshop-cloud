@@ -28,7 +28,11 @@ public class GoodsSkuDetailResultVo implements Serializable {
      */
     private String skuGoodsName;
 
+    private String storeId;
 
+    private String storeName;
+
+    private String areaId;
     /**
      * 颜色属性值名称
      */
@@ -118,6 +122,19 @@ public class GoodsSkuDetailResultVo implements Serializable {
     private BigDecimal superVipPrice;
 
 
+    private String specInfo;
 
 
+    public String getSpecInfo() {
+
+        this.specInfo="";
+        if(this.colorAttrValName!=null){
+            this.specInfo = this.colorAttrValName;
+        }
+        if(this.sizeAttrValName!=null){
+            this.specInfo = this.colorAttrValName+":"+this.sizeAttrValName;
+        }
+
+        return this.specInfo;
+    }
 }

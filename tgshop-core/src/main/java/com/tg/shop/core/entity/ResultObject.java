@@ -1,11 +1,14 @@
 package com.tg.shop.core.entity;
 
+import lombok.Data;
+
 import java.io.Serializable;
 
 /**
  * 请求返回数据
  * @author Administrator
  */
+@Data
 public class ResultObject<T> implements Serializable {
 
     /**
@@ -60,40 +63,4 @@ public class ResultObject<T> implements Serializable {
         this.data = data;
     }
 
-
-    public boolean isSuccess(){
-        return this.result==1;
-    }
-
-    public int getResult() {
-        return result;
-    }
-
-    public void setResult(int result) {
-        this.result = result;
-    }
-
-    public String getCode() {
-        return code;
-    }
-
-    public void setCode(String code) {
-        this.code = code;
-    }
-
-    public T getData() {
-        return data;
-    }
-
-    public void setData(T data) {
-        this.data = data;
-    }
-
-    public String getMessage() {
-        return message;
-    }
-
-    public void setMessage(String message) {
-        this.message = message;
-    }
 }

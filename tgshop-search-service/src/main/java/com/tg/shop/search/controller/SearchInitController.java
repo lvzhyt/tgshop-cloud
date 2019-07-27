@@ -57,7 +57,7 @@ public class SearchInitController {
         pageCondition.setPageSize(50);
         pageCondition.setCondition(new Goods());
         ResultObject resultObject =  feignProductService.findGoodsPageList(pageCondition);
-        if(!resultObject.isSuccess()){
+        if(resultObject.getResult()==0){
             return resultObject;
         }
         PageInfo<Goods> goodsPageInfo = (PageInfo<Goods>) resultObject.getData();
@@ -66,7 +66,7 @@ public class SearchInitController {
             if(i>0){
                 pageCondition.setPageNum(i+1);
                 ResultObject resultObjectPage  = feignProductService.findGoodsPageList(pageCondition);
-                if(!resultObject.isSuccess()){
+                if(resultObject.getResult()==0){
                     return resultObject;
                 }
                 goodsPageInfo = (PageInfo<Goods>) resultObjectPage.getData();

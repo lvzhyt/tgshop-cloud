@@ -596,7 +596,7 @@ public class GoodsController {
         log.info("商品索引. goodsId: "+goodsId);
         try {
             ResultObject resultObject = feignMessageQueueService.goodsElasticSearch(goodsId);
-            if (!resultObject.isSuccess()) {
+            if (resultObject.getResult()==0) {
                 log.error("ES index error.batchUpdateGoodsStatus feignMessageQueueService.goodsId:" + goodsId + " " + JSONObject.toJSONString(resultObject));
             }
         } catch (Exception e) {

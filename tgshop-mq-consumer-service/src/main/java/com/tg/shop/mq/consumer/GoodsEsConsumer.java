@@ -42,7 +42,7 @@ public class GoodsEsConsumer {
             JSONObject jsonData = JSON.parseObject(messageQueue.getMessageData());
             String goodsId = jsonData.getString("goodsId");
             ResultObject resultObject = feignGoodsSearchService.updateGoodsSearchIndex(goodsId);
-            if(!resultObject.isSuccess()){
+            if(resultObject.getResult()==0){
                 boolean reQueue = messageQueueService.requeueAble(messageQueue.getMsgId());
                 channel.basicNack(message.getMessageProperties().getDeliveryTag(),false,reQueue);
                 log.error("feignGoodsSearchService.updateGoodsSearchIndex() "+JSONObject.toJSONString(resultObject));

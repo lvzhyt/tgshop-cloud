@@ -46,6 +46,9 @@ public class TradeCartController {
 
 
         ResultObject<GoodsSkuDetailResultVo>  skuDetailResultVoResultObject = feignProductService.getSkuDetailBySkuId(skuId);
+        if(skuDetailResultVoResultObject.getResult()==0){
+            return skuDetailResultVoResultObject;
+        }
         GoodsSkuDetailResultVo vo = skuDetailResultVoResultObject.getData();
         if(vo==null){
             return new ResultObject(ErrorCode.EMPTY_DATA_ERROR);
@@ -56,6 +59,8 @@ public class TradeCartController {
                 return new ResultObject(ErrorCode.TRADE_NOT_ENOUGH_INVENTORY);
             }
             record.setGoodsNum(record.getGoodsNum()+1);
+            record.setModifyTime(new Date());
+            record.setModifier(member.getMemberId());
             int count = cartService.updateCart(record);
             return new ResultObject(count);
         }
@@ -66,12 +71,9 @@ public class TradeCartController {
         cart.setSkuId(skuId);
         cart.setGoodsId(vo.getGoodsId());
         cart.setGoodsName(vo.getSkuGoodsName());
-        String storeId="0";
-        String storeName="storeName";
-        cart.setStoreId(storeId);
-        cart.setStoreName(storeName);
-        String specInfo = "";
-        cart.setSpecInfo(specInfo);
+        cart.setStoreId(vo.getStoreId());
+        cart.setStoreName(vo.getStoreName());
+        cart.setSpecInfo(vo.getSpecInfo());
         cart.setGoodsNum(1);
         cart.setGoodsPrice(vo.getSalePrice());
         cart.setCreator(member.getMemberId());
