@@ -1,6 +1,7 @@
 package com.tg.shop.trade.request.param;
 
 import com.tg.shop.core.domain.trade.entity.Cart;
+import com.tg.shop.core.domain.trade.entity.UserReceiveAddress;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
@@ -30,21 +31,6 @@ public class OrderParam {
     private String orderSn;
 
     /**
-     * 父订单id  0未拆单，1为父订单，其它为父订单ID
-     */
-    private String parentId;
-
-    /**
-     * 父订单编号
-     */
-    private String parentOrderSn;
-
-    /**
-     * 订单来源编码
-     */
-    private String originOrderSn;
-
-    /**
      * 买家id
      */
     private String buyerId;
@@ -58,16 +44,6 @@ public class OrderParam {
      * 买家电话
      */
     private String buyerMobile;
-
-    /**
-     * 卖家id
-     */
-    private String sellerId;
-
-    /**
-     * 店铺id
-     */
-    private String storeId;
 
     /**
      * 订单状态 1 待付款 2. 待发货 3 待收货  6 已完成 0 已取消
@@ -135,19 +111,9 @@ public class OrderParam {
     private String tradeOutSn;
 
     /**
-     * 交易流水号
-     */
-    private String tradeSn;
-
-    /**
      * 实际支付金额
      */
     private BigDecimal paymentPrice;
-
-    /**
-     * 货到付款 0 否 1 是
-     */
-    private Integer payRecive;
 
     /**
      * 支付状态 0 未付款 1 已付款
@@ -155,9 +121,14 @@ public class OrderParam {
     private Integer paymentState;
 
     /**
-     * 支付类型 1 支付宝 2 微信 3 积分 4 银联
+     * 0 在线付款 1 货到付款
      */
     private Integer paymentType;
+
+    /**
+     * 支付类型 1 支付宝 2 微信 3 现金 4 银联
+     */
+    private Integer paymentKind;
 
     /**
      * 支付时间
@@ -180,14 +151,19 @@ public class OrderParam {
     private String invoiceCorporationTax;
 
     /**
+     * 收货地址id
+     */
+    private String addressId;
+
+    /**
      * 收货人
      */
-    private String addressReciverName;
+    private String addressReceiverName;
 
     /**
      * 收货电话
      */
-    private String addressReciverMobile;
+    private String addressReceiverMobile;
 
     /**
      * 邮编
@@ -215,26 +191,6 @@ public class OrderParam {
     private String addressDetailAddress;
 
     /**
-     * 物流公司
-     */
-    private String logisticsCompany;
-
-    /**
-     * 物流公司编号
-     */
-    private String logisticsCompanyCode;
-
-    /**
-     * 物流单号
-     */
-    private String logisticsNo;
-
-    /**
-     * 物流备注
-     */
-    private String logisticsRemark;
-
-    /**
      * 订单备注
      */
     private String orderRemark;
@@ -243,8 +199,6 @@ public class OrderParam {
      * 卖家备注
      */
     private String sellerRemark;
-
-
 
     /**
      * 创建人

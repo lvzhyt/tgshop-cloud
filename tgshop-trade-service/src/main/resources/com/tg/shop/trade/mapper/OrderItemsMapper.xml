@@ -6,7 +6,7 @@
     <result column="order_id" jdbcType="VARCHAR" property="orderId" />
     <result column="area_id" jdbcType="VARCHAR" property="areaId" />
     <result column="goods_id" jdbcType="VARCHAR" property="goodsId" />
-    <result column="goods_seriral" jdbcType="VARCHAR" property="goodsSeriral" />
+    <result column="goods_serial" jdbcType="VARCHAR" property="goodsSerial" />
     <result column="goods_name" jdbcType="VARCHAR" property="goodsName" />
     <result column="spec_id" jdbcType="VARCHAR" property="specId" />
     <result column="sku_no" jdbcType="VARCHAR" property="skuNo" />
@@ -25,6 +25,8 @@
     <result column="pay_price" jdbcType="DECIMAL" property="payPrice" />
     <result column="pay_price_total" jdbcType="DECIMAL" property="payPriceTotal" />
     <result column="shop_freight_template_id" jdbcType="VARCHAR" property="shopFreightTemplateId" />
+    <result column="refund" jdbcType="INTEGER" property="refund" />
+    <result column="refund_state" jdbcType="INTEGER" property="refundState" />
     <result column="is_del" jdbcType="INTEGER" property="isDel" />
     <result column="creator" jdbcType="VARCHAR" property="creator" />
     <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
@@ -33,10 +35,11 @@
     <result column="version" jdbcType="INTEGER" property="version" />
   </resultMap>
   <sql id="Base_Column_List">
-    order_item_id, order_id, area_id, goods_id, goods_seriral, goods_name, spec_id, sku_no, 
+    order_item_id, order_id, area_id, goods_id, goods_serial, goods_name, spec_id, sku_no, 
     spec_info, spec_name, category_id, category_name, brand_id, brand_name, num, goods_price, 
     goods_price_total, promotion_id, promotion_type, promotion_discount, pay_price, pay_price_total, 
-    shop_freight_template_id, is_del, creator, create_time, modifier, modify_time, version
+    shop_freight_template_id, refund, refund_state, is_del, creator, create_time, modifier, 
+    modify_time, version
   </sql>
   <select id="selectByPrimaryKey" parameterType="java.lang.String" resultMap="BaseResultMap">
     select 
@@ -50,25 +53,27 @@
   </delete>
   <insert id="insert" parameterType="com.tg.shop.core.domain.trade.entity.OrderItems">
     insert into trade_order_items (order_item_id, order_id, area_id, 
-      goods_id, goods_seriral, goods_name, 
+      goods_id, goods_serial, goods_name, 
       spec_id, sku_no, spec_info, 
       spec_name, category_id, category_name, 
       brand_id, brand_name, num, 
       goods_price, goods_price_total, promotion_id, 
       promotion_type, promotion_discount, pay_price, 
-      pay_price_total, shop_freight_template_id, is_del, 
-      creator, create_time, modifier, 
-      modify_time, version)
+      pay_price_total, shop_freight_template_id, refund, 
+      refund_state, is_del, creator, 
+      create_time, modifier, modify_time, 
+      version)
     values (#{orderItemId,jdbcType=VARCHAR}, #{orderId,jdbcType=VARCHAR}, #{areaId,jdbcType=VARCHAR}, 
-      #{goodsId,jdbcType=VARCHAR}, #{goodsSeriral,jdbcType=VARCHAR}, #{goodsName,jdbcType=VARCHAR}, 
+      #{goodsId,jdbcType=VARCHAR}, #{goodsSerial,jdbcType=VARCHAR}, #{goodsName,jdbcType=VARCHAR}, 
       #{specId,jdbcType=VARCHAR}, #{skuNo,jdbcType=VARCHAR}, #{specInfo,jdbcType=VARCHAR}, 
       #{specName,jdbcType=VARCHAR}, #{categoryId,jdbcType=VARCHAR}, #{categoryName,jdbcType=VARCHAR}, 
       #{brandId,jdbcType=VARCHAR}, #{brandName,jdbcType=VARCHAR}, #{num,jdbcType=INTEGER}, 
       #{goodsPrice,jdbcType=DECIMAL}, #{goodsPriceTotal,jdbcType=DECIMAL}, #{promotionId,jdbcType=VARCHAR}, 
       #{promotionType,jdbcType=INTEGER}, #{promotionDiscount,jdbcType=DECIMAL}, #{payPrice,jdbcType=DECIMAL}, 
-      #{payPriceTotal,jdbcType=DECIMAL}, #{shopFreightTemplateId,jdbcType=VARCHAR}, #{isDel,jdbcType=INTEGER}, 
-      #{creator,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP}, #{modifier,jdbcType=VARCHAR}, 
-      #{modifyTime,jdbcType=TIMESTAMP}, #{version,jdbcType=INTEGER})
+      #{payPriceTotal,jdbcType=DECIMAL}, #{shopFreightTemplateId,jdbcType=VARCHAR}, #{refund,jdbcType=INTEGER}, 
+      #{refundState,jdbcType=INTEGER}, #{isDel,jdbcType=INTEGER}, #{creator,jdbcType=VARCHAR}, 
+      #{createTime,jdbcType=TIMESTAMP}, #{modifier,jdbcType=VARCHAR}, #{modifyTime,jdbcType=TIMESTAMP}, 
+      #{version,jdbcType=INTEGER})
   </insert>
   <insert id="insertSelective" parameterType="com.tg.shop.core.domain.trade.entity.OrderItems">
     insert into trade_order_items
@@ -85,8 +90,8 @@
       <if test="goodsId != null">
         goods_id,
       </if>
-      <if test="goodsSeriral != null">
-        goods_seriral,
+      <if test="goodsSerial != null">
+        goods_serial,
       </if>
       <if test="goodsName != null">
         goods_name,
@@ -142,6 +147,12 @@
       <if test="shopFreightTemplateId != null">
         shop_freight_template_id,
       </if>
+      <if test="refund != null">
+        refund,
+      </if>
+      <if test="refundState != null">
+        refund_state,
+      </if>
       <if test="isDel != null">
         is_del,
       </if>
@@ -174,8 +185,8 @@
       <if test="goodsId != null">
         #{goodsId,jdbcType=VARCHAR},
       </if>
-      <if test="goodsSeriral != null">
-        #{goodsSeriral,jdbcType=VARCHAR},
+      <if test="goodsSerial != null">
+        #{goodsSerial,jdbcType=VARCHAR},
       </if>
       <if test="goodsName != null">
         #{goodsName,jdbcType=VARCHAR},
@@ -231,6 +242,12 @@
       <if test="shopFreightTemplateId != null">
         #{shopFreightTemplateId,jdbcType=VARCHAR},
       </if>
+      <if test="refund != null">
+        #{refund,jdbcType=INTEGER},
+      </if>
+      <if test="refundState != null">
+        #{refundState,jdbcType=INTEGER},
+      </if>
       <if test="isDel != null">
         #{isDel,jdbcType=INTEGER},
       </if>
@@ -263,8 +280,8 @@
       <if test="goodsId != null">
         goods_id = #{goodsId,jdbcType=VARCHAR},
       </if>
-      <if test="goodsSeriral != null">
-        goods_seriral = #{goodsSeriral,jdbcType=VARCHAR},
+      <if test="goodsSerial != null">
+        goods_serial = #{goodsSerial,jdbcType=VARCHAR},
       </if>
       <if test="goodsName != null">
         goods_name = #{goodsName,jdbcType=VARCHAR},
@@ -320,6 +337,12 @@
       <if test="shopFreightTemplateId != null">
         shop_freight_template_id = #{shopFreightTemplateId,jdbcType=VARCHAR},
       </if>
+      <if test="refund != null">
+        refund = #{refund,jdbcType=INTEGER},
+      </if>
+      <if test="refundState != null">
+        refund_state = #{refundState,jdbcType=INTEGER},
+      </if>
       <if test="isDel != null">
         is_del = #{isDel,jdbcType=INTEGER},
       </if>
@@ -346,7 +369,7 @@
     set order_id = #{orderId,jdbcType=VARCHAR},
       area_id = #{areaId,jdbcType=VARCHAR},
       goods_id = #{goodsId,jdbcType=VARCHAR},
-      goods_seriral = #{goodsSeriral,jdbcType=VARCHAR},
+      goods_serial = #{goodsSerial,jdbcType=VARCHAR},
       goods_name = #{goodsName,jdbcType=VARCHAR},
       spec_id = #{specId,jdbcType=VARCHAR},
       sku_no = #{skuNo,jdbcType=VARCHAR},
@@ -365,6 +388,8 @@
       pay_price = #{payPrice,jdbcType=DECIMAL},
       pay_price_total = #{payPriceTotal,jdbcType=DECIMAL},
       shop_freight_template_id = #{shopFreightTemplateId,jdbcType=VARCHAR},
+      refund = #{refund,jdbcType=INTEGER},
+      refund_state = #{refundState,jdbcType=INTEGER},
       is_del = #{isDel,jdbcType=INTEGER},
       creator = #{creator,jdbcType=VARCHAR},
       create_time = #{createTime,jdbcType=TIMESTAMP},

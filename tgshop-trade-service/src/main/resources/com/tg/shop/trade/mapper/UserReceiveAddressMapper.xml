@@ -31,7 +31,7 @@
     from trade_user_receive_address
     where address_id = #{addressId,jdbcType=VARCHAR}
   </select>
-  <delete id="deleteByPrimaryKey" parameterType="java.lang.String">
+    <delete id="deleteByPrimaryKey" parameterType="java.lang.String">
     delete from trade_user_receive_address
     where address_id = #{addressId,jdbcType=VARCHAR}
   </delete>
@@ -232,4 +232,20 @@
       version = #{version,jdbcType=INTEGER}
     where address_id = #{addressId,jdbcType=VARCHAR}
   </update>
+
+<!--  自定义 -->
+  <select id="findAddressByCondition" parameterType="com.tg.shop.core.domain.trade.entity.UserReceiveAddress" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from trade_user_receive_address
+    <where>
+      is_del = 0
+      <if test="memberId != null">
+        and member_id = #{memberId,jdbcType=VARCHAR}
+      </if>
+      <if test="useDefault != null">
+        and use_default = #{useDefault,jdbcType=INTEGER}
+      </if>
+    </where>
+  </select>
 </mapper>

@@ -39,3 +39,12 @@ generator:
 tgshop:
   swagger:
     enable: true
+
+# mybatis sql 日志
+logging:
+  level:
+    com:
+      tg:
+        shop:
+          trade:
+            mapper: debug

@@ -56,4 +56,4 @@ logging:
       tg:
         shop:
           product:
-            mapper=debug:
+            mapper: debug

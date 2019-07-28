@@ -27,9 +27,9 @@
     <result column="trade_out_sn" jdbcType="VARCHAR" property="tradeOutSn" />
     <result column="trade_sn" jdbcType="VARCHAR" property="tradeSn" />
     <result column="payment_price" jdbcType="DECIMAL" property="paymentPrice" />
-    <result column="pay_recive" jdbcType="INTEGER" property="payRecive" />
     <result column="payment_state" jdbcType="INTEGER" property="paymentState" />
     <result column="payment_type" jdbcType="INTEGER" property="paymentType" />
+    <result column="payment_kind" jdbcType="INTEGER" property="paymentKind" />
     <result column="payment_time" jdbcType="TIMESTAMP" property="paymentTime" />
     <result column="invoice_need" jdbcType="INTEGER" property="invoiceNeed" />
     <result column="invoice_title" jdbcType="VARCHAR" property="invoiceTitle" />
@@ -54,6 +54,7 @@
     <result column="buyer_evaluate" jdbcType="INTEGER" property="buyerEvaluate" />
     <result column="seller_evaluate" jdbcType="INTEGER" property="sellerEvaluate" />
     <result column="refund" jdbcType="INTEGER" property="refund" />
+    <result column="refund_state" jdbcType="INTEGER" property="refundState" />
     <result column="is_del" jdbcType="INTEGER" property="isDel" />
     <result column="refund_time" jdbcType="TIMESTAMP" property="refundTime" />
     <result column="creator" jdbcType="VARCHAR" property="creator" />
@@ -67,13 +68,13 @@
     buyer_mobile, seller_id, store_id, order_state, goods_amount, freight_charge, promo_id, 
     promo_discount, integral_num, integral_discount, adjust_amount, change_payment_price_time, 
     change_payment_price_operator, total_discount, total_price, trade_out_sn, trade_sn, 
-    payment_price, pay_recive, payment_state, payment_type, payment_time, invoice_need, 
+    payment_price, payment_state, payment_type, payment_kind, payment_time, invoice_need, 
     invoice_title, invoice_corporation_tax, address_receiver_name, address_receiver_mobile, 
     address_zip_code, address_province, address_city, address_county, address_detail_address, 
     logistics_company, logistics_company_code, logistics_no, logistics_remark, order_remark, 
     seller_remark, cancel_time, deliver_time, confirm_receipt_time, order_finish_time, 
-    buyer_evaluate, seller_evaluate, refund, is_del, refund_time, creator, create_time, 
-    modifier, modify_time, version
+    buyer_evaluate, seller_evaluate, refund, refund_state, is_del, refund_time, creator, 
+    create_time, modifier, modify_time, version
   </sql>
   <select id="selectByPrimaryKey" parameterType="java.lang.String" resultMap="BaseResultMap">
     select 
@@ -94,8 +95,8 @@
       integral_num, integral_discount, adjust_amount, 
       change_payment_price_time, change_payment_price_operator, 
       total_discount, total_price, trade_out_sn, 
-      trade_sn, payment_price, pay_recive, 
-      payment_state, payment_type, payment_time, 
+      trade_sn, payment_price, payment_state, 
+      payment_type, payment_kind, payment_time, 
       invoice_need, invoice_title, invoice_corporation_tax, 
       address_receiver_name, address_receiver_mobile, 
       address_zip_code, address_province, address_city, 
@@ -104,9 +105,9 @@
       order_remark, seller_remark, cancel_time, 
       deliver_time, confirm_receipt_time, order_finish_time, 
       buyer_evaluate, seller_evaluate, refund, 
-      is_del, refund_time, creator, 
-      create_time, modifier, modify_time, 
-      version)
+      refund_state, is_del, refund_time, 
+      creator, create_time, modifier, 
+      modify_time, version)
     values (#{orderId,jdbcType=VARCHAR}, #{orderSn,jdbcType=VARCHAR}, #{parentId,jdbcType=VARCHAR}, 
       #{parentOrderSn,jdbcType=VARCHAR}, #{originOrderSn,jdbcType=VARCHAR}, #{buyerId,jdbcType=VARCHAR}, 
       #{buyerName,jdbcType=VARCHAR}, #{buyerMobile,jdbcType=VARCHAR}, #{sellerId,jdbcType=VARCHAR}, 
@@ -115,8 +116,8 @@
       #{integralNum,jdbcType=INTEGER}, #{integralDiscount,jdbcType=DECIMAL}, #{adjustAmount,jdbcType=DECIMAL}, 
       #{changePaymentPriceTime,jdbcType=TIMESTAMP}, #{changePaymentPriceOperator,jdbcType=VARCHAR}, 
       #{totalDiscount,jdbcType=DECIMAL}, #{totalPrice,jdbcType=DECIMAL}, #{tradeOutSn,jdbcType=VARCHAR}, 
-      #{tradeSn,jdbcType=VARCHAR}, #{paymentPrice,jdbcType=DECIMAL}, #{payRecive,jdbcType=INTEGER}, 
-      #{paymentState,jdbcType=INTEGER}, #{paymentType,jdbcType=INTEGER}, #{paymentTime,jdbcType=TIMESTAMP}, 
+      #{tradeSn,jdbcType=VARCHAR}, #{paymentPrice,jdbcType=DECIMAL}, #{paymentState,jdbcType=INTEGER}, 
+      #{paymentType,jdbcType=INTEGER}, #{paymentKind,jdbcType=INTEGER}, #{paymentTime,jdbcType=TIMESTAMP}, 
       #{invoiceNeed,jdbcType=INTEGER}, #{invoiceTitle,jdbcType=VARCHAR}, #{invoiceCorporationTax,jdbcType=VARCHAR}, 
       #{addressReceiverName,jdbcType=VARCHAR}, #{addressReceiverMobile,jdbcType=VARCHAR}, 
       #{addressZipCode,jdbcType=VARCHAR}, #{addressProvince,jdbcType=VARCHAR}, #{addressCity,jdbcType=VARCHAR}, 
@@ -125,9 +126,9 @@
       #{orderRemark,jdbcType=VARCHAR}, #{sellerRemark,jdbcType=VARCHAR}, #{cancelTime,jdbcType=TIMESTAMP}, 
       #{deliverTime,jdbcType=TIMESTAMP}, #{confirmReceiptTime,jdbcType=TIMESTAMP}, #{orderFinishTime,jdbcType=TIMESTAMP}, 
       #{buyerEvaluate,jdbcType=INTEGER}, #{sellerEvaluate,jdbcType=INTEGER}, #{refund,jdbcType=INTEGER}, 
-      #{isDel,jdbcType=INTEGER}, #{refundTime,jdbcType=TIMESTAMP}, #{creator,jdbcType=VARCHAR}, 
-      #{createTime,jdbcType=TIMESTAMP}, #{modifier,jdbcType=VARCHAR}, #{modifyTime,jdbcType=TIMESTAMP}, 
-      #{version,jdbcType=INTEGER})
+      #{refundState,jdbcType=INTEGER}, #{isDel,jdbcType=INTEGER}, #{refundTime,jdbcType=TIMESTAMP}, 
+      #{creator,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP}, #{modifier,jdbcType=VARCHAR}, 
+      #{modifyTime,jdbcType=TIMESTAMP}, #{version,jdbcType=INTEGER})
   </insert>
   <insert id="insertSelective" parameterType="com.tg.shop.core.domain.trade.entity.Order">
     insert into trade_order
@@ -207,14 +208,14 @@
       <if test="paymentPrice != null">
         payment_price,
       </if>
-      <if test="payRecive != null">
-        pay_recive,
-      </if>
       <if test="paymentState != null">
         payment_state,
       </if>
       <if test="paymentType != null">
         payment_type,
+      </if>
+      <if test="paymentKind != null">
+        payment_kind,
       </if>
       <if test="paymentTime != null">
         payment_time,
@@ -287,6 +288,9 @@
       </if>
       <if test="refund != null">
         refund,
+      </if>
+      <if test="refundState != null">
+        refund_state,
       </if>
       <if test="isDel != null">
         is_del,
@@ -386,14 +390,14 @@
       <if test="paymentPrice != null">
         #{paymentPrice,jdbcType=DECIMAL},
       </if>
-      <if test="payRecive != null">
-        #{payRecive,jdbcType=INTEGER},
-      </if>
       <if test="paymentState != null">
         #{paymentState,jdbcType=INTEGER},
       </if>
       <if test="paymentType != null">
         #{paymentType,jdbcType=INTEGER},
+      </if>
+      <if test="paymentKind != null">
+        #{paymentKind,jdbcType=INTEGER},
       </if>
       <if test="paymentTime != null">
         #{paymentTime,jdbcType=TIMESTAMP},
@@ -466,6 +470,9 @@
       </if>
       <if test="refund != null">
         #{refund,jdbcType=INTEGER},
+      </if>
+      <if test="refundState != null">
+        #{refundState,jdbcType=INTEGER},
       </if>
       <if test="isDel != null">
         #{isDel,jdbcType=INTEGER},
@@ -565,14 +572,14 @@
       <if test="paymentPrice != null">
         payment_price = #{paymentPrice,jdbcType=DECIMAL},
       </if>
-      <if test="payRecive != null">
-        pay_recive = #{payRecive,jdbcType=INTEGER},
-      </if>
       <if test="paymentState != null">
         payment_state = #{paymentState,jdbcType=INTEGER},
       </if>
       <if test="paymentType != null">
         payment_type = #{paymentType,jdbcType=INTEGER},
+      </if>
+      <if test="paymentKind != null">
+        payment_kind = #{paymentKind,jdbcType=INTEGER},
       </if>
       <if test="paymentTime != null">
         payment_time = #{paymentTime,jdbcType=TIMESTAMP},
@@ -646,6 +653,9 @@
       <if test="refund != null">
         refund = #{refund,jdbcType=INTEGER},
       </if>
+      <if test="refundState != null">
+        refund_state = #{refundState,jdbcType=INTEGER},
+      </if>
       <if test="isDel != null">
         is_del = #{isDel,jdbcType=INTEGER},
       </if>
@@ -696,9 +706,9 @@
       trade_out_sn = #{tradeOutSn,jdbcType=VARCHAR},
       trade_sn = #{tradeSn,jdbcType=VARCHAR},
       payment_price = #{paymentPrice,jdbcType=DECIMAL},
-      pay_recive = #{payRecive,jdbcType=INTEGER},
       payment_state = #{paymentState,jdbcType=INTEGER},
       payment_type = #{paymentType,jdbcType=INTEGER},
+      payment_kind = #{paymentKind,jdbcType=INTEGER},
       payment_time = #{paymentTime,jdbcType=TIMESTAMP},
       invoice_need = #{invoiceNeed,jdbcType=INTEGER},
       invoice_title = #{invoiceTitle,jdbcType=VARCHAR},
@@ -723,6 +733,7 @@
       buyer_evaluate = #{buyerEvaluate,jdbcType=INTEGER},
       seller_evaluate = #{sellerEvaluate,jdbcType=INTEGER},
       refund = #{refund,jdbcType=INTEGER},
+      refund_state = #{refundState,jdbcType=INTEGER},
       is_del = #{isDel,jdbcType=INTEGER},
       refund_time = #{refundTime,jdbcType=TIMESTAMP},
       creator = #{creator,jdbcType=VARCHAR},

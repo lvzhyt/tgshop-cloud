@@ -1,18 +1,34 @@
 package com.tg.shop.trade.controller;
 
+import com.alibaba.fastjson.JSONObject;
 import com.tg.shop.core.annotation.UserToken;
 import com.tg.shop.core.domain.auth.entity.Member;
+import com.tg.shop.core.domain.product.result.vo.GoodsSkuDetailResultVo;
 import com.tg.shop.core.domain.trade.entity.Cart;
+import com.tg.shop.core.domain.trade.entity.Order;
+import com.tg.shop.core.domain.trade.entity.OrderItems;
+import com.tg.shop.core.domain.trade.entity.UserReceiveAddress;
+import com.tg.shop.core.entity.ErrorCode;
 import com.tg.shop.core.entity.ResultObject;
+import com.tg.shop.core.generator.IdGenerator;
 import com.tg.shop.core.utils.CacheMemberHolderLocal;
+import com.tg.shop.trade.exception.TradeException;
+import com.tg.shop.trade.feign.service.FeignProductService;
+import com.tg.shop.trade.request.param.AddressParam;
 import com.tg.shop.trade.request.param.OrderParam;
+import com.tg.shop.trade.service.UserReceiveAddressService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
+import javax.annotation.Resource;
 import javax.validation.Valid;
+import java.math.BigDecimal;
+import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -25,22 +41,160 @@ import java.util.List;
 public class TradeOrderController {
 
 
+    @Autowired
+    private IdGenerator idGenerator;
+    @Resource
+    private FeignProductService feignProductService;
+    @Autowired
+    private UserReceiveAddressService userReceiveAddressService;
+
+    /**
+     * 订单确认页面
+     * 购物车结算、商品页面直接购买结算--》订单确认页面
+     * 填写订单信息：地址、支付方式、发票、卡券、积分、选择优惠券、计算运费
+     * @param cartList
+     * @return
+     */
     @ApiOperation("确认订单")
     @PostMapping("/confirmOrder")
     public ResultObject confirmOrder(@RequestBody List<Cart> cartList){
         System.out.println(cartList);
 
-        return new ResultObject();
+        JSONObject data = new JSONObject();
+
+        // 收货地址
+        Member member = CacheMemberHolderLocal.getMember();
+        UserReceiveAddress condition = new UserReceiveAddress();
+        condition.setMemberId(member.getMemberId());
+        UserReceiveAddress defaultAddress = userReceiveAddressService.getMemberDefaultAddress(member.getMemberId());
+
+        data.put("address",defaultAddress);
+        data.put("cartList",cartList);
+
+        // 可用优惠券
+        JSONObject coupon = new JSONObject();
+        List couponList = new ArrayList();
+        data.put("usedCoupon",coupon);
+        data.put("couponList",couponList);
+
+        // 计算运费
+        int shipFee = 0;
+        data.put("shipFee",shipFee);
+        Order order = new Order();
+        order.setOrderId(idGenerator.nextStringId());
+        data.put("order",order);
+
+
+        return new ResultObject<>(data);
     }
 
+    /**
+     * 提交订单
+     *  地址、 商品 skuIds  goodsNum、支付方式、优惠券、积分、卡券
+     *  ==>> 计算得出总金额
+     * @param orderParam
+     * @param bindingResult
+     * @return
+     */
     @ApiOperation("提交订单")
     @PostMapping("/saveOrder")
-    public ResultObject saveOrder(@RequestBody @Valid OrderParam orderParam, BindingResult bindingResult){
+    public ResultObject saveOrder(@Valid @RequestBody OrderParam orderParam, BindingResult bindingResult){
+        if(bindingResult.hasErrors()){
+            return new ResultObject<>(ErrorCode.REQUEST_PARAM_ERROR,bindingResult.getFieldErrors());
+        }
+        List<GoodsSkuDetailResultVo> skuList;
+        try {
+            skuList =  getSkuDetailList(orderParam.getCartList());
+        } catch (TradeException e) {
+            return new ResultObject("6001",e.getMessage());
+        }
+        if(skuList==null|| skuList.isEmpty()){
+            return new ResultObject(ErrorCode.EMPTY_DATA_ERROR);
+        }
+        //
+        Order order = new Order();
+        List<OrderItems> orderItemsList = new ArrayList<>();
+
 
 
         return new ResultObject();
     }
 
+    @ApiOperation("获取收货地址")
+    @GetMapping("/getReceiveAddressList")
+    public ResultObject<List<UserReceiveAddress>> getReceiveAddressList(){
+        Member member = CacheMemberHolderLocal.getMember();
+        UserReceiveAddress condition = new UserReceiveAddress();
+        condition.setMemberId(member.getMemberId());
+        List<UserReceiveAddress> list = userReceiveAddressService.findAddressByCondition(condition);
+        return new ResultObject<>(list);
+    }
+
+    @ApiOperation("保存收货地址")
+    @PostMapping("/saveReceiveAddress")
+    public ResultObject saveReceiveAddress(@Valid @RequestBody AddressParam addressParam,BindingResult bindingResult){
+        if(bindingResult.hasErrors()){
+            return new ResultObject<>(ErrorCode.REQUEST_PARAM_ERROR,bindingResult.getFieldErrors());
+        }
+        Member member = CacheMemberHolderLocal.getMember();
+
+        UserReceiveAddress userReceiveAddress = new UserReceiveAddress();
+        BeanUtils.copyProperties(addressParam,userReceiveAddress);
+        userReceiveAddress.setAddressId(idGenerator.nextStringId());
+        userReceiveAddress.setMemberId(member.getMemberId());
+        userReceiveAddress.setCreateTime(new Date());
+        userReceiveAddress.setCreator(member.getMemberId());
+
+        int result = userReceiveAddressService.saveAddress(userReceiveAddress);
+        if(addressParam.getUseDefault()==1){
+            // 取消其他默认地址 设置默认地址
+            userReceiveAddressService.setDefaultReceiveAddress(userReceiveAddress.getAddressId());
+        }
+        return new ResultObject<>(userReceiveAddress);
+    }
+
+    @ApiOperation("设置默认收货地址")
+    @PostMapping("/setDefaultReceiveAddress")
+    public ResultObject setDefaultReceiveAddress(@RequestParam String addressId){
+        // 取消其他默认地址 设置默认地址
+        boolean success = userReceiveAddressService.setDefaultReceiveAddress(addressId);
+        return new ResultObject<>(success);
+    }
+
+
+
+
+    private List<GoodsSkuDetailResultVo> getSkuDetailList(List<Cart> cartList) throws TradeException {
+        List<GoodsSkuDetailResultVo> result = new ArrayList<>();
+        for (Cart cart:cartList) {
+            ResultObject<GoodsSkuDetailResultVo>  skuDetailResultVoResultObject = feignProductService.getSkuDetailBySkuId(cart.getSkuId());
+            if(skuDetailResultVoResultObject.getResult()==0){
+                throw new TradeException(skuDetailResultVoResultObject.getMessage());
+            }
+            result.add(skuDetailResultVoResultObject.getData());
+        }
+        return  result;
+    }
+
+    /**
+     * 计算运费
+     * @return
+     */
+    private int caculateShipFee(List<GoodsSkuDetailResultVo> skuList,Member member){
+        int shipFee = 0;
+        for (GoodsSkuDetailResultVo sku:skuList) {
+
+        }
+
+        return shipFee;
+    }
+
+    /**
+     * 计算优惠券
+     */
+    private Object caculateCoupon(List<GoodsSkuDetailResultVo> skuList,Member member){
+        return null;
+    }
 
 }
 

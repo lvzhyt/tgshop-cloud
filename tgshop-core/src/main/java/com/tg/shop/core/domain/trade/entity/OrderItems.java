@@ -32,7 +32,7 @@ public class OrderItems implements Serializable {
     /**
      * 货号
      */
-    private String goodsSeriral;
+    private String goodsSerial;
 
     /**
      * 商品名称
@@ -123,6 +123,16 @@ public class OrderItems implements Serializable {
      * 运费模版ID
      */
     private String shopFreightTemplateId;
+
+    /**
+     * 退款 0 否 1是
+     */
+    private Integer refund;
+
+    /**
+     * 退款状态
+     */
+    private Integer refundState;
 
     /**
      * 删除状态

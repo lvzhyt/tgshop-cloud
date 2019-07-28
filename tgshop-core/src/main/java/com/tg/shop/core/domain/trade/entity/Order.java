@@ -135,19 +135,19 @@ public class Order implements Serializable {
     private BigDecimal paymentPrice;
 
     /**
-     * 货到付款 0 否 1 是
-     */
-    private Integer payRecive;
-
-    /**
      * 支付状态 0 未付款 1 已付款
      */
     private Integer paymentState;
 
     /**
-     * 支付类型 1 支付宝 2 微信 3 积分 4 银联
+     * 0 在线付款 1 货到付款
      */
     private Integer paymentType;
+
+    /**
+     * 支付类型 1 支付宝 2 微信 3 现金 4 银联
+     */
+    private Integer paymentKind;
 
     /**
      * 支付时间
@@ -268,6 +268,11 @@ public class Order implements Serializable {
      * 退款 0 无 1 是
      */
     private Integer refund;
+
+    /**
+     * 退款状态
+     */
+    private Integer refundState;
 
     /**
      * 删除状态

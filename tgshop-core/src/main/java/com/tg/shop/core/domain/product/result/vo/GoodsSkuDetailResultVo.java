@@ -132,7 +132,7 @@ public class GoodsSkuDetailResultVo implements Serializable {
             this.specInfo = this.colorAttrValName;
         }
         if(this.sizeAttrValName!=null){
-            this.specInfo = this.colorAttrValName+":"+this.sizeAttrValName;
+            this.specInfo = this.colorAttrValName+"  "+this.sizeAttrValName;
         }
 
         return this.specInfo;
