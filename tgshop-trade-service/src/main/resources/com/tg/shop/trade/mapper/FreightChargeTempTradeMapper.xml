@@ -1,0 +1,177 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.tg.shop.trade.mapper.FreightChargeTempTradeMapper">
+  <resultMap id="BaseResultMap" type="com.tg.shop.core.domain.trade.entity.FreightChargeTempTrade">
+    <id column="template_id" jdbcType="VARCHAR" property="templateId" />
+    <result column="store_id" jdbcType="VARCHAR" property="storeId" />
+    <result column="template_name" jdbcType="VARCHAR" property="templateName" />
+    <result column="template_type" jdbcType="INTEGER" property="templateType" />
+    <result column="fulfil_price" jdbcType="DECIMAL" property="fulfilPrice" />
+    <result column="freight_price" jdbcType="DECIMAL" property="freightPrice" />
+    <result column="is_del" jdbcType="INTEGER" property="isDel" />
+    <result column="creator" jdbcType="VARCHAR" property="creator" />
+    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+    <result column="modifier" jdbcType="VARCHAR" property="modifier" />
+    <result column="modify_time" jdbcType="TIMESTAMP" property="modifyTime" />
+    <result column="version" jdbcType="INTEGER" property="version" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    template_id, store_id, template_name, template_type, fulfil_price, freight_price, 
+    is_del, creator, create_time, modifier, modify_time, version
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.String" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from item_freight_charge_template
+    where template_id = #{templateId,jdbcType=VARCHAR}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String">
+    delete from item_freight_charge_template
+    where template_id = #{templateId,jdbcType=VARCHAR}
+  </delete>
+  <insert id="insert" parameterType="com.tg.shop.core.domain.trade.entity.FreightChargeTempTrade">
+    insert into item_freight_charge_template (template_id, store_id, template_name, 
+      template_type, fulfil_price, freight_price, 
+      is_del, creator, create_time, 
+      modifier, modify_time, version
+      )
+    values (#{templateId,jdbcType=VARCHAR}, #{storeId,jdbcType=VARCHAR}, #{templateName,jdbcType=VARCHAR}, 
+      #{templateType,jdbcType=INTEGER}, #{fulfilPrice,jdbcType=DECIMAL}, #{freightPrice,jdbcType=DECIMAL}, 
+      #{isDel,jdbcType=INTEGER}, #{creator,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP}, 
+      #{modifier,jdbcType=VARCHAR}, #{modifyTime,jdbcType=TIMESTAMP}, #{version,jdbcType=INTEGER}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.tg.shop.core.domain.trade.entity.FreightChargeTempTrade">
+    insert into item_freight_charge_template
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="templateId != null">
+        template_id,
+      </if>
+      <if test="storeId != null">
+        store_id,
+      </if>
+      <if test="templateName != null">
+        template_name,
+      </if>
+      <if test="templateType != null">
+        template_type,
+      </if>
+      <if test="fulfilPrice != null">
+        fulfil_price,
+      </if>
+      <if test="freightPrice != null">
+        freight_price,
+      </if>
+      <if test="isDel != null">
+        is_del,
+      </if>
+      <if test="creator != null">
+        creator,
+      </if>
+      <if test="createTime != null">
+        create_time,
+      </if>
+      <if test="modifier != null">
+        modifier,
+      </if>
+      <if test="modifyTime != null">
+        modify_time,
+      </if>
+      <if test="version != null">
+        version,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="templateId != null">
+        #{templateId,jdbcType=VARCHAR},
+      </if>
+      <if test="storeId != null">
+        #{storeId,jdbcType=VARCHAR},
+      </if>
+      <if test="templateName != null">
+        #{templateName,jdbcType=VARCHAR},
+      </if>
+      <if test="templateType != null">
+        #{templateType,jdbcType=INTEGER},
+      </if>
+      <if test="fulfilPrice != null">
+        #{fulfilPrice,jdbcType=DECIMAL},
+      </if>
+      <if test="freightPrice != null">
+        #{freightPrice,jdbcType=DECIMAL},
+      </if>
+      <if test="isDel != null">
+        #{isDel,jdbcType=INTEGER},
+      </if>
+      <if test="creator != null">
+        #{creator,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null">
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="modifier != null">
+        #{modifier,jdbcType=VARCHAR},
+      </if>
+      <if test="modifyTime != null">
+        #{modifyTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="version != null">
+        #{version,jdbcType=INTEGER},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.tg.shop.core.domain.trade.entity.FreightChargeTempTrade">
+    update item_freight_charge_template
+    <set>
+      <if test="storeId != null">
+        store_id = #{storeId,jdbcType=VARCHAR},
+      </if>
+      <if test="templateName != null">
+        template_name = #{templateName,jdbcType=VARCHAR},
+      </if>
+      <if test="templateType != null">
+        template_type = #{templateType,jdbcType=INTEGER},
+      </if>
+      <if test="fulfilPrice != null">
+        fulfil_price = #{fulfilPrice,jdbcType=DECIMAL},
+      </if>
+      <if test="freightPrice != null">
+        freight_price = #{freightPrice,jdbcType=DECIMAL},
+      </if>
+      <if test="isDel != null">
+        is_del = #{isDel,jdbcType=INTEGER},
+      </if>
+      <if test="creator != null">
+        creator = #{creator,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null">
+        create_time = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="modifier != null">
+        modifier = #{modifier,jdbcType=VARCHAR},
+      </if>
+      <if test="modifyTime != null">
+        modify_time = #{modifyTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="version != null">
+        version = #{version,jdbcType=INTEGER},
+      </if>
+    </set>
+    where template_id = #{templateId,jdbcType=VARCHAR}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.tg.shop.core.domain.trade.entity.FreightChargeTempTrade">
+    update item_freight_charge_template
+    set store_id = #{storeId,jdbcType=VARCHAR},
+      template_name = #{templateName,jdbcType=VARCHAR},
+      template_type = #{templateType,jdbcType=INTEGER},
+      fulfil_price = #{fulfilPrice,jdbcType=DECIMAL},
+      freight_price = #{freightPrice,jdbcType=DECIMAL},
+      is_del = #{isDel,jdbcType=INTEGER},
+      creator = #{creator,jdbcType=VARCHAR},
+      create_time = #{createTime,jdbcType=TIMESTAMP},
+      modifier = #{modifier,jdbcType=VARCHAR},
+      modify_time = #{modifyTime,jdbcType=TIMESTAMP},
+      version = #{version,jdbcType=INTEGER}
+    where template_id = #{templateId,jdbcType=VARCHAR}
+  </update>
+</mapper>
