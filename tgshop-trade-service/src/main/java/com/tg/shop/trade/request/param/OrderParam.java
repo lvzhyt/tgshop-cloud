@@ -31,26 +31,6 @@ public class OrderParam {
     private String orderSn;
 
     /**
-     * 买家id
-     */
-    private String buyerId;
-
-    /**
-     * 买家姓名
-     */
-    private String buyerName;
-
-    /**
-     * 买家电话
-     */
-    private String buyerMobile;
-
-    /**
-     * 订单状态 1 待付款 2. 待发货 3 待收货  6 已完成 0 已取消
-     */
-    private Integer orderState;
-
-    /**
      * 商品总金额
      */
     private BigDecimal goodsAmount;
@@ -86,16 +66,6 @@ public class OrderParam {
     private BigDecimal adjustAmount;
 
     /**
-     * 调价时间
-     */
-    private Date changePaymentPriceTime;
-
-    /**
-     * 调价操作员
-     */
-    private String changePaymentPriceOperator;
-
-    /**
      * 总优惠价
      */
     private BigDecimal totalDiscount;
@@ -104,11 +74,6 @@ public class OrderParam {
      * 订单总价
      */
     private BigDecimal totalPrice;
-
-    /**
-     * 交易对外编号
-     */
-    private String tradeOutSn;
 
     /**
      * 实际支付金额
@@ -125,15 +90,6 @@ public class OrderParam {
      */
     private Integer paymentType;
 
-    /**
-     * 支付类型 1 支付宝 2 微信 3 现金 4 银联
-     */
-    private Integer paymentKind;
-
-    /**
-     * 支付时间
-     */
-    private Date paymentTime;
 
     /**
      * 是否有发票 0 否 1是
@@ -156,64 +112,15 @@ public class OrderParam {
     private String addressId;
 
     /**
-     * 收货人
-     */
-    private String addressReceiverName;
-
-    /**
-     * 收货电话
-     */
-    private String addressReceiverMobile;
-
-    /**
-     * 邮编
-     */
-    private String addressZipCode;
-
-    /**
-     * 省份
-     */
-    private String addressProvince;
-
-    /**
-     * 城市
-     */
-    private String addressCity;
-
-    /**
-     * 县市区
-     */
-    private String addressCounty;
-
-    /**
-     * 详细收货地址
-     */
-    private String addressDetailAddress;
-
-    /**
      * 订单备注
      */
     private String orderRemark;
 
-    /**
-     * 卖家备注
-     */
-    private String sellerRemark;
-
-    /**
-     * 创建人
-     */
-    private String creator;
-
-    /**
-     * 创建时间
-     */
-    private Date createTime;
 
     /**
      * 购物车 购买商品
      */
-    private List<Cart> cartList;
+    private List<String> cartIds;
 
 
 }

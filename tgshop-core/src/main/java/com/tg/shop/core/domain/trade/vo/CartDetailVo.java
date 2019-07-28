@@ -1,22 +1,66 @@
-package com.tg.shop.core.domain.product.result.vo;
+package com.tg.shop.core.domain.trade.vo;
 
 import lombok.Data;
 
-import java.io.Serializable;
 import java.math.BigDecimal;
 
+/**
+ * 购物车商品详情
+ * @author Administrator
+ */
 @Data
-public class GoodsSkuDetailResultVo implements Serializable {
+public class CartDetailVo {
 
     /**
      * 表id
      */
+    private String cartId;
+
+    /**
+     * 会员
+     */
+    private String memberId;
+
+    /**
+     * 商品id
+     */
+    private String goodsId;
+
+    /**
+     * sku_id
+     */
     private String skuId;
 
     /**
-     * 商品ID
+     * 商品名称
      */
-    private String goodsId;
+    private String goodsName;
+
+    /**
+     * 店铺id
+     */
+    private String storeId;
+
+    /**
+     * 店铺名称
+     */
+    private String storeName;
+
+    /**
+     * spec_info
+     */
+    private String specInfo;
+
+    /**
+     * 商品数量
+     */
+    private Integer goodsNum;
+
+    /**
+     * 加入购物车时
+     * 商品价格
+     */
+    private BigDecimal goodsPrice;
 
     /**
      * 商品编号
@@ -27,10 +71,6 @@ public class GoodsSkuDetailResultVo implements Serializable {
      * SKU商品名称
      */
     private String skuGoodsName;
-
-    private String storeId;
-
-    private String storeName;
 
     private String areaId;
     /**
@@ -89,10 +129,6 @@ public class GoodsSkuDetailResultVo implements Serializable {
      */
     private Integer leftNum;
 
-    /**
-     * 成本价格
-     */
-    private BigDecimal costPrice;
 
     /**
      * 市场价
@@ -123,21 +159,4 @@ public class GoodsSkuDetailResultVo implements Serializable {
      * 超级会员价
      */
     private BigDecimal superVipPrice;
-
-
-    private String specInfo;
-
-
-    public String getSpecInfo() {
-
-        this.specInfo="";
-        if(this.colorAttrValName!=null){
-            this.specInfo = this.colorAttrValName;
-        }
-        if(this.sizeAttrValName!=null){
-            this.specInfo = this.colorAttrValName+"  "+this.sizeAttrValName;
-        }
-
-        return this.specInfo;
-    }
 }

@@ -30,4 +30,11 @@ public interface CartService {
     Cart findCartByMemberSkuId(String memberId,String skuId);
 
     int updateCart(Cart record);
+
+    /**
+     * 根据Ids查找
+     * @param cartIds
+     * @return
+     */
+    List<Cart> findCartByIds(List<String> cartIds);
 }

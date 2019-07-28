@@ -6,6 +6,7 @@ import com.tg.shop.trade.service.CartService;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -39,5 +40,18 @@ public class CartServiceImpl implements CartService {
     @Override
     public int updateCart(Cart record) {
         return cartMapper.updateByPrimaryKeySelective(record);
+    }
+
+    @Override
+    public List<Cart> findCartByIds(List<String> cartIds) {
+        List<Cart> list = new ArrayList<>();
+        for (String id :
+                cartIds) {
+            Cart cart = cartMapper.selectByPrimaryKey(id);
+            if(cart!=null){
+                list.add(cart);
+            }
+        }
+        return list;
     }
 }

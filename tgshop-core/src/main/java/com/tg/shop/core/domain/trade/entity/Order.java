@@ -77,12 +77,12 @@ public class Order implements Serializable {
     /**
      * 优惠券id
      */
-    private String promoId;
+    private String promoteId;
 
     /**
      * 优惠金额
      */
-    private BigDecimal promoDiscount;
+    private BigDecimal promoteDiscount;
 
     /**
      * 积分数量
@@ -168,6 +168,11 @@ public class Order implements Serializable {
      * 发票税号
      */
     private String invoiceCorporationTax;
+
+    /**
+     * 收货方式 1 邮寄 2 自提
+     */
+    private Integer receiveType;
 
     /**
      * 收货人
