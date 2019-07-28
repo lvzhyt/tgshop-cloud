@@ -4,8 +4,10 @@ import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.Date;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 @Data
+@NoArgsConstructor
 public class GoodsSkuPriceLog implements Serializable {
     /**
      * 表id
@@ -86,6 +88,16 @@ public class GoodsSkuPriceLog implements Serializable {
      * 促销活动名称
      */
     private String promoteName;
+
+    /**
+     * 团购开启 0 关闭 1 开启
+     */
+    private Integer groupBuyOpen;
+
+    /**
+     * 团购价格
+     */
+    private BigDecimal groupBuyPrice;
 
     /**
      * 备注

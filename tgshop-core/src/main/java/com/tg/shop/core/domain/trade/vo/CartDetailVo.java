@@ -94,16 +94,6 @@ public class CartDetailVo {
     private String specFacePictures;
 
     /**
-     * 主图
-     */
-    private String pictureMain;
-
-    /**
-     * 详情图 商品描述
-     */
-    private String pictureDescription;
-
-    /**
      * 运费模板
      */
     private String templateId;

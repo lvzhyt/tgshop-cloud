@@ -7,37 +7,37 @@ import org.apache.ibatis.annotations.Mapper;
 public interface GoodsSkuPriceLogMapper {
     /**
      *
-     * @mbg.generated Sun Jun 30 11:40:17 CST 2019
+     * @mbg.generated Sun Jul 28 18:41:38 CST 2019
      */
     int deleteByPrimaryKey(String tbId);
 
     /**
      *
-     * @mbg.generated Sun Jun 30 11:40:17 CST 2019
+     * @mbg.generated Sun Jul 28 18:41:38 CST 2019
      */
     int insert(GoodsSkuPriceLog record);
 
     /**
      *
-     * @mbg.generated Sun Jun 30 11:40:17 CST 2019
+     * @mbg.generated Sun Jul 28 18:41:38 CST 2019
      */
     int insertSelective(GoodsSkuPriceLog record);
 
     /**
      *
-     * @mbg.generated Sun Jun 30 11:40:17 CST 2019
+     * @mbg.generated Sun Jul 28 18:41:38 CST 2019
      */
     GoodsSkuPriceLog selectByPrimaryKey(String tbId);
 
     /**
      *
-     * @mbg.generated Sun Jun 30 11:40:17 CST 2019
+     * @mbg.generated Sun Jul 28 18:41:38 CST 2019
      */
     int updateByPrimaryKeySelective(GoodsSkuPriceLog record);
 
     /**
      *
-     * @mbg.generated Sun Jun 30 11:40:17 CST 2019
+     * @mbg.generated Sun Jul 28 18:41:38 CST 2019
      */
     int updateByPrimaryKey(GoodsSkuPriceLog record);
 }

@@ -3,9 +3,11 @@ package com.tg.shop.trade.controller;
 import com.alibaba.fastjson.JSONObject;
 import com.tg.shop.core.annotation.UserToken;
 import com.tg.shop.core.domain.auth.entity.Member;
+import com.tg.shop.core.domain.auth.entity.Store;
 import com.tg.shop.core.domain.product.result.vo.GoodsSkuDetailResultVo;
 import com.tg.shop.core.domain.trade.entity.*;
 import com.tg.shop.core.domain.trade.vo.CartDetailVo;
+import com.tg.shop.core.domain.trade.vo.StoreSimpleVo;
 import com.tg.shop.core.entity.ErrorCode;
 import com.tg.shop.core.entity.ResultObject;
 import com.tg.shop.core.generator.IdGenerator;
@@ -74,6 +76,7 @@ public class TradeOrderController {
         data.put("address",defaultAddress);
         List<CartDetailVo> cartDetailVoList = getSkuDetailList(cartList);
         Map<String,List<CartDetailVo>> storeCartMap = new HashMap<>(16);
+        List<StoreSimpleVo> storeSimpleVoList = new ArrayList<>();
         for (CartDetailVo vo :
                 cartDetailVoList) {
             String key = vo.getStoreId();
@@ -83,9 +86,11 @@ public class TradeOrderController {
                 List<CartDetailVo> list = new ArrayList<>();
                 list.add(vo);
                 storeCartMap.put(key, list);
+                StoreSimpleVo storeSimpleVo = new StoreSimpleVo(key,vo.getStoreName());
+                storeSimpleVoList.add(storeSimpleVo);
             }
         }
-
+        data.put("storeSimpleVoList",storeSimpleVoList);
         data.put("storeCartMap",storeCartMap);
 
         // 可用优惠券
@@ -97,9 +102,8 @@ public class TradeOrderController {
         // 计算运费
         int shipFee = this.calculateShipFee(storeCartMap,0,member);
         data.put("shipFee",shipFee);
-        Order order = new Order();
-        order.setOrderId(idGenerator.nextStringId());
-        data.put("order",order);
+        // 防止重复提交
+        data.put("orderId",idGenerator.nextStringId());
 
 
         return new ResultObject<>(data);
@@ -186,7 +190,8 @@ public class TradeOrderController {
             }
             CartDetailVo cartDetailVo = new CartDetailVo();
             BeanUtils.copyProperties(cart,cartDetailVo);
-            BeanUtils.copyProperties(skuDetailResultVoResultObject,cartDetailVo);
+            GoodsSkuDetailResultVo skuDetail = skuDetailResultVoResultObject.getData();
+            BeanUtils.copyProperties(skuDetail,cartDetailVo);
             result.add(cartDetailVo);
         }
         return  result;

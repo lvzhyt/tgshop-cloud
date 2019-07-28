@@ -1,5 +1,6 @@
 package com.tg.shop.trade.request.param;
 
+import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
@@ -22,11 +23,13 @@ public class ConfirmOrderParam {
      * 购物车 购买商品
      */
     @NotEmpty
+    @ApiModelProperty(required = true)
     private List<String> cartIds;
 
     /**
      * 收货方式 1 邮寄 2 自提
      */
+    @ApiModelProperty(example = "1")
     private Integer receiveType=1;
 
     /**
