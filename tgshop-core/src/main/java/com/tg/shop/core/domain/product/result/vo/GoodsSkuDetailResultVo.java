@@ -24,6 +24,21 @@ public class GoodsSkuDetailResultVo implements Serializable {
     private String skuNo;
 
     /**
+     * 货号
+     */
+    private String goodsSn;
+
+    private String goodsName;
+
+    private String categoryId;
+
+    private String categoryName;
+
+    private String brandId;
+
+    private String brandName;
+
+    /**
      * SKU商品名称
      */
     private String skuGoodsName;
@@ -135,7 +150,7 @@ public class GoodsSkuDetailResultVo implements Serializable {
             this.specInfo = this.colorAttrValName;
         }
         if(this.sizeAttrValName!=null){
-            this.specInfo = this.colorAttrValName+"  "+this.sizeAttrValName;
+            this.specInfo = this.colorAttrValName+":"+this.sizeAttrValName;
         }
 
         return this.specInfo;

@@ -7,37 +7,37 @@ import org.apache.ibatis.annotations.Mapper;
 public interface OrderMapper {
     /**
      *
-     * @mbg.generated Sun Jul 28 18:29:50 CST 2019
+     * @mbg.generated Mon Jul 29 12:57:45 CST 2019
      */
     int deleteByPrimaryKey(String orderId);
 
     /**
      *
-     * @mbg.generated Sun Jul 28 18:29:50 CST 2019
+     * @mbg.generated Mon Jul 29 12:57:45 CST 2019
      */
     int insert(Order record);
 
     /**
      *
-     * @mbg.generated Sun Jul 28 18:29:50 CST 2019
+     * @mbg.generated Mon Jul 29 12:57:45 CST 2019
      */
     int insertSelective(Order record);
 
     /**
      *
-     * @mbg.generated Sun Jul 28 18:29:50 CST 2019
+     * @mbg.generated Mon Jul 29 12:57:45 CST 2019
      */
     Order selectByPrimaryKey(String orderId);
 
     /**
      *
-     * @mbg.generated Sun Jul 28 18:29:50 CST 2019
+     * @mbg.generated Mon Jul 29 12:57:45 CST 2019
      */
     int updateByPrimaryKeySelective(Order record);
 
     /**
      *
-     * @mbg.generated Sun Jul 28 18:29:50 CST 2019
+     * @mbg.generated Mon Jul 29 12:57:45 CST 2019
      */
     int updateByPrimaryKey(Order record);
 }

@@ -3,7 +3,6 @@ package com.tg.shop.trade.controller;
 import com.alibaba.fastjson.JSONObject;
 import com.tg.shop.core.annotation.UserToken;
 import com.tg.shop.core.domain.auth.entity.Member;
-import com.tg.shop.core.domain.auth.entity.Store;
 import com.tg.shop.core.domain.product.result.vo.GoodsSkuDetailResultVo;
 import com.tg.shop.core.domain.trade.entity.*;
 import com.tg.shop.core.domain.trade.vo.CartDetailVo;
@@ -19,18 +18,24 @@ import com.tg.shop.trade.request.param.ConfirmOrderParam;
 import com.tg.shop.trade.request.param.OrderParam;
 import com.tg.shop.trade.service.CartService;
 import com.tg.shop.trade.service.FreightChargeTempTradeService;
+import com.tg.shop.trade.service.OrderService;
 import com.tg.shop.trade.service.UserReceiveAddressService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.redis.core.StringRedisTemplate;
+import org.springframework.util.Assert;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
 import javax.validation.Valid;
+import javax.xml.transform.Result;
 import java.math.BigDecimal;
 import java.util.*;
+import java.util.concurrent.TimeUnit;
 
 /**
  * @author Administrator
@@ -38,7 +43,7 @@ import java.util.*;
 @UserToken
 @Api("订单交易")
 @RestController
-@RequestMapping("/trade")
+@RequestMapping("/trade/order")
 public class TradeOrderController {
 
 
@@ -52,6 +57,10 @@ public class TradeOrderController {
     private FreightChargeTempTradeService freightChargeTempTradeService;
     @Autowired
     private CartService cartService;
+    @Autowired
+    private StringRedisTemplate stringRedisTemplate;
+    @Autowired
+    private OrderService orderService;
 
     /**
      * 订单确认页面
@@ -67,13 +76,24 @@ public class TradeOrderController {
         List<Cart> cartList = cartService.findCartByIds(confirmOrderParam.getCartIds());
         JSONObject data = new JSONObject();
 
-        // 收货地址
         Member member = CacheMemberHolderLocal.getMember();
-        UserReceiveAddress condition = new UserReceiveAddress();
-        condition.setMemberId(member.getMemberId());
-        UserReceiveAddress defaultAddress = userReceiveAddressService.getMemberDefaultAddress(member.getMemberId());
+        // 收货地址
+        UserReceiveAddress address = null;
+        if(StringUtils.isNotEmpty(confirmOrderParam.getReceiveAddressId())){
+            address = userReceiveAddressService.getAddressById(confirmOrderParam.getReceiveAddressId());
+        }else {
+            UserReceiveAddress condition = new UserReceiveAddress();
+            condition.setMemberId(member.getMemberId());
+            address = userReceiveAddressService.getMemberDefaultAddress(member.getMemberId());
+        }
+        data.put("receiveAddress",address);
 
-        data.put("address",defaultAddress);
+        // 自提地址
+        if(StringUtils.isNotEmpty(confirmOrderParam.getTakeAddressId())){
+            data.put("takeAddress","");
+        }
+
+
         List<CartDetailVo> cartDetailVoList = getSkuDetailList(cartList);
         Map<String,List<CartDetailVo>> storeCartMap = new HashMap<>(16);
         List<StoreSimpleVo> storeSimpleVoList = new ArrayList<>();
@@ -100,11 +120,13 @@ public class TradeOrderController {
         data.put("couponList",couponList);
 
         // 计算运费
-        int shipFee = this.calculateShipFee(storeCartMap,0,member);
+        int payType = confirmOrderParam.getPaymentType();
+        int shipFee = this.calculateShipFee(storeCartMap,payType,member);
         data.put("shipFee",shipFee);
         // 防止重复提交
-        data.put("orderId",idGenerator.nextStringId());
+        data.put("ticket",idGenerator.uuid());
 
+        data.put("confirmOrderParam",confirmOrderParam);
 
         return new ResultObject<>(data);
     }
@@ -123,14 +145,170 @@ public class TradeOrderController {
         if(bindingResult.hasErrors()){
             return new ResultObject<>(ErrorCode.REQUEST_PARAM_ERROR,bindingResult.getFieldErrors());
         }
-        List<Cart> cartList = cartService.findCartByIds(orderParam.getCartIds());
-        List<CartDetailVo> skuList = getSkuDetailList(cartList);
-        if(skuList==null|| skuList.isEmpty()){
-            return new ResultObject(ErrorCode.EMPTY_DATA_ERROR);
+        String tick = orderParam.getTicket();
+        try{
+            if(StringUtils.isNotEmpty(tick)){
+                stringRedisTemplate.opsForValue().set(tick,tick,30, TimeUnit.SECONDS);
+            }
+            Member member = CacheMemberHolderLocal.getMember();
+            List<Cart> cartList = cartService.findCartByIds(orderParam.getCartIds());
+            List<CartDetailVo> cartDetailVoList = getSkuDetailList(cartList);
+            if(cartDetailVoList==null|| cartDetailVoList.isEmpty()){
+                return new ResultObject(ErrorCode.EMPTY_DATA_ERROR);
+            }
+
+            Map<String,List<CartDetailVo>> storeCartMap = new HashMap<>(16);
+            List<StoreSimpleVo> storeSimpleVoList = new ArrayList<>();
+            for (CartDetailVo vo :
+                    cartDetailVoList) {
+                String key = vo.getStoreId();
+                if (storeCartMap.containsKey(key)) {
+                    storeCartMap.get(key).add(vo);
+                } else {
+                    List<CartDetailVo> list = new ArrayList<>();
+                    list.add(vo);
+                    storeCartMap.put(key, list);
+                    StoreSimpleVo storeSimpleVo = new StoreSimpleVo(key,vo.getStoreName());
+                    storeSimpleVoList.add(storeSimpleVo);
+                }
+            }
+
+            Order order = new Order();
+            String orderId = idGenerator.nextStringId();
+            String orderSn = idGenerator.nextOrderSn();
+            order.setOrderId(orderId);
+            order.setOrderSn(orderSn);
+
+            int paymentType = orderParam.getPaymentType();
+            BigDecimal goodsAmount = this.calculateGoodsAmount(cartDetailVoList,member);
+            BigDecimal freightCharge = new BigDecimal(String.valueOf(this.calculateShipFee(storeCartMap,paymentType,member)));
+
+            order.setGoodsAmount(goodsAmount);
+            order.setFreightCharge(freightCharge);
+
+            BigDecimal promotionDiscount = new BigDecimal("0");
+            String promotionId = orderParam.getPromotionId();
+            if(StringUtils.isNotEmpty(promotionId)) {
+                order.setPromotionId(promotionId);
+                //TODO 获取优惠券,校验是否可用 获取优惠金额
+                promotionDiscount = new BigDecimal("0");
+            }
+            order.setPromotionDiscount(promotionDiscount);
+            BigDecimal integralDiscount = new BigDecimal("0");
+            int integralNum = 0;
+            if(orderParam.getIntegralNum()!=null&&orderParam.getIntegralNum()>=1000){
+                integralNum = orderParam.getIntegralNum();
+                integralDiscount = new BigDecimal(String.valueOf(orderParam.getIntegralNum()/100));
+            }
+            order.setIntegralNum(integralNum);
+            order.setIntegralDiscount(integralDiscount);
+            int receiveType = orderParam.getReceiveType();
+            order.setReceiveType(receiveType);
+            if(receiveType==1){
+                Assert.notNull(orderParam.getReceiveAddressId(),"receiveType=1 receiveAddress must not null");
+                UserReceiveAddress address = userReceiveAddressService.getAddressById(orderParam.getReceiveAddressId());
+                order.setReceiveAddressId(orderParam.getReceiveAddressId());
+                order.setAddressReceiverName(address.getReceiverName());
+                order.setAddressReceiverMobile(address.getMobile());
+                order.setAddressProvince(address.getProvince());
+                order.setAddressCity(address.getCity());
+                order.setAddressCounty(address.getCounty());
+                order.setAddressDetailAddress(address.getDetailAddress());
+            }else if(receiveType==2){
+                //TODO 自提地址
+                order.setTakeAddressId(orderParam.getTakeAddressId());
+                order.setTakeTimeRange(orderParam.getTakeTimeRange());
+            }
+            order.setReceiveTimeRange(orderParam.getReceiveTimeRange());
+            order.setTakeTimeRange(orderParam.getTakeTimeRange());
+            //
+            String storeId= "multi";
+            if(storeSimpleVoList.size()==1){
+                storeId = storeSimpleVoList.get(0).getStoreId();
+            }
+            order.setInvoiceNeed(orderParam.getInvoiceNeed());
+            if(orderParam.getInvoiceNeed()!=null && order.getInvoiceNeed()==1){
+                Assert.notNull(orderParam.getInvoiceTitle(),"invoiceNeed=1 InvoiceTitle must be not null");
+                Assert.notNull(orderParam.getInvoiceCorporationTax(),"invoiceNeed=1 InvoiceCorporationTax must be not null");
+                order.setInvoiceTitle(orderParam.getInvoiceTitle());
+                order.setInvoiceCorporationTax(orderParam.getInvoiceCorporationTax());
+            }
+            order.setOrderRemark(orderParam.getOrderRemark());
+
+            order.setBuyerId(member.getMemberId());
+            order.setBuyerName(member.getNickName());
+            order.setBuyerMobile(member.getPhone());
+            order.setSellerId("0");
+            order.setStoreId(storeId);
+
+            order.setPromotionId(orderParam.getPromotionId());
+            order.setAdjustAmount(new BigDecimal("0"));
+            // totalDiscount = 优惠券+调价
+            BigDecimal totalDiscount = order.getPromotionDiscount().add(order.getAdjustAmount());
+            order.setTotalDiscount(totalDiscount);
+            BigDecimal totalPrice = goodsAmount.add(freightCharge).subtract(totalDiscount);
+            order.setTotalPrice(totalPrice);
+            BigDecimal paymentPrice = totalPrice.subtract(integralDiscount);
+            order.setPaymentPrice(paymentPrice);
+            order.setCreator(member.getMemberId());
+            Date createTime = new Date();
+            order.setCreateTime(createTime);
+
+            BigDecimal sumItemPayPrice = new BigDecimal("0");
+            int count = 0;
+            List<OrderItem> orderItemsList = new ArrayList<>();
+            for (CartDetailVo vo:cartDetailVoList){
+                count++;
+                OrderItem orderItem = new OrderItem();
+                orderItem.setOrderItemId(idGenerator.nextStringId());
+                orderItem.setOrderId(orderId);
+                orderItem.setGoodsId(vo.getGoodsId());
+                orderItem.setGoodsSn(vo.getGoodsSn());
+                orderItem.setGoodsName(vo.getGoodsName());
+                orderItem.setSkuId(vo.getSkuId());
+                orderItem.setSkuNo(vo.getSkuNo());
+                orderItem.setSkuGoodsName(vo.getSkuGoodsName());
+                orderItem.setSpecInfo(vo.getSpecInfo());
+                orderItem.setCategoryId(vo.getCategoryId());
+                orderItem.setCategoryName(vo.getCategoryName());
+                orderItem.setBrandId(vo.getBrandId());
+                orderItem.setBrandName(vo.getBrandName());
+                orderItem.setGoodsNum(vo.getGoodsNum());
+                orderItem.setGoodsPrice(vo.getGoodsPrice());
+                BigDecimal goodsPriceTotal = vo.getGoodsPrice().multiply(new BigDecimal(vo.getGoodsNum()));
+                orderItem.setGoodsPriceTotal(goodsPriceTotal);
+                orderItem.setShopFreightTemplateId(vo.getTemplateId());
+                orderItem.setCreator(member.getMemberId());
+                orderItem.setCreateTime(createTime);
+                BigDecimal payPriceTotal;
+                // 最后一个 用总的减去上面其他的和，即均摊剩余值
+                if(count==cartDetailVoList.size()){
+                    payPriceTotal = paymentPrice.subtract(sumItemPayPrice);
+                }else{
+                    payPriceTotal = paymentPrice.multiply(goodsPriceTotal).divide(goodsAmount,2,BigDecimal.ROUND_HALF_UP);
+                    sumItemPayPrice = sumItemPayPrice.add(payPriceTotal);
+                }
+                orderItem.setPayPriceTotal(payPriceTotal);
+                BigDecimal payPrice = payPriceTotal.divide(new BigDecimal(String.valueOf(orderItem.getGoodsNum())),2,BigDecimal.ROUND_HALF_UP);
+                orderItem.setPayPrice(payPrice);
+                orderItemsList.add(orderItem);
+            }
+            //TODO 锁定库存
+            // 保存订单
+            orderService.saveOrder(order,orderItemsList);
+            // 非线上支付订单 多店铺 按店铺拆单
+            // 线上支付订单 支付后按店铺拆单
+            if(storeCartMap.size()>1){
+
+            }
+        }catch (Exception e){
+            throw e;
+        }finally {
+            if(StringUtils.isNotEmpty(tick)){
+                stringRedisTemplate.delete(tick);
+            }
         }
-        //
-        Order order = new Order();
-        List<OrderItems> orderItemsList = new ArrayList<>();
+
 
 
 
@@ -179,6 +357,32 @@ public class TradeOrderController {
     }
 
 
+    /**
+     * 在线支付
+     * 返回参数 调起支付宝、微信
+     * 在支付宝、微信回调页面完成付款确认
+     * @param orderId
+     * @return
+     */
+    @ApiOperation("订单在线支付")
+    @PostMapping("/payOrderOnLine")
+    public ResultObject payOrderOnLine(String orderId){
+
+        return new ResultObject();
+    }
+
+    /**
+     * 取消订单
+     * 恢复锁定库存
+     * @param orderId
+     * @return
+     */
+    @ApiOperation("取消订单")
+    @PostMapping("/cancelOrder")
+    public ResultObject cancelOrder(String orderId){
+
+        return new ResultObject();
+    }
 
 
     private List<CartDetailVo> getSkuDetailList(List<Cart> cartList) throws TradeException {

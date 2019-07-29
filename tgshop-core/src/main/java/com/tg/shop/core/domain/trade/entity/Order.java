@@ -77,12 +77,12 @@ public class Order implements Serializable {
     /**
      * 优惠券id
      */
-    private String promoteId;
+    private String promotionId;
 
     /**
      * 优惠金额
      */
-    private BigDecimal promoteDiscount;
+    private BigDecimal promotionDiscount;
 
     /**
      * 积分数量
@@ -110,12 +110,12 @@ public class Order implements Serializable {
     private String changePaymentPriceOperator;
 
     /**
-     * 总优惠价
+     * 总优惠价(优惠券+调价)
      */
     private BigDecimal totalDiscount;
 
     /**
-     * 订单总价
+     * 订单总价(商品总价+运费-优惠总价)
      */
     private BigDecimal totalPrice;
 
@@ -130,7 +130,7 @@ public class Order implements Serializable {
     private String tradeSn;
 
     /**
-     * 实际支付金额
+     * 实际支付金额(订单总价-积分金额)
      */
     private BigDecimal paymentPrice;
 
@@ -173,6 +173,26 @@ public class Order implements Serializable {
      * 收货方式 1 邮寄 2 自提
      */
     private Integer receiveType;
+
+    /**
+     * 收货地址id
+     */
+    private String receiveAddressId;
+
+    /**
+     * 自提地址id
+     */
+    private String takeAddressId;
+
+    /**
+     * 收货时间范围
+     */
+    private String receiveTimeRange;
+
+    /**
+     * 自提时间范围
+     */
+    private String takeTimeRange;
 
     /**
      * 收货人

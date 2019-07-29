@@ -1,10 +1,14 @@
 package com.tg.shop.core.generator.snowflake;
 
 import com.tg.shop.core.generator.IdGenerator;
+import org.apache.commons.lang3.time.DateFormatUtils;
+import org.apache.commons.lang3.time.DateUtils;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
 import java.text.ParseException;
+import java.util.Date;
+import java.util.UUID;
 
 /**
  * Twitter_Snowflake<br>
@@ -133,10 +137,24 @@ public class SnowflakeIdWorker implements IdGenerator {
         lastTimestamp = timestamp;
 
         //移位并通过或运算拼到一起组成64位的ID
-        return ((timestamp - twepoch) << timestampLeftShift) //
-                | (datacenterId << datacenterIdShift) //
-                | (workerId << workerIdShift) //
+        return ((timestamp - twepoch) << timestampLeftShift)
+                | (datacenterId << datacenterIdShift)
+                | (workerId << workerIdShift)
                 | sequence;
+    }
+
+    @Override
+    public String nextOrderSn() {
+
+        String date = DateFormatUtils.format(new Date(),"yyyyMMdd");
+        String result =  date+nextStringId();
+        return result;
+    }
+
+    @Override
+    public String uuid() {
+        String uuid = UUID.randomUUID().toString().replace("-","");
+        return uuid;
     }
 
 

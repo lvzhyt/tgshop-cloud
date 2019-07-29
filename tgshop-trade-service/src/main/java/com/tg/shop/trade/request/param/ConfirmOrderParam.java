@@ -35,12 +35,27 @@ public class ConfirmOrderParam {
     /**
      * 收货地址id
      */
-    private String addressId;
+    private String receiveAddressId;
+
+    /**
+     * 自提地址
+     */
+    private String takeAddressId;
+
+    /**
+     * 配送时间范围
+     */
+    private String receiveTimeRange;
+
+    /**
+     * 自提时间范围
+     */
+    private String takeTimeRange;
 
     /**
      * 0 在线付款 1 货到付款
      */
-    private Integer paymentType;
+    private Integer paymentType=0;
 
     /**
      * 优惠券id
@@ -52,11 +67,6 @@ public class ConfirmOrderParam {
      */
     private Integer integralNum;
 
-
-    /**
-     * 调价金额
-     */
-    private BigDecimal adjustAmount;
 
     /**
      * 是否有发票 0 否 1是

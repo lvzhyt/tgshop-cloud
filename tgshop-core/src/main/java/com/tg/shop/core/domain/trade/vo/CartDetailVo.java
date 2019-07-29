@@ -32,6 +32,16 @@ public class CartDetailVo {
     private String skuId;
 
     /**
+     * 货号
+     */
+    private String goodsSn;
+
+    /**
+     * 商品编号
+     */
+    private String skuNo;
+
+    /**
      * 商品名称
      */
     private String goodsName;
@@ -62,10 +72,7 @@ public class CartDetailVo {
      */
     private BigDecimal goodsPrice;
 
-    /**
-     * 商品编号
-     */
-    private String skuNo;
+
 
     /**
      * SKU商品名称
@@ -149,4 +156,14 @@ public class CartDetailVo {
      * 超级会员价
      */
     private BigDecimal superVipPrice;
+
+
+    private String categoryId;
+
+    private String categoryName;
+
+    private String brandId;
+
+    private String brandName;
+
 }

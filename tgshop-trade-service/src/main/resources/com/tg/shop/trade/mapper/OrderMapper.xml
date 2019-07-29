@@ -15,8 +15,8 @@
     <result column="order_state" jdbcType="INTEGER" property="orderState" />
     <result column="goods_amount" jdbcType="DECIMAL" property="goodsAmount" />
     <result column="freight_charge" jdbcType="DECIMAL" property="freightCharge" />
-    <result column="promote_id" jdbcType="VARCHAR" property="promoteId" />
-    <result column="promote_discount" jdbcType="DECIMAL" property="promoteDiscount" />
+    <result column="promotion_id" jdbcType="VARCHAR" property="promotionId" />
+    <result column="promotion_discount" jdbcType="DECIMAL" property="promotionDiscount" />
     <result column="integral_num" jdbcType="INTEGER" property="integralNum" />
     <result column="integral_discount" jdbcType="DECIMAL" property="integralDiscount" />
     <result column="adjust_amount" jdbcType="DECIMAL" property="adjustAmount" />
@@ -35,6 +35,10 @@
     <result column="invoice_title" jdbcType="VARCHAR" property="invoiceTitle" />
     <result column="invoice_corporation_tax" jdbcType="VARCHAR" property="invoiceCorporationTax" />
     <result column="receive_type" jdbcType="INTEGER" property="receiveType" />
+    <result column="receive_address_id" jdbcType="VARCHAR" property="receiveAddressId" />
+    <result column="take_address_id" jdbcType="VARCHAR" property="takeAddressId" />
+    <result column="receive_time_range" jdbcType="VARCHAR" property="receiveTimeRange" />
+    <result column="take_time_range" jdbcType="VARCHAR" property="takeTimeRange" />
     <result column="address_receiver_name" jdbcType="VARCHAR" property="addressReceiverName" />
     <result column="address_receiver_mobile" jdbcType="VARCHAR" property="addressReceiverMobile" />
     <result column="address_zip_code" jdbcType="VARCHAR" property="addressZipCode" />
@@ -66,11 +70,12 @@
   </resultMap>
   <sql id="Base_Column_List">
     order_id, order_sn, parent_id, parent_order_sn, origin_order_sn, buyer_id, buyer_name, 
-    buyer_mobile, seller_id, store_id, order_state, goods_amount, freight_charge, promote_id, 
-    promote_discount, integral_num, integral_discount, adjust_amount, change_payment_price_time, 
+    buyer_mobile, seller_id, store_id, order_state, goods_amount, freight_charge, promotion_id, 
+    promotion_discount, integral_num, integral_discount, adjust_amount, change_payment_price_time, 
     change_payment_price_operator, total_discount, total_price, trade_out_sn, trade_sn, 
     payment_price, payment_state, payment_type, payment_kind, payment_time, invoice_need, 
-    invoice_title, invoice_corporation_tax, receive_type, address_receiver_name, address_receiver_mobile, 
+    invoice_title, invoice_corporation_tax, receive_type, receive_address_id, take_address_id, 
+    receive_time_range, take_time_range, address_receiver_name, address_receiver_mobile, 
     address_zip_code, address_province, address_city, address_county, address_detail_address, 
     logistics_company, logistics_company_code, logistics_no, logistics_remark, order_remark, 
     seller_remark, cancel_time, deliver_time, confirm_receipt_time, order_finish_time, 
@@ -92,16 +97,18 @@
       parent_order_sn, origin_order_sn, buyer_id, 
       buyer_name, buyer_mobile, seller_id, 
       store_id, order_state, goods_amount, 
-      freight_charge, promote_id, promote_discount, 
+      freight_charge, promotion_id, promotion_discount, 
       integral_num, integral_discount, adjust_amount, 
       change_payment_price_time, change_payment_price_operator, 
       total_discount, total_price, trade_out_sn, 
       trade_sn, payment_price, payment_state, 
       payment_type, payment_kind, payment_time, 
       invoice_need, invoice_title, invoice_corporation_tax, 
-      receive_type, address_receiver_name, address_receiver_mobile, 
-      address_zip_code, address_province, address_city, 
-      address_county, address_detail_address, logistics_company, 
+      receive_type, receive_address_id, take_address_id, 
+      receive_time_range, take_time_range, address_receiver_name, 
+      address_receiver_mobile, address_zip_code, 
+      address_province, address_city, address_county, 
+      address_detail_address, logistics_company, 
       logistics_company_code, logistics_no, logistics_remark, 
       order_remark, seller_remark, cancel_time, 
       deliver_time, confirm_receipt_time, order_finish_time, 
@@ -113,16 +120,18 @@
       #{parentOrderSn,jdbcType=VARCHAR}, #{originOrderSn,jdbcType=VARCHAR}, #{buyerId,jdbcType=VARCHAR}, 
       #{buyerName,jdbcType=VARCHAR}, #{buyerMobile,jdbcType=VARCHAR}, #{sellerId,jdbcType=VARCHAR}, 
       #{storeId,jdbcType=VARCHAR}, #{orderState,jdbcType=INTEGER}, #{goodsAmount,jdbcType=DECIMAL}, 
-      #{freightCharge,jdbcType=DECIMAL}, #{promoteId,jdbcType=VARCHAR}, #{promoteDiscount,jdbcType=DECIMAL}, 
+      #{freightCharge,jdbcType=DECIMAL}, #{promotionId,jdbcType=VARCHAR}, #{promotionDiscount,jdbcType=DECIMAL}, 
       #{integralNum,jdbcType=INTEGER}, #{integralDiscount,jdbcType=DECIMAL}, #{adjustAmount,jdbcType=DECIMAL}, 
       #{changePaymentPriceTime,jdbcType=TIMESTAMP}, #{changePaymentPriceOperator,jdbcType=VARCHAR}, 
       #{totalDiscount,jdbcType=DECIMAL}, #{totalPrice,jdbcType=DECIMAL}, #{tradeOutSn,jdbcType=VARCHAR}, 
       #{tradeSn,jdbcType=VARCHAR}, #{paymentPrice,jdbcType=DECIMAL}, #{paymentState,jdbcType=INTEGER}, 
       #{paymentType,jdbcType=INTEGER}, #{paymentKind,jdbcType=INTEGER}, #{paymentTime,jdbcType=TIMESTAMP}, 
       #{invoiceNeed,jdbcType=INTEGER}, #{invoiceTitle,jdbcType=VARCHAR}, #{invoiceCorporationTax,jdbcType=VARCHAR}, 
-      #{receiveType,jdbcType=INTEGER}, #{addressReceiverName,jdbcType=VARCHAR}, #{addressReceiverMobile,jdbcType=VARCHAR}, 
-      #{addressZipCode,jdbcType=VARCHAR}, #{addressProvince,jdbcType=VARCHAR}, #{addressCity,jdbcType=VARCHAR}, 
-      #{addressCounty,jdbcType=VARCHAR}, #{addressDetailAddress,jdbcType=VARCHAR}, #{logisticsCompany,jdbcType=VARCHAR}, 
+      #{receiveType,jdbcType=INTEGER}, #{receiveAddressId,jdbcType=VARCHAR}, #{takeAddressId,jdbcType=VARCHAR}, 
+      #{receiveTimeRange,jdbcType=VARCHAR}, #{takeTimeRange,jdbcType=VARCHAR}, #{addressReceiverName,jdbcType=VARCHAR}, 
+      #{addressReceiverMobile,jdbcType=VARCHAR}, #{addressZipCode,jdbcType=VARCHAR}, 
+      #{addressProvince,jdbcType=VARCHAR}, #{addressCity,jdbcType=VARCHAR}, #{addressCounty,jdbcType=VARCHAR}, 
+      #{addressDetailAddress,jdbcType=VARCHAR}, #{logisticsCompany,jdbcType=VARCHAR}, 
       #{logisticsCompanyCode,jdbcType=VARCHAR}, #{logisticsNo,jdbcType=VARCHAR}, #{logisticsRemark,jdbcType=VARCHAR}, 
       #{orderRemark,jdbcType=VARCHAR}, #{sellerRemark,jdbcType=VARCHAR}, #{cancelTime,jdbcType=TIMESTAMP}, 
       #{deliverTime,jdbcType=TIMESTAMP}, #{confirmReceiptTime,jdbcType=TIMESTAMP}, #{orderFinishTime,jdbcType=TIMESTAMP}, 
@@ -173,11 +182,11 @@
       <if test="freightCharge != null">
         freight_charge,
       </if>
-      <if test="promoteId != null">
-        promote_id,
+      <if test="promotionId != null">
+        promotion_id,
       </if>
-      <if test="promoteDiscount != null">
-        promote_discount,
+      <if test="promotionDiscount != null">
+        promotion_discount,
       </if>
       <if test="integralNum != null">
         integral_num,
@@ -232,6 +241,18 @@
       </if>
       <if test="receiveType != null">
         receive_type,
+      </if>
+      <if test="receiveAddressId != null">
+        receive_address_id,
+      </if>
+      <if test="takeAddressId != null">
+        take_address_id,
+      </if>
+      <if test="receiveTimeRange != null">
+        receive_time_range,
+      </if>
+      <if test="takeTimeRange != null">
+        take_time_range,
       </if>
       <if test="addressReceiverName != null">
         address_receiver_name,
@@ -358,11 +379,11 @@
       <if test="freightCharge != null">
         #{freightCharge,jdbcType=DECIMAL},
       </if>
-      <if test="promoteId != null">
-        #{promoteId,jdbcType=VARCHAR},
+      <if test="promotionId != null">
+        #{promotionId,jdbcType=VARCHAR},
       </if>
-      <if test="promoteDiscount != null">
-        #{promoteDiscount,jdbcType=DECIMAL},
+      <if test="promotionDiscount != null">
+        #{promotionDiscount,jdbcType=DECIMAL},
       </if>
       <if test="integralNum != null">
         #{integralNum,jdbcType=INTEGER},
@@ -417,6 +438,18 @@
       </if>
       <if test="receiveType != null">
         #{receiveType,jdbcType=INTEGER},
+      </if>
+      <if test="receiveAddressId != null">
+        #{receiveAddressId,jdbcType=VARCHAR},
+      </if>
+      <if test="takeAddressId != null">
+        #{takeAddressId,jdbcType=VARCHAR},
+      </if>
+      <if test="receiveTimeRange != null">
+        #{receiveTimeRange,jdbcType=VARCHAR},
+      </if>
+      <if test="takeTimeRange != null">
+        #{takeTimeRange,jdbcType=VARCHAR},
       </if>
       <if test="addressReceiverName != null">
         #{addressReceiverName,jdbcType=VARCHAR},
@@ -543,11 +576,11 @@
       <if test="freightCharge != null">
         freight_charge = #{freightCharge,jdbcType=DECIMAL},
       </if>
-      <if test="promoteId != null">
-        promote_id = #{promoteId,jdbcType=VARCHAR},
+      <if test="promotionId != null">
+        promotion_id = #{promotionId,jdbcType=VARCHAR},
       </if>
-      <if test="promoteDiscount != null">
-        promote_discount = #{promoteDiscount,jdbcType=DECIMAL},
+      <if test="promotionDiscount != null">
+        promotion_discount = #{promotionDiscount,jdbcType=DECIMAL},
       </if>
       <if test="integralNum != null">
         integral_num = #{integralNum,jdbcType=INTEGER},
@@ -602,6 +635,18 @@
       </if>
       <if test="receiveType != null">
         receive_type = #{receiveType,jdbcType=INTEGER},
+      </if>
+      <if test="receiveAddressId != null">
+        receive_address_id = #{receiveAddressId,jdbcType=VARCHAR},
+      </if>
+      <if test="takeAddressId != null">
+        take_address_id = #{takeAddressId,jdbcType=VARCHAR},
+      </if>
+      <if test="receiveTimeRange != null">
+        receive_time_range = #{receiveTimeRange,jdbcType=VARCHAR},
+      </if>
+      <if test="takeTimeRange != null">
+        take_time_range = #{takeTimeRange,jdbcType=VARCHAR},
       </if>
       <if test="addressReceiverName != null">
         address_receiver_name = #{addressReceiverName,jdbcType=VARCHAR},
@@ -704,8 +749,8 @@
       order_state = #{orderState,jdbcType=INTEGER},
       goods_amount = #{goodsAmount,jdbcType=DECIMAL},
       freight_charge = #{freightCharge,jdbcType=DECIMAL},
-      promote_id = #{promoteId,jdbcType=VARCHAR},
-      promote_discount = #{promoteDiscount,jdbcType=DECIMAL},
+      promotion_id = #{promotionId,jdbcType=VARCHAR},
+      promotion_discount = #{promotionDiscount,jdbcType=DECIMAL},
       integral_num = #{integralNum,jdbcType=INTEGER},
       integral_discount = #{integralDiscount,jdbcType=DECIMAL},
       adjust_amount = #{adjustAmount,jdbcType=DECIMAL},
@@ -724,6 +769,10 @@
       invoice_title = #{invoiceTitle,jdbcType=VARCHAR},
       invoice_corporation_tax = #{invoiceCorporationTax,jdbcType=VARCHAR},
       receive_type = #{receiveType,jdbcType=INTEGER},
+      receive_address_id = #{receiveAddressId,jdbcType=VARCHAR},
+      take_address_id = #{takeAddressId,jdbcType=VARCHAR},
+      receive_time_range = #{receiveTimeRange,jdbcType=VARCHAR},
+      take_time_range = #{takeTimeRange,jdbcType=VARCHAR},
       address_receiver_name = #{addressReceiverName,jdbcType=VARCHAR},
       address_receiver_mobile = #{addressReceiverMobile,jdbcType=VARCHAR},
       address_zip_code = #{addressZipCode,jdbcType=VARCHAR},

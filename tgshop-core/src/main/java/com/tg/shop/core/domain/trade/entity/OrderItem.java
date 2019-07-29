@@ -8,7 +8,7 @@ import lombok.NoArgsConstructor;
 
 @Data
 @NoArgsConstructor
-public class OrderItems implements Serializable {
+public class OrderItem implements Serializable {
     /**
      * 表 id
      */
@@ -32,7 +32,7 @@ public class OrderItems implements Serializable {
     /**
      * 货号
      */
-    private String goodsSerial;
+    private String goodsSn;
 
     /**
      * 商品名称
@@ -40,9 +40,9 @@ public class OrderItems implements Serializable {
     private String goodsName;
 
     /**
-     * 商品规格id
+     * 商品sku id
      */
-    private String specId;
+    private String skuId;
 
     /**
      * 商品编号
@@ -57,7 +57,7 @@ public class OrderItems implements Serializable {
     /**
      * SKU名称
      */
-    private String specName;
+    private String skuGoodsName;
 
     /**
      * 类目id
@@ -82,7 +82,7 @@ public class OrderItems implements Serializable {
     /**
      * 数量
      */
-    private Integer num;
+    private Integer goodsNum;
 
     /**
      * 商品单价

@@ -1,13 +1,12 @@
 package com.tg.shop.trade.request.param;
 
-import com.tg.shop.core.domain.trade.entity.Cart;
-import com.tg.shop.core.domain.trade.entity.UserReceiveAddress;
+import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
 
+import javax.validation.constraints.NotEmpty;
 import java.math.BigDecimal;
-import java.util.Date;
 import java.util.List;
 
 /**
@@ -21,14 +20,9 @@ public class OrderParam {
 
 
     /**
-     * 订单id
+     * 防重复提交
      */
-    private String orderId;
-
-    /**
-     * 订单编号
-     */
-    private String orderSn;
+    private String ticket;
 
     /**
      * 商品总金额
@@ -41,14 +35,52 @@ public class OrderParam {
     private BigDecimal freightCharge;
 
     /**
+     * 购物车 购买商品
+     */
+    @NotEmpty
+    @ApiModelProperty(required = true)
+    private List<String> cartIds;
+
+    /**
+     * 收货方式 1 邮寄 2 自提
+     */
+    @ApiModelProperty(example = "1")
+    private Integer receiveType=1;
+
+    /**
+     * 收货地址id
+     */
+    private String receiveAddressId;
+
+    /**
+     * 自提地址
+     */
+    private String takeAddressId;
+
+    /**
+     * 配送时间范围
+     */
+    private String receiveTimeRange;
+
+    /**
+     * 自提时间范围
+     */
+    private String takeTimeRange;
+
+    /**
+     * 0 在线付款 1 货到付款
+     */
+    private Integer paymentType = 0;
+
+    /**
      * 优惠券id
      */
-    private String promoId;
+    private String promotionId;
 
     /**
      * 优惠金额
      */
-    private BigDecimal promoDiscount;
+    private BigDecimal promotionDiscount;
 
     /**
      * 积分数量
@@ -56,39 +88,9 @@ public class OrderParam {
     private Integer integralNum;
 
     /**
-     * 积分优惠金额
+     * 积分优惠
      */
     private BigDecimal integralDiscount;
-
-    /**
-     * 调价金额
-     */
-    private BigDecimal adjustAmount;
-
-    /**
-     * 总优惠价
-     */
-    private BigDecimal totalDiscount;
-
-    /**
-     * 订单总价
-     */
-    private BigDecimal totalPrice;
-
-    /**
-     * 实际支付金额
-     */
-    private BigDecimal paymentPrice;
-
-    /**
-     * 支付状态 0 未付款 1 已付款
-     */
-    private Integer paymentState;
-
-    /**
-     * 0 在线付款 1 货到付款
-     */
-    private Integer paymentType;
 
 
     /**
@@ -106,21 +108,11 @@ public class OrderParam {
      */
     private String invoiceCorporationTax;
 
-    /**
-     * 收货地址id
-     */
-    private String addressId;
 
     /**
      * 订单备注
      */
     private String orderRemark;
-
-
-    /**
-     * 购物车 购买商品
-     */
-    private List<String> cartIds;
 
 
 }

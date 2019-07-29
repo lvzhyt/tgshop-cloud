@@ -400,6 +400,12 @@
     <result column="super_vip_price_open" jdbcType="INTEGER" property="superVipPriceOpen" />
     <result column="super_vip_price" jdbcType="DECIMAL" property="superVipPrice" />
     <result column="store_name" jdbcType="VARCHAR" property="storeName" />
+    <result column="goods_sn" jdbcType="VARCHAR" property="goodsSn" />
+    <result column="goods_name" jdbcType="VARCHAR" property="goodsName" />
+    <result column="category_id" jdbcType="VARCHAR" property="categoryId" />
+    <result column="category_name" jdbcType="VARCHAR" property="categoryName" />
+    <result column="brand_id" jdbcType="VARCHAR" property="brandId" />
+    <result column="brand_name" jdbcType="VARCHAR" property="brandName" />
   </resultMap>
   <select id="findSkuInventoryListByGoodsId" resultMap="SkuInventoryResultMap" parameterType="java.lang.String">
     SELECT
@@ -486,6 +492,12 @@
       t.color_attr_val_name,
       t.size_attr_val_name,
       t.store_id,
+      tg.goods_sn,
+      tg.goods_name,
+      tg.category_id,
+      tg.category_name,
+      tg.brand_id,
+      tg.brand_name,
       tg.shop_name as store_name,
       t.sku_status,
       t.spec_face_pictures,

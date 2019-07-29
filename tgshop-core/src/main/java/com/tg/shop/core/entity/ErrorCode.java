@@ -31,6 +31,7 @@ public enum ErrorCode {
     LOGIN_PASSWORD_ERROR("1004","登录密码错误"),
     REGISTER_USER_ALREADY_EXISTS("1005","用户已存在"),
     REGISTER_CODE_ERROR("1006","验证码错误"),
+    REQUEST_REPEAT_ERROR("1010","重复提交"),
     /**
      * 权限不足
      */

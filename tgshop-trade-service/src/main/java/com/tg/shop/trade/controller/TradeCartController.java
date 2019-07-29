@@ -28,7 +28,7 @@ import java.util.List;
 @UserToken
 @Api("订单交易")
 @RestController
-@RequestMapping("/trade")
+@RequestMapping("/trade/cart")
 public class TradeCartController {
 
     @Autowired

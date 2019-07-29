@@ -20,4 +20,17 @@ public interface IdGenerator {
      * @return
      */
     long nextId();
+
+    /**
+     * 订单Id
+     * @return
+     */
+    String nextOrderSn();
+
+    /**
+     * uuid
+     * @return
+     */
+    String uuid();
+
 }

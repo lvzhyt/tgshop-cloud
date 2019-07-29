@@ -1,22 +1,22 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.tg.shop.trade.mapper.OrderItemsMapper">
-  <resultMap id="BaseResultMap" type="com.tg.shop.core.domain.trade.entity.OrderItems">
+<mapper namespace="com.tg.shop.trade.mapper.OrderItemMapper">
+  <resultMap id="BaseResultMap" type="com.tg.shop.core.domain.trade.entity.OrderItem">
     <id column="order_item_id" jdbcType="VARCHAR" property="orderItemId" />
     <result column="order_id" jdbcType="VARCHAR" property="orderId" />
     <result column="area_id" jdbcType="VARCHAR" property="areaId" />
     <result column="goods_id" jdbcType="VARCHAR" property="goodsId" />
-    <result column="goods_serial" jdbcType="VARCHAR" property="goodsSerial" />
+    <result column="goods_sn" jdbcType="VARCHAR" property="goodsSn" />
     <result column="goods_name" jdbcType="VARCHAR" property="goodsName" />
-    <result column="spec_id" jdbcType="VARCHAR" property="specId" />
+    <result column="sku_id" jdbcType="VARCHAR" property="skuId" />
     <result column="sku_no" jdbcType="VARCHAR" property="skuNo" />
     <result column="spec_info" jdbcType="VARCHAR" property="specInfo" />
-    <result column="spec_name" jdbcType="VARCHAR" property="specName" />
+    <result column="sku_goods_name" jdbcType="VARCHAR" property="skuGoodsName" />
     <result column="category_id" jdbcType="VARCHAR" property="categoryId" />
     <result column="category_name" jdbcType="VARCHAR" property="categoryName" />
     <result column="brand_id" jdbcType="VARCHAR" property="brandId" />
     <result column="brand_name" jdbcType="VARCHAR" property="brandName" />
-    <result column="num" jdbcType="INTEGER" property="num" />
+    <result column="goods_num" jdbcType="INTEGER" property="goodsNum" />
     <result column="goods_price" jdbcType="DECIMAL" property="goodsPrice" />
     <result column="goods_price_total" jdbcType="DECIMAL" property="goodsPriceTotal" />
     <result column="promotion_id" jdbcType="VARCHAR" property="promotionId" />
@@ -35,28 +35,28 @@
     <result column="version" jdbcType="INTEGER" property="version" />
   </resultMap>
   <sql id="Base_Column_List">
-    order_item_id, order_id, area_id, goods_id, goods_serial, goods_name, spec_id, sku_no, 
-    spec_info, spec_name, category_id, category_name, brand_id, brand_name, num, goods_price, 
-    goods_price_total, promotion_id, promotion_type, promotion_discount, pay_price, pay_price_total, 
-    shop_freight_template_id, refund, refund_state, is_del, creator, create_time, modifier, 
-    modify_time, version
+    order_item_id, order_id, area_id, goods_id, goods_sn, goods_name, sku_id, sku_no, 
+    spec_info, sku_goods_name, category_id, category_name, brand_id, brand_name, goods_num, 
+    goods_price, goods_price_total, promotion_id, promotion_type, promotion_discount, 
+    pay_price, pay_price_total, shop_freight_template_id, refund, refund_state, is_del, 
+    creator, create_time, modifier, modify_time, version
   </sql>
   <select id="selectByPrimaryKey" parameterType="java.lang.String" resultMap="BaseResultMap">
     select 
     <include refid="Base_Column_List" />
-    from trade_order_items
+    from trade_order_item
     where order_item_id = #{orderItemId,jdbcType=VARCHAR}
   </select>
   <delete id="deleteByPrimaryKey" parameterType="java.lang.String">
-    delete from trade_order_items
+    delete from trade_order_item
     where order_item_id = #{orderItemId,jdbcType=VARCHAR}
   </delete>
-  <insert id="insert" parameterType="com.tg.shop.core.domain.trade.entity.OrderItems">
-    insert into trade_order_items (order_item_id, order_id, area_id, 
-      goods_id, goods_serial, goods_name, 
-      spec_id, sku_no, spec_info, 
-      spec_name, category_id, category_name, 
-      brand_id, brand_name, num, 
+  <insert id="insert" parameterType="com.tg.shop.core.domain.trade.entity.OrderItem">
+    insert into trade_order_item (order_item_id, order_id, area_id, 
+      goods_id, goods_sn, goods_name, 
+      sku_id, sku_no, spec_info, 
+      sku_goods_name, category_id, category_name, 
+      brand_id, brand_name, goods_num, 
       goods_price, goods_price_total, promotion_id, 
       promotion_type, promotion_discount, pay_price, 
       pay_price_total, shop_freight_template_id, refund, 
@@ -64,10 +64,10 @@
       create_time, modifier, modify_time, 
       version)
     values (#{orderItemId,jdbcType=VARCHAR}, #{orderId,jdbcType=VARCHAR}, #{areaId,jdbcType=VARCHAR}, 
-      #{goodsId,jdbcType=VARCHAR}, #{goodsSerial,jdbcType=VARCHAR}, #{goodsName,jdbcType=VARCHAR}, 
-      #{specId,jdbcType=VARCHAR}, #{skuNo,jdbcType=VARCHAR}, #{specInfo,jdbcType=VARCHAR}, 
-      #{specName,jdbcType=VARCHAR}, #{categoryId,jdbcType=VARCHAR}, #{categoryName,jdbcType=VARCHAR}, 
-      #{brandId,jdbcType=VARCHAR}, #{brandName,jdbcType=VARCHAR}, #{num,jdbcType=INTEGER}, 
+      #{goodsId,jdbcType=VARCHAR}, #{goodsSn,jdbcType=VARCHAR}, #{goodsName,jdbcType=VARCHAR}, 
+      #{skuId,jdbcType=VARCHAR}, #{skuNo,jdbcType=VARCHAR}, #{specInfo,jdbcType=VARCHAR}, 
+      #{skuGoodsName,jdbcType=VARCHAR}, #{categoryId,jdbcType=VARCHAR}, #{categoryName,jdbcType=VARCHAR}, 
+      #{brandId,jdbcType=VARCHAR}, #{brandName,jdbcType=VARCHAR}, #{goodsNum,jdbcType=INTEGER}, 
       #{goodsPrice,jdbcType=DECIMAL}, #{goodsPriceTotal,jdbcType=DECIMAL}, #{promotionId,jdbcType=VARCHAR}, 
       #{promotionType,jdbcType=INTEGER}, #{promotionDiscount,jdbcType=DECIMAL}, #{payPrice,jdbcType=DECIMAL}, 
       #{payPriceTotal,jdbcType=DECIMAL}, #{shopFreightTemplateId,jdbcType=VARCHAR}, #{refund,jdbcType=INTEGER}, 
@@ -75,8 +75,8 @@
       #{createTime,jdbcType=TIMESTAMP}, #{modifier,jdbcType=VARCHAR}, #{modifyTime,jdbcType=TIMESTAMP}, 
       #{version,jdbcType=INTEGER})
   </insert>
-  <insert id="insertSelective" parameterType="com.tg.shop.core.domain.trade.entity.OrderItems">
-    insert into trade_order_items
+  <insert id="insertSelective" parameterType="com.tg.shop.core.domain.trade.entity.OrderItem">
+    insert into trade_order_item
     <trim prefix="(" suffix=")" suffixOverrides=",">
       <if test="orderItemId != null">
         order_item_id,
@@ -90,14 +90,14 @@
       <if test="goodsId != null">
         goods_id,
       </if>
-      <if test="goodsSerial != null">
-        goods_serial,
+      <if test="goodsSn != null">
+        goods_sn,
       </if>
       <if test="goodsName != null">
         goods_name,
       </if>
-      <if test="specId != null">
-        spec_id,
+      <if test="skuId != null">
+        sku_id,
       </if>
       <if test="skuNo != null">
         sku_no,
@@ -105,8 +105,8 @@
       <if test="specInfo != null">
         spec_info,
       </if>
-      <if test="specName != null">
-        spec_name,
+      <if test="skuGoodsName != null">
+        sku_goods_name,
       </if>
       <if test="categoryId != null">
         category_id,
@@ -120,8 +120,8 @@
       <if test="brandName != null">
         brand_name,
       </if>
-      <if test="num != null">
-        num,
+      <if test="goodsNum != null">
+        goods_num,
       </if>
       <if test="goodsPrice != null">
         goods_price,
@@ -185,14 +185,14 @@
       <if test="goodsId != null">
         #{goodsId,jdbcType=VARCHAR},
       </if>
-      <if test="goodsSerial != null">
-        #{goodsSerial,jdbcType=VARCHAR},
+      <if test="goodsSn != null">
+        #{goodsSn,jdbcType=VARCHAR},
       </if>
       <if test="goodsName != null">
         #{goodsName,jdbcType=VARCHAR},
       </if>
-      <if test="specId != null">
-        #{specId,jdbcType=VARCHAR},
+      <if test="skuId != null">
+        #{skuId,jdbcType=VARCHAR},
       </if>
       <if test="skuNo != null">
         #{skuNo,jdbcType=VARCHAR},
@@ -200,8 +200,8 @@
       <if test="specInfo != null">
         #{specInfo,jdbcType=VARCHAR},
       </if>
-      <if test="specName != null">
-        #{specName,jdbcType=VARCHAR},
+      <if test="skuGoodsName != null">
+        #{skuGoodsName,jdbcType=VARCHAR},
       </if>
       <if test="categoryId != null">
         #{categoryId,jdbcType=VARCHAR},
@@ -215,8 +215,8 @@
       <if test="brandName != null">
         #{brandName,jdbcType=VARCHAR},
       </if>
-      <if test="num != null">
-        #{num,jdbcType=INTEGER},
+      <if test="goodsNum != null">
+        #{goodsNum,jdbcType=INTEGER},
       </if>
       <if test="goodsPrice != null">
         #{goodsPrice,jdbcType=DECIMAL},
@@ -268,8 +268,8 @@
       </if>
     </trim>
   </insert>
-  <update id="updateByPrimaryKeySelective" parameterType="com.tg.shop.core.domain.trade.entity.OrderItems">
-    update trade_order_items
+  <update id="updateByPrimaryKeySelective" parameterType="com.tg.shop.core.domain.trade.entity.OrderItem">
+    update trade_order_item
     <set>
       <if test="orderId != null">
         order_id = #{orderId,jdbcType=VARCHAR},
@@ -280,14 +280,14 @@
       <if test="goodsId != null">
         goods_id = #{goodsId,jdbcType=VARCHAR},
       </if>
-      <if test="goodsSerial != null">
-        goods_serial = #{goodsSerial,jdbcType=VARCHAR},
+      <if test="goodsSn != null">
+        goods_sn = #{goodsSn,jdbcType=VARCHAR},
       </if>
       <if test="goodsName != null">
         goods_name = #{goodsName,jdbcType=VARCHAR},
       </if>
-      <if test="specId != null">
-        spec_id = #{specId,jdbcType=VARCHAR},
+      <if test="skuId != null">
+        sku_id = #{skuId,jdbcType=VARCHAR},
       </if>
       <if test="skuNo != null">
         sku_no = #{skuNo,jdbcType=VARCHAR},
@@ -295,8 +295,8 @@
       <if test="specInfo != null">
         spec_info = #{specInfo,jdbcType=VARCHAR},
       </if>
-      <if test="specName != null">
-        spec_name = #{specName,jdbcType=VARCHAR},
+      <if test="skuGoodsName != null">
+        sku_goods_name = #{skuGoodsName,jdbcType=VARCHAR},
       </if>
       <if test="categoryId != null">
         category_id = #{categoryId,jdbcType=VARCHAR},
@@ -310,8 +310,8 @@
       <if test="brandName != null">
         brand_name = #{brandName,jdbcType=VARCHAR},
       </if>
-      <if test="num != null">
-        num = #{num,jdbcType=INTEGER},
+      <if test="goodsNum != null">
+        goods_num = #{goodsNum,jdbcType=INTEGER},
       </if>
       <if test="goodsPrice != null">
         goods_price = #{goodsPrice,jdbcType=DECIMAL},
@@ -364,22 +364,22 @@
     </set>
     where order_item_id = #{orderItemId,jdbcType=VARCHAR}
   </update>
-  <update id="updateByPrimaryKey" parameterType="com.tg.shop.core.domain.trade.entity.OrderItems">
-    update trade_order_items
+  <update id="updateByPrimaryKey" parameterType="com.tg.shop.core.domain.trade.entity.OrderItem">
+    update trade_order_item
     set order_id = #{orderId,jdbcType=VARCHAR},
       area_id = #{areaId,jdbcType=VARCHAR},
       goods_id = #{goodsId,jdbcType=VARCHAR},
-      goods_serial = #{goodsSerial,jdbcType=VARCHAR},
+      goods_sn = #{goodsSn,jdbcType=VARCHAR},
       goods_name = #{goodsName,jdbcType=VARCHAR},
-      spec_id = #{specId,jdbcType=VARCHAR},
+      sku_id = #{skuId,jdbcType=VARCHAR},
       sku_no = #{skuNo,jdbcType=VARCHAR},
       spec_info = #{specInfo,jdbcType=VARCHAR},
-      spec_name = #{specName,jdbcType=VARCHAR},
+      sku_goods_name = #{skuGoodsName,jdbcType=VARCHAR},
       category_id = #{categoryId,jdbcType=VARCHAR},
       category_name = #{categoryName,jdbcType=VARCHAR},
       brand_id = #{brandId,jdbcType=VARCHAR},
       brand_name = #{brandName,jdbcType=VARCHAR},
-      num = #{num,jdbcType=INTEGER},
+      goods_num = #{goodsNum,jdbcType=INTEGER},
       goods_price = #{goodsPrice,jdbcType=DECIMAL},
       goods_price_total = #{goodsPriceTotal,jdbcType=DECIMAL},
       promotion_id = #{promotionId,jdbcType=VARCHAR},
