@@ -40,4 +40,6 @@ public interface TradeSkuInventoryMapper {
      * @mbg.generated Mon Jul 29 18:24:07 CST 2019
      */
     int updateByPrimaryKey(TradeSkuInventory record);
+
+    int updateByVersion(TradeSkuInventory skuInventory);
 }

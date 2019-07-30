@@ -1,8 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.tg.shop.trade.mapper.TradeSkuInventoryMapper">
-  <resultMap id="BaseResultMap" type="com.tg.shop.core.domain.trade.entity.TradeSkuInventory">
-    <id column="sku_id" jdbcType="VARCHAR" property="skuId" />
+<mapper namespace="com.tg.shop.trade.mapper.TradeSkuInventoryLogMapper">
+  <resultMap id="BaseResultMap" type="com.tg.shop.core.domain.trade.entity.TradeSkuInventoryLog">
+    <id column="tb_id" jdbcType="VARCHAR" property="tbId" />
+    <result column="sku_id" jdbcType="VARCHAR" property="skuId" />
     <result column="area_id" jdbcType="VARCHAR" property="areaId" />
     <result column="store_id" jdbcType="VARCHAR" property="storeId" />
     <result column="seller_id" jdbcType="VARCHAR" property="sellerId" />
@@ -20,36 +21,39 @@
     <result column="version" jdbcType="INTEGER" property="version" />
   </resultMap>
   <sql id="Base_Column_List">
-    sku_id, area_id, store_id, seller_id, goods_id, sku_no, inventory_num, lock_num, 
+    tb_id, sku_id, area_id, store_id, seller_id, goods_id, sku_no, inventory_num, lock_num, 
     left_num, remark, is_del, creator, create_time, modifier, modify_time, version
   </sql>
   <select id="selectByPrimaryKey" parameterType="java.lang.String" resultMap="BaseResultMap">
     select 
     <include refid="Base_Column_List" />
-    from item_goods_sku_inventory
-    where sku_id = #{skuId,jdbcType=VARCHAR}
+    from item_goods_sku_inventory_log
+    where tb_id = #{tbId,jdbcType=VARCHAR}
   </select>
   <delete id="deleteByPrimaryKey" parameterType="java.lang.String">
-    delete from item_goods_sku_inventory
-    where sku_id = #{skuId,jdbcType=VARCHAR}
+    delete from item_goods_sku_inventory_log
+    where tb_id = #{tbId,jdbcType=VARCHAR}
   </delete>
-  <insert id="insert" parameterType="com.tg.shop.core.domain.trade.entity.TradeSkuInventory">
-    insert into item_goods_sku_inventory (sku_id, area_id, store_id, 
-      seller_id, goods_id, sku_no, 
-      inventory_num, lock_num, left_num, 
-      remark, is_del, creator, 
-      create_time, modifier, modify_time, 
-      version)
-    values (#{skuId,jdbcType=VARCHAR}, #{areaId,jdbcType=VARCHAR}, #{storeId,jdbcType=VARCHAR}, 
-      #{sellerId,jdbcType=VARCHAR}, #{goodsId,jdbcType=VARCHAR}, #{skuNo,jdbcType=VARCHAR}, 
-      #{inventoryNum,jdbcType=INTEGER}, #{lockNum,jdbcType=INTEGER}, #{leftNum,jdbcType=INTEGER}, 
-      #{remark,jdbcType=VARCHAR}, #{isDel,jdbcType=INTEGER}, #{creator,jdbcType=VARCHAR}, 
-      #{createTime,jdbcType=TIMESTAMP}, #{modifier,jdbcType=VARCHAR}, #{modifyTime,jdbcType=TIMESTAMP}, 
-      #{version,jdbcType=INTEGER})
+  <insert id="insert" parameterType="com.tg.shop.core.domain.trade.entity.TradeSkuInventoryLog">
+    insert into item_goods_sku_inventory_log (tb_id, sku_id, area_id, 
+      store_id, seller_id, goods_id, 
+      sku_no, inventory_num, lock_num, 
+      left_num, remark, is_del, 
+      creator, create_time, modifier, 
+      modify_time, version)
+    values (#{tbId,jdbcType=VARCHAR}, #{skuId,jdbcType=VARCHAR}, #{areaId,jdbcType=VARCHAR}, 
+      #{storeId,jdbcType=VARCHAR}, #{sellerId,jdbcType=VARCHAR}, #{goodsId,jdbcType=VARCHAR}, 
+      #{skuNo,jdbcType=VARCHAR}, #{inventoryNum,jdbcType=INTEGER}, #{lockNum,jdbcType=INTEGER}, 
+      #{leftNum,jdbcType=INTEGER}, #{remark,jdbcType=VARCHAR}, #{isDel,jdbcType=INTEGER}, 
+      #{creator,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP}, #{modifier,jdbcType=VARCHAR}, 
+      #{modifyTime,jdbcType=TIMESTAMP}, #{version,jdbcType=INTEGER})
   </insert>
-  <insert id="insertSelective" parameterType="com.tg.shop.core.domain.trade.entity.TradeSkuInventory">
-    insert into item_goods_sku_inventory
+  <insert id="insertSelective" parameterType="com.tg.shop.core.domain.trade.entity.TradeSkuInventoryLog">
+    insert into item_goods_sku_inventory_log
     <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="tbId != null">
+        tb_id,
+      </if>
       <if test="skuId != null">
         sku_id,
       </if>
@@ -100,6 +104,9 @@
       </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="tbId != null">
+        #{tbId,jdbcType=VARCHAR},
+      </if>
       <if test="skuId != null">
         #{skuId,jdbcType=VARCHAR},
       </if>
@@ -150,9 +157,12 @@
       </if>
     </trim>
   </insert>
-  <update id="updateByPrimaryKeySelective" parameterType="com.tg.shop.core.domain.trade.entity.TradeSkuInventory">
-    update item_goods_sku_inventory
+  <update id="updateByPrimaryKeySelective" parameterType="com.tg.shop.core.domain.trade.entity.TradeSkuInventoryLog">
+    update item_goods_sku_inventory_log
     <set>
+      <if test="skuId != null">
+        sku_id = #{skuId,jdbcType=VARCHAR},
+      </if>
       <if test="areaId != null">
         area_id = #{areaId,jdbcType=VARCHAR},
       </if>
@@ -199,11 +209,12 @@
         version = #{version,jdbcType=INTEGER},
       </if>
     </set>
-    where sku_id = #{skuId,jdbcType=VARCHAR}
+    where tb_id = #{tbId,jdbcType=VARCHAR}
   </update>
-  <update id="updateByPrimaryKey" parameterType="com.tg.shop.core.domain.trade.entity.TradeSkuInventory">
-    update item_goods_sku_inventory
-    set area_id = #{areaId,jdbcType=VARCHAR},
+  <update id="updateByPrimaryKey" parameterType="com.tg.shop.core.domain.trade.entity.TradeSkuInventoryLog">
+    update item_goods_sku_inventory_log
+    set sku_id = #{skuId,jdbcType=VARCHAR},
+      area_id = #{areaId,jdbcType=VARCHAR},
       store_id = #{storeId,jdbcType=VARCHAR},
       seller_id = #{sellerId,jdbcType=VARCHAR},
       goods_id = #{goodsId,jdbcType=VARCHAR},
@@ -218,28 +229,6 @@
       modifier = #{modifier,jdbcType=VARCHAR},
       modify_time = #{modifyTime,jdbcType=TIMESTAMP},
       version = #{version,jdbcType=INTEGER}
-    where sku_id = #{skuId,jdbcType=VARCHAR}
+    where tb_id = #{tbId,jdbcType=VARCHAR}
   </update>
-
-  <!--   自定义 -->
-    <update id="updateByVersion" parameterType="com.tg.shop.core.domain.trade.entity.TradeSkuInventory">
-      update item_goods_sku_inventory
-      set area_id = #{areaId,jdbcType=VARCHAR},
-          store_id = #{storeId,jdbcType=VARCHAR},
-          seller_id = #{sellerId,jdbcType=VARCHAR},
-          goods_id = #{goodsId,jdbcType=VARCHAR},
-          sku_no = #{skuNo,jdbcType=VARCHAR},
-          inventory_num = #{inventoryNum,jdbcType=INTEGER},
-          lock_num = #{lockNum,jdbcType=INTEGER},
-          left_num = #{leftNum,jdbcType=INTEGER},
-          remark = #{remark,jdbcType=VARCHAR},
-          is_del = #{isDel,jdbcType=INTEGER},
-          creator = #{creator,jdbcType=VARCHAR},
-          create_time = #{createTime,jdbcType=TIMESTAMP},
-          modifier = #{modifier,jdbcType=VARCHAR},
-          modify_time = #{modifyTime,jdbcType=TIMESTAMP},
-          version = version+1
-      where sku_id = #{skuId,jdbcType=VARCHAR}
-        and version = #{version,jdbcType=INTEGER}
-    </update>
 </mapper>

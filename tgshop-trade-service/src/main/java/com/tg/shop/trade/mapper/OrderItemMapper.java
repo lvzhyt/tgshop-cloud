@@ -3,6 +3,8 @@ package com.tg.shop.trade.mapper;
 import com.tg.shop.core.domain.trade.entity.OrderItem;
 import org.apache.ibatis.annotations.Mapper;
 
+import java.util.List;
+
 @Mapper
 public interface OrderItemMapper {
     /**
@@ -40,4 +42,6 @@ public interface OrderItemMapper {
      * @mbg.generated Mon Jul 29 15:54:51 CST 2019
      */
     int updateByPrimaryKey(OrderItem record);
+
+    List<OrderItem> getOrderItemsByOrderId(String orderId);
 }

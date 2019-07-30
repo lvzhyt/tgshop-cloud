@@ -47,7 +47,7 @@
     from trade_order_item
     where order_item_id = #{orderItemId,jdbcType=VARCHAR}
   </select>
-  <delete id="deleteByPrimaryKey" parameterType="java.lang.String">
+    <delete id="deleteByPrimaryKey" parameterType="java.lang.String">
     delete from trade_order_item
     where order_item_id = #{orderItemId,jdbcType=VARCHAR}
   </delete>
@@ -398,4 +398,13 @@
       version = #{version,jdbcType=INTEGER}
     where order_item_id = #{orderItemId,jdbcType=VARCHAR}
   </update>
+
+<!--  自定义 -->
+  <select id="getOrderItemsByOrderId" parameterType="java.lang.String" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from trade_order_item
+    where order_id = #{orderId,jdbcType=VARCHAR}
+  </select>
+
 </mapper>

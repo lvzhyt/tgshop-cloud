@@ -3,9 +3,11 @@ package com.tg.shop.trade.controller;
 import com.alibaba.fastjson.JSONObject;
 import com.tg.shop.core.annotation.UserToken;
 import com.tg.shop.core.domain.auth.entity.Member;
+import com.tg.shop.core.domain.base.BaseEntityInfo;
 import com.tg.shop.core.domain.product.result.vo.GoodsSkuDetailResultVo;
 import com.tg.shop.core.domain.trade.entity.*;
 import com.tg.shop.core.domain.trade.vo.CartDetailVo;
+import com.tg.shop.core.domain.trade.vo.OrderInfo;
 import com.tg.shop.core.domain.trade.vo.StoreSimpleVo;
 import com.tg.shop.core.entity.ErrorCode;
 import com.tg.shop.core.entity.ResultObject;
@@ -16,10 +18,7 @@ import com.tg.shop.trade.feign.service.FeignProductService;
 import com.tg.shop.trade.request.param.AddressParam;
 import com.tg.shop.trade.request.param.ConfirmOrderParam;
 import com.tg.shop.trade.request.param.OrderParam;
-import com.tg.shop.trade.service.CartService;
-import com.tg.shop.trade.service.FreightChargeTempTradeService;
-import com.tg.shop.trade.service.OrderService;
-import com.tg.shop.trade.service.UserReceiveAddressService;
+import com.tg.shop.trade.service.*;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.apache.commons.lang3.StringUtils;
@@ -61,6 +60,8 @@ public class TradeOrderController {
     private StringRedisTemplate stringRedisTemplate;
     @Autowired
     private OrderService orderService;
+    @Resource
+    private OrderItemService orderItemService;
 
     /**
      * 订单确认页面
@@ -157,6 +158,15 @@ public class TradeOrderController {
                 return new ResultObject(ErrorCode.EMPTY_DATA_ERROR);
             }
 
+            // 检查可用库存
+            for (CartDetailVo vo :
+                    cartDetailVoList) {
+                if (vo.getGoodsNum() > vo.getLeftNum()){
+                    String msg = "库存不足.SkuNo:"+vo.getSkuNo();
+                    throw new TradeException(msg);
+                }
+            }
+            
             Map<String,List<CartDetailVo>> storeCartMap = new HashMap<>(16);
             List<StoreSimpleVo> storeSimpleVoList = new ArrayList<>();
             for (CartDetailVo vo :
@@ -250,6 +260,7 @@ public class TradeOrderController {
             order.setTotalPrice(totalPrice);
             BigDecimal paymentPrice = totalPrice.subtract(integralDiscount);
             order.setPaymentPrice(paymentPrice);
+            order.setOrderState(OrderInfo.ORDER_STATE_WAIT_CONFIRM);
             order.setCreator(member.getMemberId());
             Date createTime = new Date();
             order.setCreateTime(createTime);
@@ -296,6 +307,7 @@ public class TradeOrderController {
             //TODO 锁定库存
             // 保存订单
             orderService.saveOrder(order,orderItemsList);
+            stringRedisTemplate.opsForValue().set(orderId,orderId,15,TimeUnit.SECONDS);
             // 非线上支付订单 多店铺 按店铺拆单
             // 线上支付订单 支付后按店铺拆单
             if(storeCartMap.size()>1){
@@ -384,6 +396,60 @@ public class TradeOrderController {
         return new ResultObject();
     }
 
+    /**
+     * 确认订单
+     * 锁定库存
+     * @param orderId
+     * @return
+     */
+    @ApiOperation("确认订单")
+    @PostMapping("/confirmOrder")
+    public ResultObject confirmOrder(String orderId){
+        Order order = orderService.getByOrderId(orderId);
+        if(order.getOrderState()!=OrderInfo.ORDER_STATE_WAIT_CONFIRM){
+            return new ResultObject();
+        }
+        ResultObject resultObject = orderService.confirmOrder(orderId);
+
+        return resultObject;
+    }
+
+
+    /**
+     * 获取订单是否下单成功
+     * @param orderId
+     * @return
+     */
+    @ApiOperation("获取订单是否下单成功")
+    @GetMapping("/getSubmitOrder")
+    public ResultObject getSubmitOrder(String orderId){
+        Order order = orderService.getByOrderId(orderId);
+        boolean success = order.getOrderState() == OrderInfo.ORDER_STATE_WAIT_PAY;
+        if(success){
+            return new ResultObject<>(order);
+        }
+        if(!stringRedisTemplate.hasKey(orderId)){
+            order.setOrderState(0);
+            order.setIsDel(BaseEntityInfo.STATE_DELETE);
+            order.setModifier("sys getSubmitOrder");
+            order.setModifyTime(new Date());
+
+            OrderLog orderLog = new OrderLog();
+            orderLog.setOrderLogId(idGenerator.nextStringId());
+            orderLog.setOrderId(order.getOrderId());
+            orderLog.setOrderSn(order.getOrderSn());
+            orderLog.setOrderState(String.valueOf(order.getOrderState()));
+            String remark = "确认订单超时，删除订单";
+            orderLog.setRemark(remark);
+            orderLog.setOperator("sys getSubmitOrder");
+            orderLog.setCreator(order.getCreator());
+            orderLog.setCreateTime(new Date());
+            int count = orderService.updateOrder(order,orderLog);
+            return new ResultObject("6009","确认订单超时.");
+        }
+        ResultObject resultObject = new ResultObject<>(order);
+        return resultObject;
+    }
 
     private List<CartDetailVo> getSkuDetailList(List<Cart> cartList) throws TradeException {
         List<CartDetailVo> result = new ArrayList<>();
@@ -393,9 +459,15 @@ public class TradeOrderController {
                 throw new TradeException(skuDetailResultVoResultObject.getMessage());
             }
             CartDetailVo cartDetailVo = new CartDetailVo();
-            BeanUtils.copyProperties(cart,cartDetailVo);
+
             GoodsSkuDetailResultVo skuDetail = skuDetailResultVoResultObject.getData();
+            // 检查可用库存
+            if (cartDetailVo.getGoodsNum() > skuDetail.getLeftNum()){
+                String msg = "库存不足.SkuNo:"+cartDetailVo.getSkuNo();
+                throw new TradeException(msg);
+            }
             BeanUtils.copyProperties(skuDetail,cartDetailVo);
+            BeanUtils.copyProperties(cart,cartDetailVo);
             result.add(cartDetailVo);
         }
         return  result;
