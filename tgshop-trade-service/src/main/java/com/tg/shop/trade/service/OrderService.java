@@ -38,4 +38,12 @@ public interface OrderService {
      * @return
      */
     ResultObject cancelOrderStock(String orderId);
+
+    /**
+     * 分页查找
+     * @param condition
+     * @param pageSize
+     * @param pageNum
+     */
+    void findOrderPageList(Order condition, Integer pageNum, Integer pageSize);
 }

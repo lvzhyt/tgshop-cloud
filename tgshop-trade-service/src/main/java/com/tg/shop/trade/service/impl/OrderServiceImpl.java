@@ -1,5 +1,6 @@
 package com.tg.shop.trade.service.impl;
 
+import com.github.pagehelper.PageHelper;
 import com.tg.shop.core.domain.auth.entity.Member;
 import com.tg.shop.core.domain.trade.entity.*;
 import com.tg.shop.core.domain.trade.vo.OrderDetailVo;
@@ -174,6 +175,12 @@ public class OrderServiceImpl implements OrderService {
         }
 
         return new ResultObject(resultCount);
+    }
+
+    @Override
+    public void findOrderPageList(Order condition, Integer pageNum,Integer pageSize ) {
+        PageHelper.startPage(pageNum,pageSize);
+        List<Order> list = orderMapper.findOrderByCondition(condition);
     }
 
 }

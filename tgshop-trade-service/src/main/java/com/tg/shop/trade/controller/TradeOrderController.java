@@ -332,6 +332,24 @@ public class TradeOrderController {
         return new ResultObject();
     }
 
+    @ApiOperation("订单列表")
+    public ResultObject listOrderByPage(@RequestParam(value = "orderState",required = false) Integer orderState,
+                                  @RequestParam(value = "pageSize",required = false,defaultValue = "10") Integer pageSize,
+                                  @RequestParam(value = "pageNo",required = false,defaultValue = "1") Integer pageNo){
+        Member member = CacheMemberHolderLocal.getMember();
+        Order condition = new Order();
+        condition.setOrderState(orderState);
+        condition.setBuyerId(member.getMemberId());
+
+        orderService.findOrderPageList(condition,pageSize,pageNo);
+
+        return null;
+    }
+
+    /**
+     * 获取收货地址
+     * @return
+     */
     @ApiOperation("获取收货地址")
     @GetMapping("/getReceiveAddressList")
     public ResultObject<List<UserReceiveAddress>> getReceiveAddressList(){
@@ -342,6 +360,12 @@ public class TradeOrderController {
         return new ResultObject<>(list);
     }
 
+    /**
+     * 保存收货地址
+     * @param addressParam
+     * @param bindingResult
+     * @return
+     */
     @ApiOperation("保存收货地址")
     @PostMapping("/saveReceiveAddress")
     public ResultObject saveReceiveAddress(@Valid @RequestBody AddressParam addressParam,BindingResult bindingResult){
@@ -365,6 +389,11 @@ public class TradeOrderController {
         return new ResultObject<>(userReceiveAddress);
     }
 
+    /**
+     * 设置默认收货地址
+     * @param addressId
+     * @return
+     */
     @ApiOperation("设置默认收货地址")
     @PostMapping("/setDefaultReceiveAddress")
     public ResultObject setDefaultReceiveAddress(@RequestParam String addressId){
