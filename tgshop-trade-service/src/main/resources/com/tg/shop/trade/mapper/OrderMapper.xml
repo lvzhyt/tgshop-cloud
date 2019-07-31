@@ -60,6 +60,7 @@
     <result column="seller_evaluate" jdbcType="INTEGER" property="sellerEvaluate" />
     <result column="refund" jdbcType="INTEGER" property="refund" />
     <result column="refund_state" jdbcType="INTEGER" property="refundState" />
+    <result column="user_delete" jdbcType="INTEGER" property="userDelete" />
     <result column="is_del" jdbcType="INTEGER" property="isDel" />
     <result column="refund_time" jdbcType="TIMESTAMP" property="refundTime" />
     <result column="creator" jdbcType="VARCHAR" property="creator" />
@@ -79,8 +80,8 @@
     address_zip_code, address_province, address_city, address_county, address_detail_address, 
     logistics_company, logistics_company_code, logistics_no, logistics_remark, order_remark, 
     seller_remark, cancel_time, deliver_time, confirm_receipt_time, order_finish_time, 
-    buyer_evaluate, seller_evaluate, refund, refund_state, is_del, refund_time, creator, 
-    create_time, modifier, modify_time, version
+    buyer_evaluate, seller_evaluate, refund, refund_state, user_delete, is_del, refund_time, 
+    creator, create_time, modifier, modify_time, version
   </sql>
   <select id="selectByPrimaryKey" parameterType="java.lang.String" resultMap="BaseResultMap">
     select 
@@ -88,7 +89,7 @@
     from trade_order
     where order_id = #{orderId,jdbcType=VARCHAR}
   </select>
-    <delete id="deleteByPrimaryKey" parameterType="java.lang.String">
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String">
     delete from trade_order
     where order_id = #{orderId,jdbcType=VARCHAR}
   </delete>
@@ -113,9 +114,10 @@
       order_remark, seller_remark, cancel_time, 
       deliver_time, confirm_receipt_time, order_finish_time, 
       buyer_evaluate, seller_evaluate, refund, 
-      refund_state, is_del, refund_time, 
-      creator, create_time, modifier, 
-      modify_time, version)
+      refund_state, user_delete, is_del, 
+      refund_time, creator, create_time, 
+      modifier, modify_time, version
+      )
     values (#{orderId,jdbcType=VARCHAR}, #{orderSn,jdbcType=VARCHAR}, #{parentId,jdbcType=VARCHAR}, 
       #{parentOrderSn,jdbcType=VARCHAR}, #{originOrderSn,jdbcType=VARCHAR}, #{buyerId,jdbcType=VARCHAR}, 
       #{buyerName,jdbcType=VARCHAR}, #{buyerMobile,jdbcType=VARCHAR}, #{sellerId,jdbcType=VARCHAR}, 
@@ -136,9 +138,10 @@
       #{orderRemark,jdbcType=VARCHAR}, #{sellerRemark,jdbcType=VARCHAR}, #{cancelTime,jdbcType=TIMESTAMP}, 
       #{deliverTime,jdbcType=TIMESTAMP}, #{confirmReceiptTime,jdbcType=TIMESTAMP}, #{orderFinishTime,jdbcType=TIMESTAMP}, 
       #{buyerEvaluate,jdbcType=INTEGER}, #{sellerEvaluate,jdbcType=INTEGER}, #{refund,jdbcType=INTEGER}, 
-      #{refundState,jdbcType=INTEGER}, #{isDel,jdbcType=INTEGER}, #{refundTime,jdbcType=TIMESTAMP}, 
-      #{creator,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP}, #{modifier,jdbcType=VARCHAR}, 
-      #{modifyTime,jdbcType=TIMESTAMP}, #{version,jdbcType=INTEGER})
+      #{refundState,jdbcType=INTEGER}, #{userDelete,jdbcType=INTEGER}, #{isDel,jdbcType=INTEGER}, 
+      #{refundTime,jdbcType=TIMESTAMP}, #{creator,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP}, 
+      #{modifier,jdbcType=VARCHAR}, #{modifyTime,jdbcType=TIMESTAMP}, #{version,jdbcType=INTEGER}
+      )
   </insert>
   <insert id="insertSelective" parameterType="com.tg.shop.core.domain.trade.entity.Order">
     insert into trade_order
@@ -316,6 +319,9 @@
       </if>
       <if test="refundState != null">
         refund_state,
+      </if>
+      <if test="userDelete != null">
+        user_delete,
       </if>
       <if test="isDel != null">
         is_del,
@@ -514,6 +520,9 @@
       <if test="refundState != null">
         #{refundState,jdbcType=INTEGER},
       </if>
+      <if test="userDelete != null">
+        #{userDelete,jdbcType=INTEGER},
+      </if>
       <if test="isDel != null">
         #{isDel,jdbcType=INTEGER},
       </if>
@@ -711,6 +720,9 @@
       <if test="refundState != null">
         refund_state = #{refundState,jdbcType=INTEGER},
       </if>
+      <if test="userDelete != null">
+        user_delete = #{userDelete,jdbcType=INTEGER},
+      </if>
       <if test="isDel != null">
         is_del = #{isDel,jdbcType=INTEGER},
       </if>
@@ -794,6 +806,7 @@
       seller_evaluate = #{sellerEvaluate,jdbcType=INTEGER},
       refund = #{refund,jdbcType=INTEGER},
       refund_state = #{refundState,jdbcType=INTEGER},
+      user_delete = #{userDelete,jdbcType=INTEGER},
       is_del = #{isDel,jdbcType=INTEGER},
       refund_time = #{refundTime,jdbcType=TIMESTAMP},
       creator = #{creator,jdbcType=VARCHAR},
@@ -804,11 +817,113 @@
     where order_id = #{orderId,jdbcType=VARCHAR}
   </update>
 
+<!--  自定义 -->
   <select id="findOrderByCondition" parameterType="com.tg.shop.core.domain.trade.entity.Order" resultMap="BaseResultMap">
     select
     <include refid="Base_Column_List" />
     from trade_order
-    where order_id = #{orderId,jdbcType=VARCHAR}
+    <where>
+      <if test="orderSn != null">
+        and order_sn = #{orderSn,jdbcType=VARCHAR}
+      </if>
+      <if test="parentId != null">
+        and parent_id = #{parentId,jdbcType=VARCHAR}
+      </if>
+      <if test="parentOrderSn != null">
+        and parent_order_sn = #{parentOrderSn,jdbcType=VARCHAR}
+      </if>
+      <if test="originOrderSn != null">
+        and origin_order_sn = #{originOrderSn,jdbcType=VARCHAR}
+      </if>
+      <if test="buyerId != null">
+        and buyer_id = #{buyerId,jdbcType=VARCHAR}
+      </if>
+      <if test="buyerName != null">
+        and buyer_name like CONCAT(#{buyerName,jdbcType=VARCHAR},'%')
+      </if>
+      <if test="buyerMobile != null">
+        and  buyer_mobile = #{buyerMobile,jdbcType=VARCHAR}
+      </if>
+      <if test="sellerId != null">
+        and seller_id = #{sellerId,jdbcType=VARCHAR}
+      </if>
+      <if test="storeId != null">
+        and store_id = #{storeId,jdbcType=VARCHAR}
+      </if>
+      <if test="orderState != null">
+        and order_state = #{orderState,jdbcType=INTEGER}
+      </if>
+      <if test="promotionId != null">
+        and promotion_id = #{promotionId,jdbcType=VARCHAR}
+      </if>
+      <if test="tradeOutSn != null">
+        and trade_out_sn = #{tradeOutSn,jdbcType=VARCHAR}
+      </if>
+      <if test="tradeSn != null">
+        and trade_sn = #{tradeSn,jdbcType=VARCHAR}
+      </if>
+      <if test="paymentState != null">
+        and payment_state = #{paymentState,jdbcType=INTEGER}
+      </if>
+      <if test="paymentType != null">
+        and payment_type = #{paymentType,jdbcType=INTEGER}
+      </if>
+      <if test="paymentKind != null">
+        and  payment_kind = #{paymentKind,jdbcType=INTEGER}
+      </if>
+      <if test="paymentTime != null">
+        and payment_time = #{paymentTime,jdbcType=TIMESTAMP}
+      </if>
+      <if test="invoiceNeed != null">
+        and invoice_need = #{invoiceNeed,jdbcType=INTEGER}
+      </if>
+      <if test="receiveType != null">
+        and receive_type = #{receiveType,jdbcType=INTEGER}
+      </if>
+      <if test="receiveAddressId != null">
+        and receive_address_id = #{receiveAddressId,jdbcType=VARCHAR}
+      </if>
+      <if test="takeAddressId != null">
+        and take_address_id = #{takeAddressId,jdbcType=VARCHAR}
+      </if>
+      <if test="addressReceiverName != null">
+        and address_receiver_name = #{addressReceiverName,jdbcType=VARCHAR}
+      </if>
+      <if test="addressReceiverMobile != null">
+        and address_receiver_mobile = #{addressReceiverMobile,jdbcType=VARCHAR}
+      </if>
+      <if test="addressProvince != null">
+        and address_province = #{addressProvince,jdbcType=VARCHAR}
+      </if>
+      <if test="addressCity != null">
+        and address_city = #{addressCity,jdbcType=VARCHAR}
+      </if>
+      <if test="addressCounty != null">
+        and address_county = #{addressCounty,jdbcType=VARCHAR}
+      </if>
+      <if test="logisticsCompany != null">
+        and logistics_company = #{logisticsCompany,jdbcType=VARCHAR}
+      </if>
+      <if test="logisticsCompanyCode != null">
+        and logistics_company_code = #{logisticsCompanyCode,jdbcType=VARCHAR}
+      </if>
+      <if test="logisticsNo != null">
+        and logistics_no = #{logisticsNo,jdbcType=VARCHAR}
+      </if>
+      <if test="refund != null">
+        and refund = #{refund,jdbcType=INTEGER}
+      </if>
+      <if test="refundState != null">
+        and refund_state = #{refundState,jdbcType=INTEGER}
+      </if>
+      <if test="userDelete != null">
+        and user_delete = #{userDelete,jdbcType=INTEGER}
+      </if>
+      <if test="createTime != null">
+        and create_time = #{createTime,jdbcType=TIMESTAMP}
+      </if>
+      and is_del = 0
+    </where>
   </select>
 
 </mapper>

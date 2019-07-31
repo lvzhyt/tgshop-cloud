@@ -9,6 +9,7 @@ import com.tg.shop.core.domain.trade.entity.*;
 import com.tg.shop.core.domain.trade.vo.CartDetailVo;
 import com.tg.shop.core.domain.trade.vo.OrderInfo;
 import com.tg.shop.core.domain.trade.vo.StoreSimpleVo;
+import com.tg.shop.core.domain.util.PageResult;
 import com.tg.shop.core.entity.ErrorCode;
 import com.tg.shop.core.entity.ResultObject;
 import com.tg.shop.core.generator.IdGenerator;
@@ -333,17 +334,34 @@ public class TradeOrderController {
     }
 
     @ApiOperation("订单列表")
-    public ResultObject listOrderByPage(@RequestParam(value = "orderState",required = false) Integer orderState,
+    @GetMapping("/")
+    public ResultObject<PageResult<Order>> listOrderByPage(@RequestParam(value = "orderState",required = false) Integer orderState,
                                   @RequestParam(value = "pageSize",required = false,defaultValue = "10") Integer pageSize,
                                   @RequestParam(value = "pageNo",required = false,defaultValue = "1") Integer pageNo){
         Member member = CacheMemberHolderLocal.getMember();
         Order condition = new Order();
         condition.setOrderState(orderState);
         condition.setBuyerId(member.getMemberId());
+        condition.setUserDelete(0);
+        PageResult<Order> pageResult = orderService.findOrderPageList(condition,pageSize,pageNo);
+        return new ResultObject<>(pageResult);
+    }
 
-        orderService.findOrderPageList(condition,pageSize,pageNo);
-
-        return null;
+    @ApiOperation("用户删除订单")
+    @GetMapping("/member/deleteOrder")
+    public ResultObject memberDeleteOrder(String orderId){
+        Member member = CacheMemberHolderLocal.getMember();
+        Order record = orderService.getByOrderId(orderId);
+        Assert.notNull(record,"order is not exist");
+        Order order = new Order();
+        order.setOrderId(orderId);
+        order.setUserDelete(1);
+        order.setModifier(member.getMemberId());
+        order.setModifyTime(new Date());
+        String remark = "用户删除";
+        OrderLog orderLog = this.buildOrderLog(record,member.getNickName(),member.getMemberId(),remark);
+        int count = orderService.updateOrder(order,orderLog);
+        return new ResultObject<>(count);
     }
 
     /**
@@ -428,16 +446,8 @@ public class TradeOrderController {
     public ResultObject memberCancelOrder(String orderId){
         Member member = CacheMemberHolderLocal.getMember();
         Order order = orderService.getByOrderId(orderId);
-        OrderLog orderLog = new OrderLog();
-        orderLog.setOrderLogId(idGenerator.nextStringId());
-        orderLog.setOrderId(orderId);
-        orderLog.setOrderSn(order.getOrderSn());
-        orderLog.setOrderState(order.getOrderState()+"");
-        String remark = "取消订单";
-        orderLog.setRemark(remark);
-        orderLog.setOperator(member.getNickName());
-        orderLog.setCreator(member.getMemberId());
-        orderLog.setCreateTime(new Date());
+        String remark = "用户取消订单";
+        OrderLog orderLog = this.buildOrderLog(order,member.getNickName(),member.getCreator(),remark);
         return orderService.cancelOrder(order,orderLog);
     }
 
@@ -607,6 +617,18 @@ public class TradeOrderController {
     }
 
 
+    private OrderLog buildOrderLog(Order order,String operator,String creator,String remark){
+        OrderLog orderLog = new OrderLog();
+        orderLog.setOrderLogId(idGenerator.nextStringId());
+        orderLog.setOrderId(order.getOrderId());
+        orderLog.setOrderSn(order.getOrderSn());
+        orderLog.setOrderState(order.getOrderState()+"");
+        orderLog.setRemark(remark);
+        orderLog.setOperator(operator);
+        orderLog.setCreator(creator);
+        orderLog.setCreateTime(new Date());
+        return orderLog;
+    }
 
 
 }

@@ -3,6 +3,7 @@ package com.tg.shop.trade.service;
 import com.tg.shop.core.domain.trade.entity.Order;
 import com.tg.shop.core.domain.trade.entity.OrderItem;
 import com.tg.shop.core.domain.trade.entity.OrderLog;
+import com.tg.shop.core.domain.util.PageResult;
 import com.tg.shop.core.entity.ResultObject;
 
 import java.util.List;
@@ -45,5 +46,5 @@ public interface OrderService {
      * @param pageSize
      * @param pageNum
      */
-    void findOrderPageList(Order condition, Integer pageNum, Integer pageSize);
+    PageResult<Order> findOrderPageList(Order condition, Integer pageNum, Integer pageSize);
 }

@@ -9,37 +9,37 @@ import java.util.List;
 public interface OrderMapper {
     /**
      *
-     * @mbg.generated Mon Jul 29 12:57:45 CST 2019
+     * @mbg.generated Wed Jul 31 12:48:56 CST 2019
      */
     int deleteByPrimaryKey(String orderId);
 
     /**
      *
-     * @mbg.generated Mon Jul 29 12:57:45 CST 2019
+     * @mbg.generated Wed Jul 31 12:48:56 CST 2019
      */
     int insert(Order record);
 
     /**
      *
-     * @mbg.generated Mon Jul 29 12:57:45 CST 2019
+     * @mbg.generated Wed Jul 31 12:48:56 CST 2019
      */
     int insertSelective(Order record);
 
     /**
      *
-     * @mbg.generated Mon Jul 29 12:57:45 CST 2019
+     * @mbg.generated Wed Jul 31 12:48:56 CST 2019
      */
     Order selectByPrimaryKey(String orderId);
 
     /**
      *
-     * @mbg.generated Mon Jul 29 12:57:45 CST 2019
+     * @mbg.generated Wed Jul 31 12:48:56 CST 2019
      */
     int updateByPrimaryKeySelective(Order record);
 
     /**
      *
-     * @mbg.generated Mon Jul 29 12:57:45 CST 2019
+     * @mbg.generated Wed Jul 31 12:48:56 CST 2019
      */
     int updateByPrimaryKey(Order record);
 

@@ -1,10 +1,12 @@
 package com.tg.shop.trade.service.impl;
 
 import com.github.pagehelper.PageHelper;
+import com.github.pagehelper.PageInfo;
 import com.tg.shop.core.domain.auth.entity.Member;
 import com.tg.shop.core.domain.trade.entity.*;
 import com.tg.shop.core.domain.trade.vo.OrderDetailVo;
 import com.tg.shop.core.domain.trade.vo.OrderInfo;
+import com.tg.shop.core.domain.util.PageResult;
 import com.tg.shop.core.entity.ResultObject;
 import com.tg.shop.core.generator.IdGenerator;
 import com.tg.shop.core.utils.CacheMemberHolderLocal;
@@ -114,6 +116,11 @@ public class OrderServiceImpl implements OrderService {
         orderLog.setCreateTime(new Date());
         orderLogMapper.insertSelective(orderLog);
 
+        // 非在线支付  发送拆单消息
+        if(order.getPaymentType()!=0){
+            feignMessageQueueService.sendDisassembleOrder(orderId);
+        }
+
         return new ResultObject(count);
     }
 
@@ -178,9 +185,13 @@ public class OrderServiceImpl implements OrderService {
     }
 
     @Override
-    public void findOrderPageList(Order condition, Integer pageNum,Integer pageSize ) {
+    public PageResult<Order>  findOrderPageList(Order condition, Integer pageNum,Integer pageSize ) {
         PageHelper.startPage(pageNum,pageSize);
+        PageHelper.orderBy("create_time desc");
         List<Order> list = orderMapper.findOrderByCondition(condition);
+        PageInfo<Order> pageInfo = new PageInfo<>(list);
+        PageResult<Order> pageResult = new PageResult(pageInfo);
+        return pageResult;
     }
 
 }

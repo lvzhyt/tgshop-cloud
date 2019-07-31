@@ -60,7 +60,7 @@ public class Order implements Serializable {
     private String storeId;
 
     /**
-     * 订单状态 1 待付款 2. 待发货 3 待收货  6 已完成 0 已取消 
+     * 订单状态 1 待确认 2 待付款 3. 待发货 4 待收货 5 待评价 6 已完成 0 已取消 
      */
     private Integer orderState;
 
@@ -298,6 +298,11 @@ public class Order implements Serializable {
      * 退款状态
      */
     private Integer refundState;
+
+    /**
+     * 用户删除状态 0 正常 1 删除
+     */
+    private Integer userDelete;
 
     /**
      * 删除状态
