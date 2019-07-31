@@ -47,4 +47,11 @@ public interface OrderService {
      * @param pageNum
      */
     PageResult<Order> findOrderPageList(Order condition, Integer pageNum, Integer pageSize);
+
+    /**
+     * 拆单
+     * @param orderId
+     * @return
+     */
+    ResultObject disassembleOrder(String orderId);
 }

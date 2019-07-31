@@ -62,8 +62,7 @@ public class FeignTradeOrderController {
     @ApiOperation("feign 取消订单恢复库存")
     @RequestMapping(value = "/feign/trade/cancelConfirmFailedOrder",method = RequestMethod.GET)
     public ResultObject cancelConfirmFailedOrder(@RequestParam(value = "orderId") String orderId){
-
-        return null;
+        return  orderService.cancelOrderStock(orderId);
     }
 
 
@@ -75,7 +74,6 @@ public class FeignTradeOrderController {
     @ApiOperation("feign 拆单")
     @RequestMapping(value = "/feign/trade/disassembleOrder",method = RequestMethod.GET)
     public ResultObject disassembleOrder(@RequestParam(value = "orderId") String orderId){
-
-        return null;
+        return orderService.disassembleOrder(orderId);
     }
 }
