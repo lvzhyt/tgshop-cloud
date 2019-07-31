@@ -37,9 +37,16 @@ public enum ErrorCode {
      */
     TOKEN_AUTH_POWER_ERROR("1005","权限不足"),
 
-    EMPTY_DATA_ERROR("2001", "查询为空"),
+
+    MQ_TRADE_CONFIRM_ORDER_ERROR("2301", "确认订单消息错误"),
+    MQ_TRADE_CANCEL_ORDER_ERROR("2302", "取消订单消息错误"),
+    MQ_TRADE_DISASSEMBLE_ORDER_ERROR("2303", "拆单单消息错误"),
 
     TRADE_NOT_ENOUGH_INVENTORY("3001", "库存不足"),
+    TRADE_CONFIRM_ORDER_OUT_OF_TIME_ERROR("3002", "确认订单超时"),
+    TRADE_DISASSEMBLE_ORDER_ERROR("3003", "拆单错误"),
+
+    EMPTY_DATA_ERROR("6001", "查询为空"),
 
     HYSTRIX_ERROR("8001", "服务熔断"),
 

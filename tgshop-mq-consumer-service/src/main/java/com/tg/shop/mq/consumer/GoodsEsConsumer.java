@@ -36,7 +36,7 @@ public class GoodsEsConsumer {
 
     @RabbitHandler
     public void process(String msg, Channel channel, Message message) {
-        log.debug("GoodsEsConsumer.message: "+msg);
+        log.info("GoodsEsConsumer.message: "+msg);
         MessageQueue messageQueue = JSON.parseObject(msg, MessageQueue.class);
         try {
             JSONObject jsonData = JSON.parseObject(messageQueue.getMessageData());

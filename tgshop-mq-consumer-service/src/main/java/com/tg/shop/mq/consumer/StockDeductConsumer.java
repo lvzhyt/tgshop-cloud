@@ -12,10 +12,10 @@ import java.io.IOException;
 
 @Slf4j
 @Component
-@RabbitListener(queues = RabbitMqConfigInfo.QUEUE_TRADE_DEDUCT_STOCK)
+//@RabbitListener(queues = RabbitMqConfigInfo.QUEUE_TRADE_DEDUCT_STOCK)
 public class StockDeductConsumer {
 
-    @RabbitHandler
+//    @RabbitHandler
     public void process(String msg, Channel channel, Message message){
         try {
             System.out.println("## StockDeductConsumer:"+msg);

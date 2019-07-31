@@ -30,6 +30,11 @@ public interface RabbitMqConfigInfo {
      */
     String QUEUE_TRADE_UPDATE_STOCK ="update.stock.trade.shop.queue";
 
+    /**
+     * 拆单
+     */
+    String QUEUE_TRADE_DISASSEMBLE_ORDER ="disassemble.order.trade.shop.queue";
+
 
     /**
      * 扣减库存 binding_key
@@ -40,6 +45,11 @@ public interface RabbitMqConfigInfo {
      * 增加库存 binding_key
      */
     String KEY_TRADE_INCREASE_STOCK ="increase.stock.trade.shop.key";
+
+    /**
+     * 拆单
+     */
+    String KEY_TRADE_DISASSEMBLE_ORDER ="disassemble.order.trade.shop.key";
 
 
     /**
@@ -79,6 +89,11 @@ public interface RabbitMqConfigInfo {
      * 修改库存
      */
     int MQ_TYPE_TRADE_UPDATE_STOCK = 4;
+
+    /**
+     * 拆单
+     */
+    int MQ_TYPE_TRADE_DISASSEMBEL_ORDER = 4;
 
 
 

@@ -13,7 +13,9 @@ import com.tg.shop.core.entity.ErrorCode;
 import com.tg.shop.core.entity.ResultObject;
 import com.tg.shop.core.generator.IdGenerator;
 import com.tg.shop.core.utils.CacheMemberHolderLocal;
+import com.tg.shop.trade.domain.TradeDictionary;
 import com.tg.shop.trade.exception.TradeException;
+import com.tg.shop.trade.feign.service.FeignMessageQueueService;
 import com.tg.shop.trade.feign.service.FeignProductService;
 import com.tg.shop.trade.request.param.AddressParam;
 import com.tg.shop.trade.request.param.ConfirmOrderParam;
@@ -22,6 +24,7 @@ import com.tg.shop.trade.service.*;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.apache.commons.lang3.StringUtils;
+import org.aspectj.weaver.ast.Or;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.StringRedisTemplate;
@@ -31,7 +34,6 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
 import javax.validation.Valid;
-import javax.xml.transform.Result;
 import java.math.BigDecimal;
 import java.util.*;
 import java.util.concurrent.TimeUnit;
@@ -62,6 +64,8 @@ public class TradeOrderController {
     private OrderService orderService;
     @Resource
     private OrderItemService orderItemService;
+    @Resource
+    private FeignMessageQueueService feignMessageQueueService;
 
     /**
      * 订单确认页面
@@ -232,7 +236,7 @@ public class TradeOrderController {
             order.setReceiveTimeRange(orderParam.getReceiveTimeRange());
             order.setTakeTimeRange(orderParam.getTakeTimeRange());
             //
-            String storeId= "multi";
+            String storeId= TradeDictionary.MULTI_STORE_ID;
             if(storeSimpleVoList.size()==1){
                 storeId = storeSimpleVoList.get(0).getStoreId();
             }
@@ -248,7 +252,7 @@ public class TradeOrderController {
             order.setBuyerId(member.getMemberId());
             order.setBuyerName(member.getNickName());
             order.setBuyerMobile(member.getPhone());
-            order.setSellerId("0");
+            order.setSellerId("-1");
             order.setStoreId(storeId);
 
             order.setPromotionId(orderParam.getPromotionId());
@@ -304,15 +308,19 @@ public class TradeOrderController {
                 orderItem.setPayPrice(payPrice);
                 orderItemsList.add(orderItem);
             }
-            //TODO 锁定库存
-            // 保存订单
-            orderService.saveOrder(order,orderItemsList);
+            OrderLog orderLog = new OrderLog();
+            orderLog.setOrderLogId(idGenerator.nextStringId());
+            orderLog.setOrderId(order.getOrderId());
+            orderLog.setOrderSn(order.getOrderSn());
+            orderLog.setOrderState(String.valueOf(order.getOrderState()));
+            String remark = "提交订单";
+            orderLog.setRemark(remark);
+            orderLog.setOperator(member.getNickName());
+            orderLog.setCreator(order.getCreator());
+            orderLog.setCreateTime(new Date());
+            // 保存订单 发送确认消息
+            orderService.saveOrder(order,orderItemsList,orderLog);
             stringRedisTemplate.opsForValue().set(orderId,orderId,15,TimeUnit.SECONDS);
-            // 非线上支付订单 多店铺 按店铺拆单
-            // 线上支付订单 支付后按店铺拆单
-            if(storeCartMap.size()>1){
-
-            }
         }catch (Exception e){
             throw e;
         }finally {
@@ -320,9 +328,6 @@ public class TradeOrderController {
                 stringRedisTemplate.delete(tick);
             }
         }
-
-
-
 
         return new ResultObject();
     }
@@ -384,16 +389,27 @@ public class TradeOrderController {
     }
 
     /**
-     * 取消订单
+     * 用户取消订单
      * 恢复锁定库存
      * @param orderId
      * @return
      */
-    @ApiOperation("取消订单")
-    @PostMapping("/cancelOrder")
-    public ResultObject cancelOrder(String orderId){
-
-        return new ResultObject();
+    @ApiOperation("用户取消订单")
+    @PostMapping("/member/cancelOrder")
+    public ResultObject memberCancelOrder(String orderId){
+        Member member = CacheMemberHolderLocal.getMember();
+        Order order = orderService.getByOrderId(orderId);
+        OrderLog orderLog = new OrderLog();
+        orderLog.setOrderLogId(idGenerator.nextStringId());
+        orderLog.setOrderId(orderId);
+        orderLog.setOrderSn(order.getOrderSn());
+        orderLog.setOrderState(order.getOrderState()+"");
+        String remark = "取消订单";
+        orderLog.setRemark(remark);
+        orderLog.setOperator(member.getNickName());
+        orderLog.setCreator(member.getMemberId());
+        orderLog.setCreateTime(new Date());
+        return orderService.cancelOrder(order,orderLog);
     }
 
     /**
@@ -418,15 +434,16 @@ public class TradeOrderController {
     /**
      * 获取订单是否下单成功
      * @param orderId
-     * @return
+     * @return  1 等待 2 成功
      */
     @ApiOperation("获取订单是否下单成功")
     @GetMapping("/getSubmitOrder")
     public ResultObject getSubmitOrder(String orderId){
         Order order = orderService.getByOrderId(orderId);
+        // 待支付状态
         boolean success = order.getOrderState() == OrderInfo.ORDER_STATE_WAIT_PAY;
         if(success){
-            return new ResultObject<>(order);
+            return new ResultObject<>(2);
         }
         if(!stringRedisTemplate.hasKey(orderId)){
             order.setOrderState(0);
@@ -445,9 +462,10 @@ public class TradeOrderController {
             orderLog.setCreator(order.getCreator());
             orderLog.setCreateTime(new Date());
             int count = orderService.updateOrder(order,orderLog);
-            return new ResultObject("6009","确认订单超时.");
+            return new ResultObject<>(ErrorCode.TRADE_CONFIRM_ORDER_OUT_OF_TIME_ERROR);
         }
-        ResultObject resultObject = new ResultObject<>(order);
+        // 等待
+        ResultObject resultObject = new ResultObject<>(1);
         return resultObject;
     }
 
@@ -558,6 +576,9 @@ public class TradeOrderController {
     private Object caculateCoupon(List<CartDetailVo> skuList,Member member){
         return null;
     }
+
+
+
 
 }
 

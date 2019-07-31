@@ -1,6 +1,6 @@
 package com.tg.shop.trade.exception;
 
-public class TradeException extends Exception {
+public class TradeException extends RuntimeException {
 
     public TradeException() {
     }

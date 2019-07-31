@@ -13,7 +13,7 @@ public interface OrderService {
      * 保存订单 及订单商品
      * @return
      */
-    int saveOrder(Order order, List<OrderItem> orderItemList);
+    int saveOrder(Order order, List<OrderItem> orderItemList,OrderLog orderLog);
 
     Order getByOrderId(String orderId);
 
@@ -25,4 +25,17 @@ public interface OrderService {
     ResultObject confirmOrder(String orderId);
 
     int updateOrder(Order order, OrderLog orderLog);
+
+    /**
+     * 取消订单
+     * @return
+     */
+    ResultObject cancelOrder(Order order,OrderLog orderLog);
+
+    /**
+     * 取消订单 恢复库存
+     * @param orderId
+     * @return
+     */
+    ResultObject cancelOrderStock(String orderId);
 }

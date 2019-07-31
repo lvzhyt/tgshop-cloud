@@ -7,6 +7,8 @@ import com.tg.shop.core.domain.trade.vo.OrderInfo;
 import com.tg.shop.core.entity.ResultObject;
 import com.tg.shop.core.generator.IdGenerator;
 import com.tg.shop.core.utils.CacheMemberHolderLocal;
+import com.tg.shop.trade.exception.TradeException;
+import com.tg.shop.trade.feign.service.FeignMessageQueueService;
 import com.tg.shop.trade.mapper.*;
 import com.tg.shop.trade.service.OrderService;
 import org.springframework.beans.BeanUtils;
@@ -37,30 +39,25 @@ public class OrderServiceImpl implements OrderService {
     private TradeSkuInventoryLogMapper tradeSkuInventoryLogMapper;
     @Resource
     private OrderLogMapper orderLogMapper;
+    @Resource
+    private FeignMessageQueueService feignMessageQueueService;
 
     @Override
     @Transactional(rollbackFor = Exception.class)
-    public int saveOrder( Order order, List<OrderItem> orderItemList) {
-        Member member = CacheMemberHolderLocal.getMember();
+    public int saveOrder( Order order, List<OrderItem> orderItemList,OrderLog orderLog) {
         int count = orderMapper.insertSelective(order);
         for (OrderItem item :
                 orderItemList) {
             orderItemMapper.insertSelective(item);
         }
-        OrderLog orderLog = new OrderLog();
-        orderLog.setOrderLogId(idGenerator.nextStringId());
-        orderLog.setOrderId(order.getOrderId());
-        orderLog.setOrderSn(order.getOrderSn());
-        orderLog.setOrderState(String.valueOf(order.getOrderState()));
-        String remark = "提交订单";
-        orderLog.setRemark(remark);
-        orderLog.setOperator(member.getNickName());
-        orderLog.setCreator(order.getCreator());
-        orderLog.setCreateTime(new Date());
         orderLogMapper.insertSelective(orderLog);
         // 扣除积分
         if(order.getIntegralNum()!=null&&order.getIntegralNum()>0){
             //TODO 扣除积分
+        }
+        ResultObject resultObject = feignMessageQueueService.sendConfirmOrderStock(order.getOrderId());
+        if(resultObject.getResult()!=1){
+            throw new TradeException("发送确认订单消息失败");
         }
 
         return count;
@@ -125,6 +122,58 @@ public class OrderServiceImpl implements OrderService {
         int count = orderMapper.updateByPrimaryKeySelective(order);
         orderLogMapper.insertSelective(orderLog);
         return  count;
+    }
+
+    @Override
+    @Transactional(rollbackFor = Exception.class)
+    public ResultObject cancelOrder(Order order,OrderLog orderLog) {
+        String orderId = order.getOrderId();
+        Order record = orderMapper.selectByPrimaryKey(orderId);
+        int orderState =  record.getOrderState();
+        if(orderState==OrderInfo.ORDER_STATE_CANCLED){
+            return  new ResultObject();
+        }
+        order.setOrderState(OrderInfo.ORDER_STATE_CANCLED);
+        int count = orderMapper.updateByPrimaryKeySelective(order);
+        orderLogMapper.insertSelective(orderLog);
+        // 待付款 待发货的  发送恢复库存消息
+        boolean needSendMsg = count>1 && (orderState==OrderInfo.ORDER_STATE_WAIT_PAY || orderState==OrderInfo.ORDER_STATE_WAIT_SEND);
+        if(needSendMsg){
+            feignMessageQueueService.sendCancelOrderStock(orderId);
+        }
+
+        return new ResultObject<>(count);
+    }
+
+    @Override
+    @Transactional(rollbackFor = Exception.class)
+    public ResultObject cancelOrderStock(String orderId) {
+        List<OrderItem> orderItemList = orderItemMapper.getOrderItemsByOrderId(orderId);
+        int retryCount = 0;
+        final int MAX_RETRY_COUNT = 3;
+        int resultCount = 0;
+        for (OrderItem item :
+                orderItemList) {
+            int goodsNum = item.getGoodsNum();
+            // 乐观锁更新 重试3次
+            while (retryCount<MAX_RETRY_COUNT){
+                TradeSkuInventory skuInventory = tradeSkuInventoryMapper.selectByPrimaryKey(item.getSkuId());
+                skuInventory.setLockNum(skuInventory.getLockNum()+goodsNum);
+                skuInventory.setModifier("sys cancelOrderStock");
+                skuInventory.setModifyTime(new Date());
+                TradeSkuInventoryLog skuInventoryLog = new TradeSkuInventoryLog();
+                BeanUtils.copyProperties(skuInventory,skuInventoryLog);
+                skuInventoryLog.setTbId(idGenerator.nextStringId());
+                int count = tradeSkuInventoryMapper.updateByVersion(skuInventory);
+                if(count>0){
+                    resultCount += count;
+                    tradeSkuInventoryLogMapper.insertSelective(skuInventoryLog);
+                    break;
+                }
+            }
+        }
+
+        return new ResultObject(resultCount);
     }
 
 }

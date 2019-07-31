@@ -42,7 +42,7 @@ public class SmsConsumer {
 
     @RabbitHandler
     public void process(String msg, Channel channel, Message message) {
-        log.debug("SmsConsumer.message: "+msg);
+        log.info("SmsConsumer.message: "+msg);
         MessageQueue messageQueue = JSON.parseObject(msg, MessageQueue.class);
         try {
             SmsMessage smsMessage = JSONObject.parseObject(messageQueue.getMessageData(),SmsMessage.class);
