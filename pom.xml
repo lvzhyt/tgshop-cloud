@@ -24,6 +24,8 @@
         <module>tgshop-mq-consumer-service</module>
         <module>tgshop-mq-producer-service</module>
         <module>tgshop-trade-service</module>
+        <module>tgshop-zuul-vant</module>
+        <module>tgshop-vant-api</module>
     </modules>
 
     <parent>
