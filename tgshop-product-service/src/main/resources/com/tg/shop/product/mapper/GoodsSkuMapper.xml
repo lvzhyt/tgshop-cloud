@@ -19,6 +19,7 @@
     <result column="spec_face_pictures" jdbcType="VARCHAR" property="specFacePictures" />
     <result column="picture_main" jdbcType="VARCHAR" property="pictureMain" />
     <result column="picture_description" jdbcType="VARCHAR" property="pictureDescription" />
+    <result column="text_description" jdbcType="VARCHAR" property="textDescription" />
     <result column="template_id" jdbcType="VARCHAR" property="templateId" />
     <result column="volume" jdbcType="DECIMAL" property="volume" />
     <result column="weight" jdbcType="DECIMAL" property="weight" />
@@ -33,7 +34,7 @@
   <sql id="Base_Column_List">
     sku_id, goods_id, seller_id, store_id, area_id, sku_goods_name, sku_no, attr_value_json, 
     color_attr_val_id, color_attr_val_name, size_attr_val_id, size_attr_val_name, sku_type, 
-    sku_status, spec_face_pictures, picture_main, picture_description, template_id, volume, 
+    sku_status, spec_face_pictures, picture_main, picture_description,text_description, template_id, volume,
     weight, item_size, is_del, creator, create_time, modifier, modify_time, version
   </sql>
   <select id="selectByPrimaryKey" parameterType="java.lang.String" resultMap="BaseResultMap">
@@ -52,7 +53,7 @@
       sku_no, attr_value_json, color_attr_val_id, 
       color_attr_val_name, size_attr_val_id, size_attr_val_name, 
       sku_type, sku_status, spec_face_pictures, 
-      picture_main, picture_description, template_id, 
+      picture_main, picture_description,text_description, template_id,
       volume, weight, item_size, 
       is_del, creator, create_time, 
       modifier, modify_time, version
@@ -62,7 +63,7 @@
       #{skuNo,jdbcType=VARCHAR}, #{attrValueJson,jdbcType=VARCHAR}, #{colorAttrValId,jdbcType=VARCHAR}, 
       #{colorAttrValName,jdbcType=VARCHAR}, #{sizeAttrValId,jdbcType=VARCHAR}, #{sizeAttrValName,jdbcType=VARCHAR}, 
       #{skuType,jdbcType=INTEGER}, #{skuStatus,jdbcType=INTEGER}, #{specFacePictures,jdbcType=VARCHAR}, 
-      #{pictureMain,jdbcType=VARCHAR}, #{pictureDescription,jdbcType=VARCHAR}, #{templateId,jdbcType=VARCHAR}, 
+      #{pictureMain,jdbcType=VARCHAR}, #{pictureDescription,jdbcType=VARCHAR},#{textDescription,jdbcType=VARCHAR}, #{templateId,jdbcType=VARCHAR},
       #{volume,jdbcType=DECIMAL}, #{weight,jdbcType=DECIMAL}, #{itemSize,jdbcType=VARCHAR}, 
       #{isDel,jdbcType=INTEGER}, #{creator,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP}, 
       #{modifier,jdbcType=VARCHAR}, #{modifyTime,jdbcType=TIMESTAMP}, #{version,jdbcType=INTEGER}
@@ -121,6 +122,9 @@
       </if>
       <if test="pictureDescription != null">
         picture_description,
+      </if>
+      <if test="textDescription != null">
+        text_description,
       </if>
       <if test="templateId != null">
         template_id,
@@ -205,6 +209,9 @@
       <if test="pictureDescription != null">
         #{pictureDescription,jdbcType=VARCHAR},
       </if>
+      <if test="textDescription != null">
+        #{textDescription,jdbcType=VARCHAR},
+      </if>
       <if test="templateId != null">
         #{templateId,jdbcType=VARCHAR},
       </if>
@@ -288,6 +295,9 @@
       <if test="pictureDescription != null">
         picture_description = #{pictureDescription,jdbcType=VARCHAR},
       </if>
+      <if test="textDescription != null">
+        text_description = #{textDescription,jdbcType=VARCHAR},
+      </if>
       <if test="templateId != null">
         template_id = #{templateId,jdbcType=VARCHAR},
       </if>
@@ -339,6 +349,7 @@
       spec_face_pictures = #{specFacePictures,jdbcType=VARCHAR},
       picture_main = #{pictureMain,jdbcType=VARCHAR},
       picture_description = #{pictureDescription,jdbcType=VARCHAR},
+      text_description = #{textDescription,jdbcType=VARCHAR},
       template_id = #{templateId,jdbcType=VARCHAR},
       volume = #{volume,jdbcType=DECIMAL},
       weight = #{weight,jdbcType=DECIMAL},
@@ -453,12 +464,15 @@
       t.goods_id,
       t.sku_no,
       t.sku_goods_name,
+      t.color_attr_val_id,
       t.color_attr_val_name,
+      t.size_attr_val_id,
       t.size_attr_val_name,
       t.sku_status,
       t.spec_face_pictures,
       t.picture_main,
       t.picture_description,
+      t.text_description,
       t.template_id,
       t.weight,
       t.volume,
@@ -503,6 +517,7 @@
       t.spec_face_pictures,
       t.picture_main,
       t.picture_description,
+      t.text_description,
       t.template_id,
       t.weight,
       t.volume,
@@ -579,6 +594,9 @@
       </if>
       <if test="pictureDescription != null">
         and picture_description = #{pictureDescription,jdbcType=VARCHAR}
+      </if>
+      <if test="textDescription != null">
+        and text_description = #{textDescription,jdbcType=VARCHAR}
       </if>
       <if test="templateId != null">
         and template_id = #{templateId,jdbcType=VARCHAR}

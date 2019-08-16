@@ -41,12 +41,11 @@ public class SearchInitController {
     }
 
     @PutMapping("/createGoodsIndex")
-    public JSONObject createGoodsIndex(){
-        JSONObject jsonObject = new JSONObject();
+    public ResultObject createGoodsIndex(){
 
         boolean success = elasticsearchTemplate.createIndex(EsGoods.class);
         System.out.println("createGoodsIndex:"+success);
-        return  jsonObject;
+        return  new ResultObject<>(success);
     }
 
     @GetMapping("/indexGoodsData")

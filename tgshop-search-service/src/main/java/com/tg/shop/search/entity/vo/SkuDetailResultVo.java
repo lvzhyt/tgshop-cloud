@@ -1,26 +1,21 @@
-package com.tg.shop.search.entity;
+package com.tg.shop.search.entity.vo;
 
 import lombok.Data;
-import org.springframework.data.annotation.Id;
-import org.springframework.data.elasticsearch.annotations.Document;
-import org.springframework.data.elasticsearch.annotations.Field;
-import org.springframework.data.elasticsearch.annotations.FieldType;
-import org.springframework.data.elasticsearch.annotations.GeoPointField;
 import org.springframework.data.elasticsearch.core.geo.GeoPoint;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 
 @Data
-@Document(indexName = "tgshop",type = "goods")
-public class EsGoods implements Serializable {
+public class SkuDetailResultVo implements Serializable {
 
     /**
      * 表id
      */
-    @Id
     private String skuId;
 
     /**
@@ -31,13 +26,11 @@ public class EsGoods implements Serializable {
     /**
      * 商品名
      */
-    @Field(type = FieldType.Text, analyzer = "ik_max_word")
     private String goodsName;
 
     /**
      * 关键字
      */
-    @Field(type = FieldType.Text, analyzer = "ik_max_word")
     private String keywords;
 
     /**
@@ -59,13 +52,11 @@ public class EsGoods implements Serializable {
     /**
      * 品牌名
      */
-    @Field(type = FieldType.Text,analyzer = "ik_max_word")
     private String brandName;
 
     /**
      * 类目名
      */
-    @Field(type = FieldType.Keyword)
     private String categoryName;
 
     /**
@@ -112,13 +103,11 @@ public class EsGoods implements Serializable {
     /**
      * SKU商品名称
      */
-    @Field(type = FieldType.Text,analyzer = "ik_max_word")
     private String skuGoodsName;
 
     /**
      * 商品编号
      */
-    @Field(type = FieldType.Keyword)
     private String skuNo;
 
     /**
@@ -134,7 +123,6 @@ public class EsGoods implements Serializable {
     /**
      * 颜色属性值名称
      */
-    @Field(type = FieldType.Keyword)
     private String colorAttrValName;
 
     /**
@@ -145,7 +133,6 @@ public class EsGoods implements Serializable {
     /**
      * 尺码属性值名称
      */
-    @Field(type = FieldType.Keyword)
     private String sizeAttrValName;
 
     /**
@@ -161,25 +148,7 @@ public class EsGoods implements Serializable {
     /**
      * 封面图url
      */
-    @Field(type = FieldType.Keyword,index = false)
     private String specFacePictures;
-
-    /**
-     * 主图
-     */
-    @Field(type = FieldType.Keyword,index = false)
-    private String pictureMain;
-
-    /**
-     * 文本 商品描述
-     */
-    private String textDescription;
-
-    /**
-     * 详情图 商品描述
-     */
-    @Field(type = FieldType.Keyword,index = false)
-    private String pictureDescription;
 
     /**
      * 运费模板
@@ -239,13 +208,11 @@ public class EsGoods implements Serializable {
     /**
      * 创建时间
      */
-    @Field(type = FieldType.Date)
     private Date createTime;
 
     /**
      * 位置
      */
-    @GeoPointField
     private GeoPoint location;
 
 
@@ -265,14 +232,23 @@ public class EsGoods implements Serializable {
     private Integer advertAble;
 
     /**
-     * 广告排序分数
-     * 分值越大越靠前
+     * 文本详情描述
      */
-    private Integer advertSortScore;
+    private String textDescription;
 
     /**
      * 逗号分隔
      */
-    private String tags;
+    private List<String> tagList = new ArrayList<>();
+
+    /**
+     * 主图
+     */
+    private List<String> pictureMainList = new ArrayList<>();
+
+    /**
+     * 详情图 商品描述
+     */
+    private List<String> pictureDescriptionList = new ArrayList<>();
 
 }

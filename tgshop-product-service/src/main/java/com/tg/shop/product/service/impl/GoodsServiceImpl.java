@@ -91,7 +91,7 @@ public class GoodsServiceImpl implements GoodsService {
     }
 
     @Override
-    @Transactional(rollbackFor = Exception.class)
+    @Transactional(rollbackFor = RuntimeException.class)
     public int saveGoodsAndSku(Goods goods, GoodsSku sku) {
         int count = goodsMapper.insertSelective(goods);
         goodsSkuDao.saveSku(sku);

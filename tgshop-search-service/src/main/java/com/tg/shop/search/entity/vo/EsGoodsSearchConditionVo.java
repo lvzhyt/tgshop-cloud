@@ -1,6 +1,13 @@
 package com.tg.shop.search.entity.vo;
 
-public class EsGoodsSearchVo {
+import lombok.Data;
+
+/**
+ * 查询条件vo
+ * @author Administrator
+ */
+@Data
+public class EsGoodsSearchConditionVo {
 
 
     /**

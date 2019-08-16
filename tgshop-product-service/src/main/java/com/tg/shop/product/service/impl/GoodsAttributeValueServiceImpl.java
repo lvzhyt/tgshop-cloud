@@ -66,7 +66,7 @@ public class GoodsAttributeValueServiceImpl implements GoodsAttributeValueServic
     }
 
     @Override
-    @Transactional(rollbackFor = Exception.class)
+    @Transactional(rollbackFor = RuntimeException.class)
     public ResultObject deleteSpecAttrValue(GoodsAttributeValue goodsAttributeValue, List<GoodsSku> goodsSkuList) {
         Assert.notNull(goodsAttributeValue,"goodsAttributeValue is null");
         goodsAttributeValue.setIsDel(BaseEntityInfo.STATE_DELETE);

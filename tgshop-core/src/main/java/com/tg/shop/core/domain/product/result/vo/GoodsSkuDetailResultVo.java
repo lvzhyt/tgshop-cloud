@@ -48,10 +48,21 @@ public class GoodsSkuDetailResultVo implements Serializable {
     private String storeName;
 
     private String areaId;
+
+    /**
+     * 颜色属性id
+     */
+    private String colorAttrValId;
+
     /**
      * 颜色属性值名称
      */
     private String colorAttrValName;
+
+    /**
+     * 尺码属性值id
+     */
+    private String sizeAttrValId;
 
     /**
      * 尺码属性值名称

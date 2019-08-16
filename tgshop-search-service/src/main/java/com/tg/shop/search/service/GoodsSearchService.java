@@ -3,7 +3,7 @@ package com.tg.shop.search.service;
 
 import com.tg.shop.core.entity.ResultObject;
 import com.tg.shop.search.entity.EsGoods;
-import com.tg.shop.search.entity.vo.EsGoodsSearchVo;
+import com.tg.shop.search.entity.vo.EsGoodsSearchConditionVo;
 import org.springframework.data.domain.Page;
 import org.springframework.data.elasticsearch.core.geo.GeoPoint;
 
@@ -32,7 +32,7 @@ public interface GoodsSearchService {
      * @param searchCondition
      * @return
      */
-    Page<EsGoods> searchGoods(String search, EsGoodsSearchVo searchCondition, int pageNum, int pageSize);
+    Page<EsGoods> searchGoods(String search, EsGoodsSearchConditionVo searchCondition, int pageNum, int pageSize);
 
     /**
      * 价格区间查询
@@ -51,8 +51,14 @@ public interface GoodsSearchService {
      * @param offset
      * @return
      */
-    Page<EsGoods> searchGoods(String search, GeoPoint location, double offset, int pageNum, int pageSize);
+    Page<EsGoods> searchGoods(String search, GeoPoint location, Double offset, Integer sortType, int pageNum, int pageSize);
 
     ResultObject updateGoodsIndex(String goodsId);
 
+    /**
+     * 根据id查找sku
+     * @param skuId
+     * @return
+     */
+    EsGoods findSkuById(String skuId);
 }

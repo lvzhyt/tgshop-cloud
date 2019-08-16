@@ -137,7 +137,7 @@ public class TradeConsumer {
      * @param channel
      * @param message
      */
-    @RabbitListener(queues = RabbitMqConfigInfo.QUEUE_TRADE_DISASSEMBLE_ORDER)
+//    @RabbitListener(queues = RabbitMqConfigInfo.QUEUE_TRADE_DISASSEMBLE_ORDER)
     public void handleDisassembleOrder(String msg, Channel channel, Message message) {
         log.info("handleDisassembleOrder.message: "+msg);
         MessageQueue messageQueue = JSON.parseObject(msg, MessageQueue.class);

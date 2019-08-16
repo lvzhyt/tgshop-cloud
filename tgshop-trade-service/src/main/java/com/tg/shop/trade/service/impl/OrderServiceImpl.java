@@ -46,7 +46,7 @@ public class OrderServiceImpl implements OrderService {
     private FeignMessageQueueService feignMessageQueueService;
 
     @Override
-    @Transactional(rollbackFor = Exception.class)
+    @Transactional(rollbackFor = RuntimeException.class)
     public int saveOrder( Order order, List<OrderItem> orderItemList,OrderLog orderLog) {
         int count = orderMapper.insertSelective(order);
         for (OrderItem item :
@@ -72,7 +72,7 @@ public class OrderServiceImpl implements OrderService {
     }
 
     @Override
-    @Transactional(rollbackFor = Exception.class)
+    @Transactional(rollbackFor = RuntimeException.class)
     public ResultObject confirmOrder(String orderId) {
         Order order = orderMapper.selectByPrimaryKey(orderId);
         List<OrderItem> list = orderItemMapper.getOrderItemsByOrderId(orderId);
@@ -125,7 +125,7 @@ public class OrderServiceImpl implements OrderService {
     }
 
     @Override
-    @Transactional(rollbackFor = Exception.class)
+    @Transactional(rollbackFor = RuntimeException.class)
     public int updateOrder(Order order,OrderLog orderLog) {
         int count = orderMapper.updateByPrimaryKeySelective(order);
         orderLogMapper.insertSelective(orderLog);
@@ -133,7 +133,7 @@ public class OrderServiceImpl implements OrderService {
     }
 
     @Override
-    @Transactional(rollbackFor = Exception.class)
+    @Transactional(rollbackFor = RuntimeException.class)
     public ResultObject cancelOrder(Order order,OrderLog orderLog) {
         String orderId = order.getOrderId();
         Order record = orderMapper.selectByPrimaryKey(orderId);
@@ -154,7 +154,7 @@ public class OrderServiceImpl implements OrderService {
     }
 
     @Override
-    @Transactional(rollbackFor = Exception.class)
+    @Transactional(rollbackFor = RuntimeException.class)
     public ResultObject cancelOrderStock(String orderId) {
         List<OrderItem> orderItemList = orderItemMapper.getOrderItemsByOrderId(orderId);
         int retryCount = 0;
@@ -192,6 +192,11 @@ public class OrderServiceImpl implements OrderService {
         PageInfo<Order> pageInfo = new PageInfo<>(list);
         PageResult<Order> pageResult = new PageResult(pageInfo);
         return pageResult;
+    }
+
+    @Override
+    public ResultObject disassembleOrder(String orderId) {
+        return null;
     }
 
 }

@@ -47,6 +47,11 @@ public class GoodsAttributeValue implements Serializable {
     private Integer sortNumber;
 
     /**
+     * 规格图片
+     */
+    private String imgUrl;
+
+    /**
      * 删除状态
      */
     private Integer isDel;

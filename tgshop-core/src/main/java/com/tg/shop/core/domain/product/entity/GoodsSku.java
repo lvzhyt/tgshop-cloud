@@ -93,6 +93,11 @@ public class GoodsSku implements Serializable {
     private String pictureDescription;
 
     /**
+     * 详情文字描述
+     */
+    private String textDescription;
+
+    /**
      * 运费模板
      */
     private String templateId;

@@ -10,6 +10,7 @@
     <result column="attr_value_name" jdbcType="VARCHAR" property="attrValueName" />
     <result column="attr_type" jdbcType="INTEGER" property="attrType" />
     <result column="sort_number" jdbcType="INTEGER" property="sortNumber" />
+    <result column="img_url" jdbcType="VARCHAR" property="imgUrl" />
     <result column="is_del" jdbcType="INTEGER" property="isDel" />
     <result column="creator" jdbcType="VARCHAR" property="creator" />
     <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
@@ -18,7 +19,7 @@
     <result column="version" jdbcType="INTEGER" property="version" />
   </resultMap>
   <sql id="Base_Column_List">
-    tb_id, attr_id, value_id, goods_id, attr_name, attr_value_name, attr_type, sort_number, 
+    tb_id, attr_id, value_id, goods_id, attr_name, attr_value_name, attr_type, sort_number, img_url,
     is_del, creator, create_time, modifier, modify_time, version
   </sql>
   <select id="selectByPrimaryKey" parameterType="java.lang.String" resultMap="BaseResultMap">
@@ -34,12 +35,12 @@
   <insert id="insert" parameterType="com.tg.shop.core.domain.product.entity.GoodsAttributeValue">
     insert into item_goods_attribute_value (tb_id, attr_id, value_id, 
       goods_id, attr_name, attr_value_name, 
-      attr_type, sort_number, is_del, 
+      attr_type, sort_number, img_url,is_del,
       creator, create_time, modifier, 
       modify_time, version)
     values (#{tbId,jdbcType=VARCHAR}, #{attrId,jdbcType=VARCHAR}, #{valueId,jdbcType=VARCHAR}, 
       #{goodsId,jdbcType=VARCHAR}, #{attrName,jdbcType=VARCHAR}, #{attrValueName,jdbcType=VARCHAR}, 
-      #{attrType,jdbcType=INTEGER}, #{sortNumber,jdbcType=INTEGER}, #{isDel,jdbcType=INTEGER}, 
+      #{attrType,jdbcType=INTEGER}, #{sortNumber,jdbcType=INTEGER}, #{imgUrl,jdbcType=VARCHAR}, #{isDel,jdbcType=INTEGER},
       #{creator,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP}, #{modifier,jdbcType=VARCHAR}, 
       #{modifyTime,jdbcType=TIMESTAMP}, #{version,jdbcType=INTEGER})
   </insert>
@@ -69,6 +70,9 @@
       </if>
       <if test="sortNumber != null">
         sort_number,
+      </if>
+      <if test="imgUrl != null">
+        img_url,
       </if>
       <if test="isDel != null">
         is_del,
@@ -114,6 +118,9 @@
       <if test="sortNumber != null">
         #{sortNumber,jdbcType=INTEGER},
       </if>
+      <if test="imgUrl != null">
+        #{imgUrl,jdbcType=VARCHAR},
+      </if>
       <if test="isDel != null">
         #{isDel,jdbcType=INTEGER},
       </if>
@@ -158,6 +165,9 @@
       <if test="sortNumber != null">
         sort_number = #{sortNumber,jdbcType=INTEGER},
       </if>
+      <if test="imgUrl != null">
+        img_url = #{imgUrl,jdbcType=VARCHAR},
+      </if>
       <if test="isDel != null">
         is_del = #{isDel,jdbcType=INTEGER},
       </if>
@@ -188,6 +198,7 @@
       attr_value_name = #{attrValueName,jdbcType=VARCHAR},
       attr_type = #{attrType,jdbcType=INTEGER},
       sort_number = #{sortNumber,jdbcType=INTEGER},
+        img_url = #{imgUrl,jdbcType=VARCHAR},
       is_del = #{isDel,jdbcType=INTEGER},
       creator = #{creator,jdbcType=VARCHAR},
       create_time = #{createTime,jdbcType=TIMESTAMP},

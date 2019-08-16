@@ -6,7 +6,7 @@ import com.tg.shop.core.domain.product.info.GoodsInfo;
 import com.tg.shop.core.domain.product.result.vo.GoodsSkuDetailResultVo;
 import com.tg.shop.core.entity.ResultObject;
 import com.tg.shop.search.entity.EsGoods;
-import com.tg.shop.search.entity.vo.EsGoodsSearchVo;
+import com.tg.shop.search.entity.vo.EsGoodsSearchConditionVo;
 import com.tg.shop.search.feign.service.FeignProductService;
 import com.tg.shop.search.repositry.GoodsRepository;
 import com.tg.shop.search.service.GoodsSearchService;
@@ -27,6 +27,7 @@ import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class GoodsSearchServiceImpl implements GoodsSearchService {
@@ -38,19 +39,7 @@ public class GoodsSearchServiceImpl implements GoodsSearchService {
 
     @Override
     public Page<EsGoods> searchGoods(String search, int pageNum, int pageSize) {
-
-        NativeSearchQueryBuilder queryBuilder = new NativeSearchQueryBuilder();
-        // 评论数
-        ScoreFunctionBuilder<?> scoreFunctionBuilder = ScoreFunctionBuilders.fieldValueFactorFunction("commentNum").modifier(FieldValueFactorFunction.Modifier.LN1P).factor(0.1f);
-        FunctionScoreQueryBuilder query = QueryBuilders.functionScoreQuery(scoreFunctionBuilder).boostMode(CombineFunction.SUM);
-        queryBuilder.withQuery(QueryBuilders.matchQuery("goodsName",search));
-        queryBuilder.withQuery(query).build();
-        SearchQuery searchQuery = queryBuilder.build();
-        Pageable pageable = PageRequest.of(pageNum - 1, pageSize);
-        searchQuery.setPageable(pageable);
-        Page<EsGoods>  page = goodsRepository.search(searchQuery);
-
-        return page;
+        return searchGoods(search,null,null,null,pageNum,pageSize);
     }
 
     @Override
@@ -59,7 +48,7 @@ public class GoodsSearchServiceImpl implements GoodsSearchService {
     }
 
     @Override
-    public Page<EsGoods> searchGoods(String search, EsGoodsSearchVo searchCondition, int pageNum, int pageSize) {
+    public Page<EsGoods> searchGoods(String search, EsGoodsSearchConditionVo searchCondition, int pageNum, int pageSize) {
         return null;
     }
 
@@ -69,8 +58,19 @@ public class GoodsSearchServiceImpl implements GoodsSearchService {
     }
 
     @Override
-    public Page<EsGoods> searchGoods(String search, GeoPoint location, double offset,int pageNum,int pageSize) {
-        return null;
+    public Page<EsGoods> searchGoods(String search, GeoPoint location, Double offset,Integer sortType,int pageNum,int pageSize) {
+        NativeSearchQueryBuilder queryBuilder = new NativeSearchQueryBuilder();
+        // 评论数
+        ScoreFunctionBuilder<?> scoreFunctionBuilder = ScoreFunctionBuilders.fieldValueFactorFunction("commentNum").modifier(FieldValueFactorFunction.Modifier.LN1P).factor(0.1f);
+        FunctionScoreQueryBuilder query = QueryBuilders.functionScoreQuery(scoreFunctionBuilder).boostMode(CombineFunction.SUM);
+        queryBuilder.withQuery(QueryBuilders.matchQuery("goodsName",search));
+        queryBuilder.withQuery(query).build();
+        SearchQuery searchQuery = queryBuilder.build();
+        Pageable pageable = PageRequest.of(pageNum, pageSize);
+        searchQuery.setPageable(pageable);
+        Page<EsGoods>  page = goodsRepository.search(searchQuery);
+
+        return page;
     }
 
     @Override
@@ -109,5 +109,15 @@ public class GoodsSearchServiceImpl implements GoodsSearchService {
             }
         }
         return new ResultObject();
+    }
+
+    @Override
+    public EsGoods findSkuById(String skuId) {
+        Optional<EsGoods> optionalEsGoods = goodsRepository.findById(skuId);
+        EsGoods esGoods = null;
+        if(optionalEsGoods.isPresent()){
+            esGoods = optionalEsGoods.get();
+        }
+        return esGoods;
     }
 }
