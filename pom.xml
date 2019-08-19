@@ -26,6 +26,7 @@
         <module>tgshop-trade-service</module>
         <module>tgshop-zuul-vant</module>
         <module>tgshop-vant-api</module>
+        <module>tgshop-fileUpload</module>
     </modules>
 
     <parent>

@@ -22,6 +22,7 @@ import com.tg.shop.product.feign.service.FeignMessageQueueService;
 import com.tg.shop.product.request.param.*;
 import com.tg.shop.product.service.*;
 import com.tg.shop.product.utils.GoodsAttributeUtil;
+import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
 import lombok.extern.slf4j.Slf4j;
@@ -270,6 +271,35 @@ public class GoodsController {
         return JSONResultUtil.createJsonObject(record);
     }
 
+    /**
+     * 上传商品属性图片
+     * item_goods_attribute_value
+     * @param parameter
+     * @param bindingResult
+     * @return
+     */
+    @ApiOperation("上传商品属性图片")
+    @PostMapping("/uploadSpecAttributePicture")
+    public ResultObject uploadSpecAttributePicture(@RequestBody @Valid UploadSpecAttributePictureParameter parameter,BindingResult bindingResult){
+        if(bindingResult.hasErrors()){
+            return new ResultObject(ErrorCode.REQUEST_PARAM_ERROR,bindingResult.getFieldErrors());
+        }
+        String goodsAttrValId = parameter.getGoodsAttrValId();
+        String pictureUrl = parameter.getPictureUrl();
+        GoodsAttributeValue goodsAttributeValue = new GoodsAttributeValue();
+        goodsAttributeValue.setTbId(goodsAttrValId);
+        goodsAttributeValue.setImgUrl(pictureUrl);
+        String sellerId = CacheSellerHolderLocal.getSeller().getSellerId();
+        goodsAttributeValue.setModifier(sellerId);
+        goodsAttributeValue.setModifyTime(new Date());
+
+        int count = goodsAttributeValueService.updateGoodsAttributeValue(goodsAttributeValue);
+
+        return ResultObject.getInstanceByResult(count);
+    }
+
+
+
 
     /**
      * 商品SKU列表
@@ -409,7 +439,7 @@ public class GoodsController {
     public JSONObject uploadProductPicture(
             @RequestParam("file") MultipartFile[] files,
             @ApiParam(value = "商品Id") @RequestParam(value = "goodsId",required = false) String goodsId,
-            @ApiParam(value = "图片类型 1 封面图 2 主图 3 详情图",defaultValue = "1",example = "1") @RequestParam(value = "type",required = false,defaultValue = "1") Integer type) throws Exception {
+            @ApiParam(value = "图片类型 1 封面图 2 主图 3 详情图 4 属性图",defaultValue = "1",example = "1") @RequestParam(value = "type",required = false,defaultValue = "1") Integer type) throws Exception {
         Assert.notNull(CacheSellerHolderLocal.getSeller(),"商家未登录");
         Store store = CacheStoreHolderLocal.getStore();
         Seller seller = CacheSellerHolderLocal.getSeller();

@@ -1,0 +1,54 @@
+server:
+  port: 9090
+
+spring:
+  application:
+    name: tgshop-fileUpload
+
+  #datasource
+  datasource:
+    url: jdbc:mysql://localhost:3306/tgshop_cloud?useUnicode=true&characterEncoding=utf8&serverTimezone=GMT%2B8
+    username: root
+    password: 123456
+  #jackson
+  jackson:
+    date-format: yyyy-MM-dd HH:mm:ss
+
+eureka:
+  client:
+    service-url:
+      #设置与Eureka Server交互的地址，查询服务和注册服务都需要依赖这个地址。默认是http://localhost:8761/eureka ；多个地址可使用 , 分隔。
+      defaultZone: http://localhost:8761/eureka/,http://localhost:8762/eureka/,http://localhost:8763/eureka/
+
+feign:
+  hystrix:
+    enabled: true
+
+generator:
+  snowflake:
+    worker-id: 1
+    data-center: 1
+
+tgshop:
+  swagger:
+    enable: true
+  conf:
+    goodsAuditEnable: false
+
+# oss
+aliyun:
+  oss:
+    endpoint: oss-cn-shanghai.aliyuncs.com
+    access-key-id: LTAIeWcftS8x79Vw
+    access-key-secret: zCt4j93bJ6oBgRKCuJRODdfsYptizb
+    bucket-name: tgshop
+    pub-service: http://tgshop.oss-cn-shanghai.aliyuncs.com
+
+# mybatis sql 日志
+logging:
+  level:
+    com:
+      tg:
+        shop:
+          product:
+            mapper: debug

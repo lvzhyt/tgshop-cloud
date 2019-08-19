@@ -18,6 +18,7 @@
         <module name="tgshop-product-service" />
         <module name="tgshop-core" />
         <module name="tgshop-zuul-vant" />
+        <module name="tgshop-upload-service" />
         <module name="tgshop-mybatis-generator" />
         <module name="tgshop-eureka-service" />
         <module name="tgshop-trade-service" />
@@ -46,6 +47,7 @@
       <module name="tgshop-service-zuul" options="-parameters" />
       <module name="tgshop-trade-service" options="-parameters" />
       <module name="tgshop-trade-service2" options="-parameters" />
+      <module name="tgshop-upload-service" options="-parameters" />
       <module name="tgshop-vant-api" options="-parameters" />
       <module name="tgshop-zuul-seller" options="-parameters" />
       <module name="tgshop-zuul-vant" options="-parameters" />

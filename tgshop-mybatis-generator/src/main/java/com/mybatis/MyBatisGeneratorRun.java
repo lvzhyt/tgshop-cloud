@@ -32,7 +32,8 @@ public class MyBatisGeneratorRun {
 //        String configFile = "generatorConfig-category.xml";
 //        String configFile = "generatorConfig-product.xml";
 //        String configFile = "generatorConfig-mq.xml";
-        String configFile = "generatorConfig-trade.xml";
+//        String configFile = "generatorConfig-trade.xml";
+        String configFile = "generatorConfig-upload.xml";
 
         List<String> warnings = new ArrayList<String>();
         boolean overwrite = true;

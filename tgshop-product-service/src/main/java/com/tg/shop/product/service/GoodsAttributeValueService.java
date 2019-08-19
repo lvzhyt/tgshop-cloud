@@ -32,4 +32,11 @@ public interface GoodsAttributeValueService {
      * @return
      */
     ResultObject deleteSpecAttrValue(GoodsAttributeValue goodsAttributeValue, List<GoodsSku> goodsSkuList);
+
+    /**
+     * 更新商品属性
+     * @param goodsAttributeValue
+     * @return
+     */
+    int updateGoodsAttributeValue(GoodsAttributeValue goodsAttributeValue);
 }

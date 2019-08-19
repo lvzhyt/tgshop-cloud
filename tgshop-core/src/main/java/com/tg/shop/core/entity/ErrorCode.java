@@ -47,6 +47,7 @@ public enum ErrorCode {
     TRADE_DISASSEMBLE_ORDER_ERROR("3003", "拆单错误"),
 
     EMPTY_DATA_ERROR("6001", "查询为空"),
+    UPDATE_ZERO_ROW_ERROR("6002", "更新失败"),
 
     HYSTRIX_ERROR("8001", "服务熔断"),
 

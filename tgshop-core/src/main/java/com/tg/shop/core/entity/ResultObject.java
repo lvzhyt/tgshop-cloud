@@ -63,4 +63,8 @@ public class ResultObject<T> implements Serializable {
         this.data = data;
     }
 
+    public static ResultObject getInstanceByResult(int count){
+        ResultObject<Integer> resultObject = count>0?new ResultObject<>(count):new ResultObject<>(ErrorCode.UPDATE_ZERO_ROW_ERROR);
+        return resultObject;
+    }
 }

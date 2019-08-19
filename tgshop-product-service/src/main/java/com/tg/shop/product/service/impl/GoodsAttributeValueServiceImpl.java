@@ -82,4 +82,9 @@ public class GoodsAttributeValueServiceImpl implements GoodsAttributeValueServic
         return new ResultObject<>(result);
     }
 
+    @Override
+    public int updateGoodsAttributeValue(GoodsAttributeValue goodsAttributeValue) {
+        return goodsAttributeValueMapper.updateByPrimaryKeySelective(goodsAttributeValue);
+    }
+
 }

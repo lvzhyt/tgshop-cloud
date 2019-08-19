@@ -108,7 +108,7 @@ public class GoodsApiController {
         jsonObject.put("goods",goodsJsonObject);
 
 
-        return new ResultObject(jsonObject);
+        return new ResultObject<>(jsonObject);
     }
 
     /**
