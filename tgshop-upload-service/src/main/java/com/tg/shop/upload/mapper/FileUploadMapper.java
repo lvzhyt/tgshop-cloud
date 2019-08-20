@@ -9,37 +9,37 @@ import java.util.List;
 public interface FileUploadMapper {
     /**
      *
-     * @mbg.generated Mon Aug 19 16:58:38 CST 2019
+     * @mbg.generated Tue Aug 20 17:56:10 CST 2019
      */
     int deleteByPrimaryKey(String uploadFileId);
 
     /**
      *
-     * @mbg.generated Mon Aug 19 16:58:38 CST 2019
+     * @mbg.generated Tue Aug 20 17:56:10 CST 2019
      */
     int insert(FileUpload record);
 
     /**
      *
-     * @mbg.generated Mon Aug 19 16:58:38 CST 2019
+     * @mbg.generated Tue Aug 20 17:56:10 CST 2019
      */
     int insertSelective(FileUpload record);
 
     /**
      *
-     * @mbg.generated Mon Aug 19 16:58:38 CST 2019
+     * @mbg.generated Tue Aug 20 17:56:10 CST 2019
      */
     FileUpload selectByPrimaryKey(String uploadFileId);
 
     /**
      *
-     * @mbg.generated Mon Aug 19 16:58:38 CST 2019
+     * @mbg.generated Tue Aug 20 17:56:10 CST 2019
      */
     int updateByPrimaryKeySelective(FileUpload record);
 
     /**
      *
-     * @mbg.generated Mon Aug 19 16:58:38 CST 2019
+     * @mbg.generated Tue Aug 20 17:56:10 CST 2019
      */
     int updateByPrimaryKey(FileUpload record);
 

@@ -3,7 +3,7 @@
 <mapper namespace="com.tg.shop.upload.mapper.FileUploadMapper">
   <resultMap id="BaseResultMap" type="com.tg.shop.core.domain.upload.FileUpload">
     <id column="upload_file_id" jdbcType="VARCHAR" property="uploadFileId" />
-    <result column="store_id" jdbcType="VARCHAR" property="storeId" />
+    <result column="owner_id" jdbcType="VARCHAR" property="ownerId" />
     <result column="ref_id" jdbcType="VARCHAR" property="refId" />
     <result column="upload_type" jdbcType="INTEGER" property="uploadType" />
     <result column="file_name" jdbcType="VARCHAR" property="fileName" />
@@ -20,7 +20,7 @@
     <result column="version" jdbcType="INTEGER" property="version" />
   </resultMap>
   <sql id="Base_Column_List">
-    upload_file_id, store_id, ref_id, upload_type, file_name, file_url, src_md5, file_md5, 
+    upload_file_id, owner_id, ref_id, upload_type, file_name, file_url, src_md5, file_md5, 
     file_size, file_ext, remark, creator, create_time, modifier, modify_time, version
   </sql>
   <select id="selectByPrimaryKey" parameterType="java.lang.String" resultMap="BaseResultMap">
@@ -29,18 +29,18 @@
     from item_file_upload
     where upload_file_id = #{uploadFileId,jdbcType=VARCHAR}
   </select>
-    <delete id="deleteByPrimaryKey" parameterType="java.lang.String">
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String">
     delete from item_file_upload
     where upload_file_id = #{uploadFileId,jdbcType=VARCHAR}
   </delete>
   <insert id="insert" parameterType="com.tg.shop.core.domain.upload.FileUpload">
-    insert into item_file_upload (upload_file_id, store_id, ref_id, 
+    insert into item_file_upload (upload_file_id, owner_id, ref_id, 
       upload_type, file_name, file_url, 
       src_md5, file_md5, file_size, 
       file_ext, remark, creator, 
       create_time, modifier, modify_time, 
       version)
-    values (#{uploadFileId,jdbcType=VARCHAR}, #{storeId,jdbcType=VARCHAR}, #{refId,jdbcType=VARCHAR}, 
+    values (#{uploadFileId,jdbcType=VARCHAR}, #{ownerId,jdbcType=VARCHAR}, #{refId,jdbcType=VARCHAR}, 
       #{uploadType,jdbcType=INTEGER}, #{fileName,jdbcType=VARCHAR}, #{fileUrl,jdbcType=VARCHAR}, 
       #{srcMd5,jdbcType=VARCHAR}, #{fileMd5,jdbcType=VARCHAR}, #{fileSize,jdbcType=INTEGER}, 
       #{fileExt,jdbcType=VARCHAR}, #{remark,jdbcType=VARCHAR}, #{creator,jdbcType=VARCHAR}, 
@@ -53,8 +53,8 @@
       <if test="uploadFileId != null">
         upload_file_id,
       </if>
-      <if test="storeId != null">
-        store_id,
+      <if test="ownerId != null">
+        owner_id,
       </if>
       <if test="refId != null">
         ref_id,
@@ -103,8 +103,8 @@
       <if test="uploadFileId != null">
         #{uploadFileId,jdbcType=VARCHAR},
       </if>
-      <if test="storeId != null">
-        #{storeId,jdbcType=VARCHAR},
+      <if test="ownerId != null">
+        #{ownerId,jdbcType=VARCHAR},
       </if>
       <if test="refId != null">
         #{refId,jdbcType=VARCHAR},
@@ -153,8 +153,8 @@
   <update id="updateByPrimaryKeySelective" parameterType="com.tg.shop.core.domain.upload.FileUpload">
     update item_file_upload
     <set>
-      <if test="storeId != null">
-        store_id = #{storeId,jdbcType=VARCHAR},
+      <if test="ownerId != null">
+        owner_id = #{ownerId,jdbcType=VARCHAR},
       </if>
       <if test="refId != null">
         ref_id = #{refId,jdbcType=VARCHAR},
@@ -203,7 +203,7 @@
   </update>
   <update id="updateByPrimaryKey" parameterType="com.tg.shop.core.domain.upload.FileUpload">
     update item_file_upload
-    set store_id = #{storeId,jdbcType=VARCHAR},
+    set owner_id = #{ownerId,jdbcType=VARCHAR},
       ref_id = #{refId,jdbcType=VARCHAR},
       upload_type = #{uploadType,jdbcType=INTEGER},
       file_name = #{fileName,jdbcType=VARCHAR},
@@ -227,8 +227,8 @@
     <include refid="Base_Column_List" />
     from item_file_upload
     <where>
-      <if test="storeId != null">
-       and store_id = #{storeId,jdbcType=VARCHAR}
+      <if test="ownerId != null">
+       and owner_id = #{ownerId,jdbcType=VARCHAR}
       </if>
       <if test="refId != null">
         and ref_id = #{refId,jdbcType=VARCHAR}

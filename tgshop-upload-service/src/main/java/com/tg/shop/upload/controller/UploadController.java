@@ -70,18 +70,18 @@ public class UploadController {
         Member member = CacheMemberHolderLocal.getMember();
         Store store = CacheStoreHolderLocal.getStore();
         Seller seller = CacheSellerHolderLocal.getSeller();
-        String owner = "0";
+        String ownerId = "0";
         String creator = "none";
         String userFolder = "anon";
         if(member!=null){
             creator = member.getMemberId();
             userFolder = member.getPhone()!=null?member.getPhone():member.getMemberId();
-            owner = member.getMemberId();
+            ownerId = member.getMemberId();
         }
         if(seller!=null){
             creator = seller.getSellerId();
             userFolder = store.getStoreCode();
-            owner=store.getStoreId();
+            ownerId=store.getStoreId();
         }
 
         String uploadTypeFolder = "type";
@@ -131,7 +131,7 @@ public class UploadController {
             fileUpload.setUploadFileId(idGenerator.nextStringId());
             fileUpload.setRefId(refId);
 
-            fileUpload.setStoreId(owner);
+            fileUpload.setOwnerId(ownerId);
             fileUpload.setFileSize(bytesZip.length);
             fileUpload.setUploadType(type);
             String md5 = DigestUtils.md5DigestAsHex(bytesZip);

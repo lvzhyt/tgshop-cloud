@@ -14,12 +14,12 @@ public class FileUpload implements Serializable {
     private String uploadFileId;
 
     /**
-     * 店铺id
+     * 店铺id  用户id
      */
-    private String storeId;
+    private String ownerId;
 
     /**
-     * 商品id
+     * 相关id 商品id 
      */
     private String refId;
 
@@ -29,7 +29,7 @@ public class FileUpload implements Serializable {
     private Integer uploadType;
 
     /**
-     * 图片名称
+     * 文件名称
      */
     private String fileName;
 
