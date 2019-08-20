@@ -16,8 +16,8 @@
         <jdbcConnection driverClass="com.mysql.jdbc.Driver" connectionURL="${url}" userId="${username}" password="${password}">
         </jdbcConnection>
 
-        <javaModelGenerator targetProject="tgshop-commons-api/src/main/java"
-                            targetPackage="com.tg.shop.upload.entity"/>
+        <javaModelGenerator targetProject="tgshop-core/src/main/java"
+                            targetPackage="com.tg.shop.core.domain.upload"/>
         <sqlMapGenerator targetProject="tgshop-upload-service/src/main/resources"
                          targetPackage="com.tg.shop.upload.mapper"/>
         <javaClientGenerator targetProject="tgshop-upload-service/src/main/java"

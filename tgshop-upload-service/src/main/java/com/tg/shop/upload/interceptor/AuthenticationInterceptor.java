@@ -1,4 +1,4 @@
-package com.tg.shop.product.interceptor;
+package com.tg.shop.upload.interceptor;
 
 import com.alibaba.fastjson.JSONObject;
 import com.tg.shop.core.domain.auth.cache.SellerStore;
