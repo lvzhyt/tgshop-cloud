@@ -114,6 +114,7 @@ public class GoodsSearchController {
      * @param goodsId
      * @return
      */
+    @ApiOperation("更新商品索引")
     @RequestMapping(value = "/es/updateGoodsSearchIndex",method = RequestMethod.GET)
     public ResultObject updateGoodsSearchIndex(@RequestParam(value = "goodsId") String goodsId){
         ResultObject resultObject = goodsSearchService.updateGoodsIndex(goodsId);

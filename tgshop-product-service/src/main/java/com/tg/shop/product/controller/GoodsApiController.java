@@ -102,10 +102,14 @@ public class GoodsApiController {
             goodsSkuSpecDetailVo.setCollection_id(goodsSkuDetailResultVoDefault.getSkuId());
             goodsJsonObject.put("title",goodsSkuDetailResultVoDefault.getSkuGoodsName());
             goodsJsonObject.put("picture",goodsSkuDetailResultVoDefault.getSpecFacePictures());
+            goodsJsonObject.put("price",goodsSkuDetailResultVoDefault.getSalePrice());
         }
 
         jsonObject.put("sku",goodsSkuSpecDetailVo);
-        jsonObject.put("goods",goodsJsonObject);
+        jsonObject.put("goods_info",goodsJsonObject);
+        jsonObject.put("goods_id",goodsSku.getGoodsId());
+        jsonObject.put("quota",0);
+        jsonObject.put("quota_used",0);
 
 
         return new ResultObject<>(jsonObject);
