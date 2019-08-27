@@ -131,6 +131,11 @@ public class GoodsSkuDetailResultVo implements Serializable {
     private BigDecimal salePrice;
 
     /**
+     * 促销价格
+     */
+    private BigDecimal promotePrice;
+
+    /**
      * 开启plus价格 0 否 1是
      */
     private Integer plusPriceOpen;
@@ -149,6 +154,11 @@ public class GoodsSkuDetailResultVo implements Serializable {
      * 超级会员价
      */
     private BigDecimal superVipPrice;
+
+    /**
+     * 购买数量
+     */
+    private Integer buyNum;
 
 
     private String specInfo;

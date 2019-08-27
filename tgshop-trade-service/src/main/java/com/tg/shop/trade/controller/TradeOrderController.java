@@ -6,9 +6,7 @@ import com.tg.shop.core.domain.auth.entity.Member;
 import com.tg.shop.core.domain.base.BaseEntityInfo;
 import com.tg.shop.core.domain.product.result.vo.GoodsSkuDetailResultVo;
 import com.tg.shop.core.domain.trade.entity.*;
-import com.tg.shop.core.domain.trade.vo.CartDetailVo;
-import com.tg.shop.core.domain.trade.vo.OrderInfo;
-import com.tg.shop.core.domain.trade.vo.StoreSimpleVo;
+import com.tg.shop.core.domain.trade.vo.*;
 import com.tg.shop.core.domain.util.PageResult;
 import com.tg.shop.core.entity.ErrorCode;
 import com.tg.shop.core.entity.ResultObject;
@@ -45,7 +43,7 @@ import java.util.concurrent.TimeUnit;
 @UserToken
 @Api("订单交易")
 @RestController
-@RequestMapping("/trade/order")
+@RequestMapping("/api/trade/order")
 public class TradeOrderController {
 
 
@@ -68,54 +66,64 @@ public class TradeOrderController {
     @Resource
     private FeignMessageQueueService feignMessageQueueService;
 
+
     /**
      * 订单确认页面
      * 购物车结算、商品页面直接购买结算--》订单确认页面
      * 填写订单信息：地址、支付方式、发票、卡券、积分、选择优惠券、计算运费
      * @return
      */
-    @ApiOperation("确认订单")
-    @PostMapping("/confirmOrder")
-    public ResultObject confirmOrder(@Valid @RequestBody ConfirmOrderParam confirmOrderParam) throws TradeException {
+    @ApiOperation("获取确认订单数据")
+    @PostMapping("/getOrderConfirmData")
+    public ResultObject getOrderConfirmData(@Valid @RequestBody ConfirmOrderParam[] confirmOrderParam) throws TradeException {
         System.out.println(confirmOrderParam);
 
-        List<Cart> cartList = cartService.findCartByIds(confirmOrderParam.getCartIds());
         JSONObject data = new JSONObject();
 
         Member member = CacheMemberHolderLocal.getMember();
-        // 收货地址
-        UserReceiveAddress address = null;
-        if(StringUtils.isNotEmpty(confirmOrderParam.getReceiveAddressId())){
-            address = userReceiveAddressService.getAddressById(confirmOrderParam.getReceiveAddressId());
-        }else {
-            UserReceiveAddress condition = new UserReceiveAddress();
-            condition.setMemberId(member.getMemberId());
-            address = userReceiveAddressService.getMemberDefaultAddress(member.getMemberId());
-        }
-        data.put("receiveAddress",address);
+//        // 默认收货地址
+//        UserReceiveAddress condition = new UserReceiveAddress();
+//        condition.setMemberId(member.getMemberId());
+//        UserReceiveAddress defaultAddress = userReceiveAddressService.getMemberDefaultAddress(member.getMemberId());
+//        data.put("defaultReceiveAddress",defaultAddress);
 
-        // 自提地址
-        if(StringUtils.isNotEmpty(confirmOrderParam.getTakeAddressId())){
-            data.put("takeAddress","");
-        }
+        List<GoodsSkuDetailResultVo> skuDetailList = getSkuDetailList(confirmOrderParam);
 
-
-        List<CartDetailVo> cartDetailVoList = getSkuDetailList(cartList);
-        Map<String,List<CartDetailVo>> storeCartMap = new HashMap<>(16);
-        List<StoreSimpleVo> storeSimpleVoList = new ArrayList<>();
-        for (CartDetailVo vo :
-                cartDetailVoList) {
-            String key = vo.getStoreId();
-            if (storeCartMap.containsKey(key)) {
-                storeCartMap.get(key).add(vo);
-            } else {
-                List<CartDetailVo> list = new ArrayList<>();
-                list.add(vo);
-                storeCartMap.put(key, list);
-                StoreSimpleVo storeSimpleVo = new StoreSimpleVo(key,vo.getStoreName());
-                storeSimpleVoList.add(storeSimpleVo);
+        Map<String,OrderStoreConfirmDetailVo> orderStoreMap = new HashMap<>(16);
+        for (GoodsSkuDetailResultVo itemVo : skuDetailList) {
+            String storeId = itemVo.getStoreId();
+            OrderStoreConfirmDetailVo storeVo = null;
+            if(orderStoreMap.containsKey(storeId)){
+                storeVo = orderStoreMap.get(storeId);
+            }else{
+                storeVo = new OrderStoreConfirmDetailVo();
+                orderStoreMap.put(storeVo.getStoreId(),storeVo);
             }
+            List<OrderSkuItemConfirmDetailVo> storeSkuList = storeVo.getSkuItemList();
+            OrderSkuItemConfirmDetailVo vo = buildStoreSkuItem(itemVo);
+            storeSkuList.add(vo);
         }
+        Iterator<String> iterator = orderStoreMap.keySet().iterator();
+        OrderConfirmDetailVo orderConfirmDetailVo = new OrderConfirmDetailVo();
+        BigDecimal goodsAmount = new BigDecimal("0");
+        BigDecimal discountAmount = new BigDecimal("0");
+        BigDecimal orderAmount = new BigDecimal("0");
+        while(iterator.hasNext()){
+            OrderStoreConfirmDetailVo vo = orderStoreMap.get(iterator.next());
+            goodsAmount = goodsAmount.add(vo.getStoreGoodsAmount());
+            discountAmount = discountAmount.add(vo.getStoreDiscountAmount());
+            orderAmount = orderAmount.add(vo.getStoreOrderAmount());
+        }
+        orderConfirmDetailVo.setGoodsAmount(goodsAmount);
+        orderConfirmDetailVo.setOrderDiscountAmount(discountAmount);
+        orderConfirmDetailVo.setOrderAmount(orderAmount);
+
+        // 获取已领优惠券列表
+        // 可用优惠券 单店铺：店铺的优惠券 多个店铺：只能用平台优惠券 需满足条件
+
+
+
+
         data.put("storeSimpleVoList",storeSimpleVoList);
         data.put("storeCartMap",storeCartMap);
 
@@ -138,6 +146,25 @@ public class TradeOrderController {
     }
 
     /**
+     * 构建店铺订单商品项
+     * @param skuDetail
+     * @return
+     */
+    private OrderSkuItemConfirmDetailVo buildStoreSkuItem(GoodsSkuDetailResultVo skuDetail) {
+        OrderSkuItemConfirmDetailVo vo = new OrderSkuItemConfirmDetailVo();
+        BeanUtils.copyProperties(skuDetail,vo);
+        BigDecimal buyPrice = skuDetail.getSalePrice();
+        vo.setBuyPrice(buyPrice);
+        int num = skuDetail.getBuyNum();
+        BigDecimal discountPrice = new BigDecimal("0");
+        vo.setDiscountPrice(discountPrice);
+        vo.setDiscountAmount(discountPrice.multiply(new BigDecimal(String.valueOf(num))));
+        vo.setOrderSkuItemAmount(buyPrice.multiply(new BigDecimal(String.valueOf(num))));
+
+        return vo;
+    }
+
+    /**
      * 提交订单
      *  地址、 商品 skuIds  goodsNum、支付方式、优惠券、积分、卡券
      *  ==>> 计算得出总金额
@@ -146,8 +173,8 @@ public class TradeOrderController {
      * @return
      */
     @ApiOperation("提交订单")
-    @PostMapping("/saveOrder")
-    public ResultObject saveOrder(@Valid @RequestBody OrderParam orderParam, BindingResult bindingResult) throws TradeException {
+    @PostMapping("/submitOrder")
+    public ResultObject submitOrder(@Valid @RequestBody OrderParam orderParam, BindingResult bindingResult) throws TradeException {
         if(bindingResult.hasErrors()){
             return new ResultObject<>(ErrorCode.REQUEST_PARAM_ERROR,bindingResult.getFieldErrors());
         }
@@ -508,24 +535,22 @@ public class TradeOrderController {
         return resultObject;
     }
 
-    private List<CartDetailVo> getSkuDetailList(List<Cart> cartList) throws TradeException {
-        List<CartDetailVo> result = new ArrayList<>();
-        for (Cart cart:cartList) {
-            ResultObject<GoodsSkuDetailResultVo>  skuDetailResultVoResultObject = feignProductService.getSkuDetailBySkuId(cart.getSkuId());
+    /**
+     * 获取sku详情
+     * @param confirmOrderParam
+     * @return
+     * @throws TradeException
+     */
+    private List<GoodsSkuDetailResultVo> getSkuDetailList(ConfirmOrderParam[] confirmOrderParam) throws TradeException {
+        List<GoodsSkuDetailResultVo> result = new ArrayList<>();
+        for (ConfirmOrderParam orderParam:confirmOrderParam) {
+            ResultObject<GoodsSkuDetailResultVo>  skuDetailResultVoResultObject = feignProductService.getSkuDetailBySkuId(orderParam.getSkuId());
             if(skuDetailResultVoResultObject.getResult()==0){
                 throw new TradeException(skuDetailResultVoResultObject.getMessage());
             }
-            CartDetailVo cartDetailVo = new CartDetailVo();
-
             GoodsSkuDetailResultVo skuDetail = skuDetailResultVoResultObject.getData();
-            // 检查可用库存
-            if (cartDetailVo.getGoodsNum() > skuDetail.getLeftNum()){
-                String msg = "库存不足.SkuNo:"+cartDetailVo.getSkuNo();
-                throw new TradeException(msg);
-            }
-            BeanUtils.copyProperties(skuDetail,cartDetailVo);
-            BeanUtils.copyProperties(cart,cartDetailVo);
-            result.add(cartDetailVo);
+            skuDetail.setBuyNum(orderParam.getGoodsNum());
+            result.add(skuDetail);
         }
         return  result;
     }
