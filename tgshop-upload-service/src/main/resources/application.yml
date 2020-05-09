@@ -44,8 +44,8 @@ tgshop:
 aliyun:
   oss:
     endpoint: oss-cn-shanghai.aliyuncs.com
-    access-key-id: LTAIeWcftS8x79Vw
-    access-key-secret: zCt4j93bJ6oBgRKCuJRODdfsYptizb
+    access-key-id: 
+    access-key-secret: 
     bucket-name: tgshop
     pub-service: http://tgshop.oss-cn-shanghai.aliyuncs.com
 
